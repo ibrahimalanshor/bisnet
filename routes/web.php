@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\CustomerController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'customer.index')
-    ->name('customer.index');
+Route::name('customer.')
+    ->group(function () {
+        Route::view('/', 'customer.index')
+            ->name('index');
+        Route::post('/customer/store', [CustomerController::class, 'store'])
+            ->name('store');
+    });
     
