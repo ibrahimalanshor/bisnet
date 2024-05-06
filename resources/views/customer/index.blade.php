@@ -21,7 +21,7 @@
                 <table class="table table-bordered" id="example" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Nama</th>
                             <th>No Telp</th>
                         </tr>
                     </thead>
