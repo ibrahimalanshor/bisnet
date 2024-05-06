@@ -48,26 +48,7 @@
                 Menu
             </div>
 
-            <!-- Nav Item - Data Pelanggan -->
-            <li class="nav-item @if(request()->routeIs('customer.*')) active @endif">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Data Pelanggan</span></a>
-            </li>
-
-            <!-- Nav Item - Data Pembayaran -->
-            <li class="nav-item @if(request()->routeIs('payment.*')) active @endif">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-receipt"></i>
-                    <span>Data Pembayaran</span></a>
-            </li>
-
-            <!-- Nav Item - Keluhan Pelanggan -->
-            <li class="nav-item @if(request()->routeIs('support.*')) active @endif">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-comment-alt"></i>
-                    <span>Keluhan Pelanggan</span></a>
-            </li>
+            <x-sidebar />
 
         </ul>
         <!-- End of Sidebar -->
