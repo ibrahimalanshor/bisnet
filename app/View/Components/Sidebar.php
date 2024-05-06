@@ -30,8 +30,8 @@ class Sidebar extends Component
             ],
             [
                 'name' => 'Data Pembayaran',
-                'route' => 'customer.index',
-                'active_route' => 'receipt.*',
+                'route' => 'payments.index',
+                'active_route' => 'payments.*',
                 'icon' => 'receipt'
             ],
             [

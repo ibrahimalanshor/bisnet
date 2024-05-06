@@ -23,3 +23,8 @@ Route::name('customer.')
             ->name('store');
     });
     
+Route::name('payments.')
+    ->group(function () {
+        Route::view('/payments', 'payment.index')
+            ->name('index');
+    });
