@@ -15,9 +15,9 @@
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Data Pembayaran</h6>
             <div>
-                <select class="form-control form-control-sm">
-                    <option>Sudah Bayar</option>
-                    <option>Belum Bayar</option>
+                <select class="form-control form-control-sm" id="filter-is-paid">
+                    <option value="1" selected>Sudah Bayar</option>
+                    <option value="0">Belum Bayar</option>
                 </select>
             </div>
         </div>
@@ -74,8 +74,13 @@
     <script src="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
     <script>
-        $('#example').DataTable({
-            ajax: '{{ route('api.payments.get-all') }}',
+        const table = $('#example').DataTable({
+            ajax: {
+                url: '{{ route('api.payments.per-customer-for-current-month') }}',
+                data: query => {
+                    query.is_paid = $('#filter-is-paid').val()
+                } 
+            },
             processing: true,
             serverSide: true,
             columns: [
@@ -85,8 +90,11 @@
                         return new Date(data).toLocaleString()
                     }
                 },
-                { data: 'pelanggan.nama' },
+                { data: 'nama' },
             ]
+        })
+        $('#filter-is-paid').on('change', (e) => {
+            table.ajax.reload()
         })
     </script>
 @endsection
