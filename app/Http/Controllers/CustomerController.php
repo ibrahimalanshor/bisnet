@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Models\Customer;
-use DataTables;
 
 class CustomerController extends Controller
 {
@@ -15,10 +14,6 @@ class CustomerController extends Controller
         
         return redirect()
             ->route('customer.index');
-    }
-
-    public function getAll() {
-        return DataTables::of(Customer::query())->toJson();
     }
 
 }
