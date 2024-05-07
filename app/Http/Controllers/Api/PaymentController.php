@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
 use App\Models\Customer;
 use App\Http\Requests\Payment\GetPerCustomerForCurrentMonthRequest;
 use DataTables;

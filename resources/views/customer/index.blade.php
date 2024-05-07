@@ -70,7 +70,7 @@
 
     <script>
         $('#example').DataTable({
-            ajax: '{{ route('api.customer.getAll') }}',
+            ajax: '{{ route('api.customer.get-all') }}',
             processing: true,
             serverSide: true,
             columns: [
