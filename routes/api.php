@@ -3,8 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\ComplaintController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,5 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/customer/get-all', [CustomerController::class, 'getAll'])->name('customer.get-all');
+Route::get('/customers/get-all', [CustomerController::class, 'getAll'])->name('customers.get-all');
 Route::get('/payments/per-customer-for-current-month', [PaymentController::class, 'perCustomerForCurrentMonth'])->name('payments.per-customer-for-current-month');
+Route::get('/complaints/get-all', [ComplaintController::class, 'getAll'])->name('complaints.get-all');

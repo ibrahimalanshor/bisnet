@@ -23,8 +23,5 @@ Route::name('customer.')
             ->name('store');
     });
     
-Route::name('payments.')
-    ->group(function () {
-        Route::view('/payments', 'payment.index')
-            ->name('index');
-    });
+Route::view('/payment', 'payment.index')->name('payment.index');
+Route::view('/complaint', 'complaint.index')->name('complaint.index');
