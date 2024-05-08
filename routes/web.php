@@ -25,3 +25,6 @@ Route::name('customer.')
     
 Route::view('/payment', 'payment.index')->name('payment.index');
 Route::view('/complaint', 'complaint.index')->name('complaint.index');
+
+Route::view('/login', 'login')->name('login');
+Route::post('/login', [CustomerController::class, 'store'])->name('login');
