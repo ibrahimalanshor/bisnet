@@ -30,14 +30,14 @@ class Sidebar extends Component
             ],
             [
                 'name' => 'Data Pembayaran',
-                'route' => 'payments.index',
-                'active_route' => 'payments.*',
+                'route' => 'payment.index',
+                'active_route' => 'payment.*',
                 'icon' => 'receipt'
             ],
             [
                 'name' => 'Keluhan Pelanggan',
-                'route' => 'customer.index',
-                'active_route' => 'support.*',
+                'route' => 'complaint.index',
+                'active_route' => 'complaint.*',
                 'icon' => 'comment-alt'
             ]
         ]);
