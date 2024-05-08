@@ -3,14 +3,6 @@
 @section('content')
     <h1 class="h3 mb-4 text-gray-800">Data Pembayaran</h1>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <span>{{ $error }}</span><br />
-            @endforeach
-        </div>
-    @endif
-
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Data Pembayaran</h6>
@@ -33,35 +25,6 @@
                 </table>
             </div>
         </div>
-    </div>
-
-    <!-- modal tambah pelanggan -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="tambah">
-        <form class="modal-dialog" role="document" method="POST" action="{{ route('customer.store') }}">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Pelanggan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="text" class="form-control" id="nama" placeholder="Nama" name="nama">
-                    </div>
-                    <div class="form-group">
-                        <label for="no_telp">No Telp</label>
-                        <input type="number" class="form-control" id="no_telp" placeholder="No Telp" name="no_telp">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                </div>
-            </div>
-        </form>
     </div>
 @endsection
 
