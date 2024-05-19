@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,17 +17,24 @@ use App\Http\Controllers\ReportController;
 |
 */
 
-Route::name('customer.')
+Route::middleware('auth')
     ->group(function () {
-        Route::view('/', 'customer.index')
-            ->name('index');
-        Route::post('/customer/store', [CustomerController::class, 'store'])
-            ->name('store');
+        Route::name('customer.')
+            ->group(function () {
+                Route::view('/', 'customer.index')
+                    ->name('index');
+                Route::post('/customer/store', [CustomerController::class, 'store'])
+                    ->name('store');
+            });
+            
+        Route::view('/payment', 'payment.index')->name('payment.index');
+        Route::view('/complaint', 'complaint.index')->name('complaint.index');
+
+        Route::get('/report', [ReportController::class, 'index'])->name('report.index');
     });
-    
-Route::view('/payment', 'payment.index')->name('payment.index');
-Route::view('/complaint', 'complaint.index')->name('complaint.index');
 
-Route::get('/report', [ReportController::class, 'index'])->name('report.index');
-
-Route::view('/login', 'login')->name('login');
+Route::middleware('guest')
+    ->group(function () {
+        Route::view('/login', 'login')->name('login');
+        Route::post('/login', [AuthController::class, 'login'])->name('login');
+    });

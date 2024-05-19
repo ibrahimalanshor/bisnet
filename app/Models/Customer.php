@@ -17,6 +17,13 @@ class Customer extends Model
     protected $table = 'pelanggan';
     
     /**
+     * primaryKey
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id_pelanggan';
+    
+    /**
      * fillable
      *
      * @var array
@@ -29,7 +36,7 @@ class Customer extends Model
      * @return void
      */
     public function payment() {
-        return $this->hasMany(Payment::class, 'pelanggan_id');
+        return $this->hasMany(Payment::class, 'id_pelanggan');
     }
     
     /**

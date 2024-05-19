@@ -41,13 +41,19 @@
                             <form action="{{ route('login') }}" method="POST" class="user">
                                 @csrf
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user"
+                                    <input type="email" class="form-control form-control-user @if ($errors->has('email')) is-invalid @endif)"
                                         id="exampleInputEmail" aria-describedby="emailHelp"
-                                        placeholder="Enter Email Address..." name="email">
+                                        placeholder="Enter Email Address..." name="email" value="{{ old('email') }}">
+                                    @if ($errors->has('email'))
+                                        <p class="invalid-feedback">{{ $errors->first('email') }}</p>
+                                    @endif
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Password" name="password">
+                                    <input type="password" class="form-control form-control-user @if ($errors->has('password')) is-invalid @endif)"
+                                        id="exampleInputPassword" placeholder="Password" name="password" value="{{ old('password') }}">
+                                    @if ($errors->has('password'))
+                                        <p class="invalid-feedback">{{ $errors->first('password') }}</p>
+                                    @endif
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-user btn-block">
                                     Login

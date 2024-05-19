@@ -17,11 +17,18 @@ class Payment extends Model
     protected $table = 'pembayaran';
     
     /**
+     * fillable
+     *
+     * @var array
+     */
+    protected $fillable = ['id_pelanggan'];
+    
+    /**
      * pelanggan
      *
      * @return void
      */
     public function pelanggan() {
-        return $this->belongsTo(Customer::class, 'pelanggan_id');
+        return $this->belongsTo(Customer::class, 'id_pelanggan');
     }
 }

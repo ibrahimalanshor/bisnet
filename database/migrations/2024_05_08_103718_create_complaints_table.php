@@ -14,10 +14,11 @@ class CreateComplaintsTable extends Migration
     public function up()
     {
         Schema::create('keluhan_pelanggan', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id_keluhan_pelanggan');
             $table->text('keluhan');
-            $table->foreignId('pelanggan_id')->constrained('pelanggan')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedInteger('id_pelanggan');
             $table->timestamps();
+            $table->foreign('id_pelanggan')->references('id_pelanggan')->on('pelanggan');
         });
     }
 

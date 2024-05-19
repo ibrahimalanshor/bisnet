@@ -17,11 +17,18 @@ class Complaint extends Model
     protected $table = 'keluhan_pelanggan';
     
     /**
+     * fillable
+     *
+     * @var array
+     */
+    protected $fillable = ['id_pelanggan', 'keluhan'];
+    
+    /**
      * pelanggan
      *
      * @return void
      */
     public function pelanggan() {
-        return $this->belongsTo(Customer::class, 'pelanggan_id');
+        return $this->belongsTo(Customer::class, 'id_pelanggan');
     }
 }

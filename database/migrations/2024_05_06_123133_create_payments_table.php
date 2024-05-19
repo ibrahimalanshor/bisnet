@@ -14,9 +14,10 @@ class CreatePaymentsTable extends Migration
     public function up()
     {
         Schema::create('pembayaran', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pelanggan_id')->constrained('pelanggan')->onUpdate('cascade')->onDelete('cascade');
+            $table->increments('id_pembayaran');
+            $table->unsignedInteger('id_pelanggan');
             $table->timestamps();
+            $table->foreign('id_pelanggan')->references('id_pelanggan')->on('pelanggan');
         });
     }
 
