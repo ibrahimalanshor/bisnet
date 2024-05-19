@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,6 @@ Route::name('customer.')
 Route::view('/payment', 'payment.index')->name('payment.index');
 Route::view('/complaint', 'complaint.index')->name('complaint.index');
 
+Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+
 Route::view('/login', 'login')->name('login');
-Route::post('/login', [CustomerController::class, 'store'])->name('login');

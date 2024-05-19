@@ -39,6 +39,12 @@ class Sidebar extends Component
                 'route' => 'complaint.index',
                 'active_route' => 'complaint.*',
                 'icon' => 'comment-alt'
+            ],
+            [
+                'name' => 'Laporan Pembayaran',
+                'route' => 'report.index',
+                'active_route' => 'report.*',
+                'icon' => 'file-alt'
             ]
         ]);
     }
