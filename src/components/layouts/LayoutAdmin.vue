@@ -58,7 +58,7 @@ function onClickOutsideSidebar(e) {
           <Icon icon="ri:user-3-line" class="size-4" />
         </button>
       </nav>
-      <main>
+      <main class="p-4 lg:p-6 xl:p-8">
         <slot />
       </main>
     </div>
