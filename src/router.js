@@ -10,5 +10,12 @@ export const router = createRouter({
       component: () =>
         import('./features/dashboard/components/DashboardPage.vue'),
     },
+    {
+      path: '/supplier',
+      name: 'supplier',
+      meta: { layout: 'LayoutAdmin' },
+      component: () =>
+        import('./features/supplier/components/SupplierPage.vue'),
+    },
   ],
 });

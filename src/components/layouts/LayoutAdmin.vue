@@ -3,14 +3,38 @@ import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 
 const menus = [
-  { id: 'dashboard', name: 'Dashboard', icon: 'ri:dashboard-2-fill' },
-  { id: 'supplier', name: 'Supplier', icon: 'ri:truck-fill' },
-  { id: 'product', name: 'Barang', icon: 'ri:archive-2-fill' },
-  { id: 'restock', name: 'Restock', icon: 'ri:box-3-fill' },
-  { id: 'order', name: 'Penjualan', icon: 'ri:calculator-fill' },
+  {
+    id: 'dashboard',
+    to: { name: 'dashboard' },
+    name: 'Dashboard',
+    icon: 'ri:dashboard-2-fill',
+  },
+  {
+    id: 'supplier',
+    to: { name: 'supplier' },
+    name: 'Supplier',
+    icon: 'ri:truck-fill',
+  },
+  {
+    id: 'product',
+    to: { name: 'dashboard' },
+    name: 'Barang',
+    icon: 'ri:archive-2-fill',
+  },
+  {
+    id: 'restock',
+    to: { name: 'dashboard' },
+    name: 'Restock',
+    icon: 'ri:box-3-fill',
+  },
+  {
+    id: 'order',
+    to: { name: 'dashboard' },
+    name: 'Penjualan',
+    icon: 'ri:calculator-fill',
+  },
 ];
 
-const active = 'dashboard';
 const sidebarVisible = ref(false);
 
 function onClickOutsideSidebar(e) {
@@ -29,20 +53,22 @@ function onClickOutsideSidebar(e) {
       ]"
       v-click-outside="onClickOutsideSidebar"
     >
-      <a
+      <router-link
         v-for="menu in menus"
         :key="menu.id"
-        href=""
+        :to="menu.to"
         :class="[
           'rounded-md px-3.5 py-2.5 flex items-center',
-          active === menu.id ? 'bg-blue-600 font-medium' : 'hover:bg-gray-800',
+          $route.name === menu.id
+            ? 'bg-blue-600 font-medium'
+            : 'hover:bg-gray-800',
         ]"
       >
         <div class="w-7">
           <Icon :icon="menu.icon" class="size-4" />
         </div>
         {{ menu.name }}
-      </a>
+      </router-link>
     </aside>
     <div class="lg:ml-72">
       <nav
