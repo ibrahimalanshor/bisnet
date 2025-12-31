@@ -1,3 +1,7 @@
+<script setup>
+import LayoutAdmin from './components/layouts/LayoutAdmin.vue';
+</script>
+
 <template>
-  <div></div>
+  <LayoutAdmin></LayoutAdmin>
 </template>
