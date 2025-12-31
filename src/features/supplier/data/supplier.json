@@ -1,0 +1,16 @@
+[
+  { "id": 1, "name": "PT Sumber Jaya", "phone": "081234567801", "address": "Jakarta" },
+  { "id": 2, "name": "CV Mitra Abadi", "phone": "081234567802", "address": "Bandung" },
+  { "id": 3, "name": "PT Karya Sejahtera", "phone": "081234567803", "address": "Surabaya" },
+  { "id": 4, "name": "UD Makmur Sentosa", "phone": "081234567804", "address": "Semarang" },
+  { "id": 5, "name": "PT Nusantara Supply", "phone": "081234567805", "address": "Yogyakarta" },
+  { "id": 6, "name": "CV Jaya Mandiri", "phone": "081234567806", "address": "Malang" },
+  { "id": 7, "name": "PT Berkah Utama", "phone": "081234567807", "address": "Medan" },
+  { "id": 8, "name": "CV Sinar Terang", "phone": "081234567808", "address": "Palembang" },
+  { "id": 9, "name": "PT Global Distribusi", "phone": "081234567809", "address": "Makassar" },
+  { "id": 10, "name": "UD Rejeki Lancar", "phone": "081234567810", "address": "Solo" },
+  { "id": 11, "name": "PT Anugerah Supply", "phone": "081234567811", "address": "Balikpapan" },
+  { "id": 12, "name": "CV Prima Jaya", "phone": "081234567812", "address": "Denpasar" },
+  { "id": 13, "name": "PT Sentosa Abadi", "phone": "081234567813", "address": "Banjarmasin" }
+]
+
