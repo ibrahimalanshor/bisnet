@@ -1,0 +1,36 @@
+{
+  "name": "todo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "click-outside-vue3": "^4.0.1",
+    "pinia": "^3.0.4",
+    "pinia-plugin-persistedstate": "^4.7.1",
+    "tailwindcss": "^4.1.18",
+    "vue": "^3.5.24"
+  },
+  "devDependencies": {
+    "@eslint/json": "^0.14.0",
+    "@iconify/vue": "^5.0.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "eslint": "^9.39.2",
+    "eslint-plugin-vue": "^10.6.2",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "3.7.4",
+    "vite": "^7.2.4"
+  },
+  "lint-staged": {
+    "*.{vue,js,ts,css,md}": "prettier --write",
+    "*.{vue,js,ts}": "eslint --cache --fix"
+  }
+}
