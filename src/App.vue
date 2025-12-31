@@ -1,10 +1,5 @@
-<script setup>
-import LayoutAdmin from './components/layouts/LayoutAdmin.vue';
-import BaseHeading from './components/base/BaseHeading.vue';
-</script>
-
 <template>
-  <LayoutAdmin>
-    <BaseHeading>Dashboard</BaseHeading>
-  </LayoutAdmin>
+  <component :is="$route.meta.layout">
+    <router-view />
+  </component>
 </template>

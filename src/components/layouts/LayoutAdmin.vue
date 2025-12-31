@@ -24,7 +24,7 @@ function onClickOutsideSidebar(e) {
   <div>
     <aside
       :class="[
-        'bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 p-4 flex flex-col gap-1 transition lg:translate-x-0',
+        'bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 px-4 py-6 flex flex-col gap-1 transition lg:translate-x-0',
         sidebarVisible ? 'translate-x-0' : '-translate-x-full',
       ]"
       v-click-outside="onClickOutsideSidebar"
