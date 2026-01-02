@@ -14,7 +14,13 @@ const suppliers = { data: data.slice(0, 10) };
 </script>
 
 <template>
-  <BaseHeading>Supplier</BaseHeading>
+  <BaseHeading>
+    Supplier
+
+    <template #action>
+      <BaseButton icon="ri:add-fill" class="w-full">Tambah Supplier</BaseButton>
+    </template>
+  </BaseHeading>
   <BaseTable :columns="columns" :data="suppliers.data">
     <template #column-action>
       <div class="flex gap-2">
