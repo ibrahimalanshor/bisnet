@@ -3,16 +3,19 @@ import BaseModal from '../../../components/base/BaseModal.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
+import BaseAlert from '../../../components/base/BaseAlert.vue';
 import { ref } from 'vue';
 
 const visible = defineModel('visible');
 
 const loading = ref(false);
+const error = ref(false);
 </script>
 
 <template>
   <BaseModal title="Tambah Supplier" size="sm" v-model:visible="visible">
     <form class="space-y-4">
+      <BaseAlert v-if="error"> Gagal menyimpan supplier baru. </BaseAlert>
       <BaseFormItem id="supplier_form.name" label="Nama" v-slot="{ id }">
         <BaseInput :id="id" placeholder="Unilever" required />
       </BaseFormItem>
