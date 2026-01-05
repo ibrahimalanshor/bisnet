@@ -3,8 +3,11 @@ import BaseModal from '../../../components/base/BaseModal.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
+import { ref } from 'vue';
 
 const visible = defineModel('visible');
+
+const loading = ref(false);
 </script>
 
 <template>
@@ -32,7 +35,7 @@ const visible = defineModel('visible');
           @click="visible = false"
           >Batal</BaseButton
         >
-        <BaseButton>Simpan</BaseButton>
+        <BaseButton :loading="loading">Simpan</BaseButton>
       </div>
     </form>
   </BaseModal>

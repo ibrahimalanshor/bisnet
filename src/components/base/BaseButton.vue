@@ -16,6 +16,7 @@ const props = defineProps({
     type: String,
     default: 'md',
   },
+  loading: Boolean,
 });
 const slot = useSlots();
 
@@ -62,10 +63,16 @@ const iconSizeClass = computed(() => {
     :class="[
       buttonSizeClass,
       buttonColorClass,
-      'inline-flex items-center justify-center gap-2 cursor-pointer',
+      'inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
     ]"
+    :disabled="loading"
   >
-    <Icon v-if="icon" :icon="icon" :class="iconSizeClass" />
+    <Icon
+      v-if="loading"
+      icon="ri:loader-4-fill"
+      :class="['animate-spin', iconSizeClass]"
+    />
+    <Icon v-else-if="icon" :icon="icon" :class="iconSizeClass" />
 
     <slot />
   </button>
