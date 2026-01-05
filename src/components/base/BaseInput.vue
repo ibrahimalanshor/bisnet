@@ -10,6 +10,8 @@ defineProps({
     default: 'input',
   },
 });
+
+const value = defineModel();
 </script>
 
 <template>
@@ -18,10 +20,12 @@ defineProps({
     :id="id"
     :type="type"
     class="w-full h-10 px-2.5 border-gray-300 rounded-md focus:ring-1 focus:ring-blue-600 focus:border-blue-600"
+    v-model="value"
   />
   <textarea
     v-else
     :id="id"
     class="w-full min-h-10 px-2.5 border-gray-300 rounded-md focus:ring-1 focus:ring-blue-600 focus:border-blue-600"
+    v-model="value"
   ></textarea>
 </template>

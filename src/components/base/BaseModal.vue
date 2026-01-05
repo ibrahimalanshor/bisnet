@@ -1,6 +1,7 @@
 <script setup>
 import BaseCard from './BaseCard.vue';
 import BaseButton from './BaseButton.vue';
+import { watch } from 'vue';
 
 defineProps({
   title: String,
@@ -9,12 +10,21 @@ defineProps({
     default: 'md',
   },
 });
+const emit = defineEmits(['open', 'close']);
 
 const visible = defineModel('visible');
 
 function onClose() {
   visible.value = false;
 }
+
+watch(visible, (val) => {
+  if (val) {
+    emit('open');
+  } else {
+    emit('close');
+  }
+});
 </script>
 
 <template>

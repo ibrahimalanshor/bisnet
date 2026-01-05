@@ -1,6 +1,10 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
+import BaseAlert from '../base/BaseAlert.vue';
+import { useToastStore } from '../../cores/toast/toast.store';
+
+const toastStore = useToastStore();
 
 const menus = [
   {
@@ -45,7 +49,20 @@ function onClickOutsideSidebar(e) {
 </script>
 
 <template>
-  <div>
+  <div class="bg-white text-gray-900">
+    <div
+      v-if="toastStore.toasts.length"
+      class="fixed top-0 right-0 w-full p-4 z-10 space-y-2 sm:w-fit"
+    >
+      <BaseAlert
+        v-for="toast in toastStore.toasts"
+        :key="toast.ud"
+        closable
+        :color="toast.type"
+        @close="toastStore.close(toast.id)"
+        >{{ toast.message }}</BaseAlert
+      >
+    </div>
     <aside
       :class="[
         'bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 px-4 py-6 flex flex-col gap-1 transition lg:translate-x-0',
