@@ -15,7 +15,7 @@ export const router = createRouter({
       name: 'supplier',
       meta: { layout: 'LayoutAdmin' },
       component: () =>
-        import('./features/supplier/components/SupplierPage.vue'),
+        import('./features/supplier/components/SupplierIndexPage.vue'),
     },
   ],
 });

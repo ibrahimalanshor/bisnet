@@ -1,9 +1,12 @@
 <script setup>
 import data from '../data/supplier.json';
+import { ref } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
+import BaseModal from '../../../components/base/BaseModal.vue';
 
+const visible = ref(false);
 const columns = [
   { id: 'name', name: 'Nama', value: (item) => item.name },
   { id: 'phone', name: 'No. Telp', value: (item) => item.phone },
@@ -18,7 +21,9 @@ const suppliers = { data: data.slice(0, 10) };
     Supplier
 
     <template #action>
-      <BaseButton icon="ri:add-fill" class="w-full">Tambah Supplier</BaseButton>
+      <BaseButton icon="ri:add-fill" class="w-full" @click="visible = true"
+        >Tambah Supplier</BaseButton
+      >
     </template>
   </BaseHeading>
   <BaseTable :columns="columns" :data="suppliers.data">
@@ -29,4 +34,5 @@ const suppliers = { data: data.slice(0, 10) };
       </div>
     </template>
   </BaseTable>
+  <BaseModal title="Tambah Supplier" v-model:visible="visible"> </BaseModal>
 </template>
