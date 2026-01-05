@@ -4,6 +4,10 @@ import BaseButton from './BaseButton.vue';
 
 defineProps({
   title: String,
+  size: {
+    type: String,
+    default: 'md',
+  },
 });
 
 const visible = defineModel('visible');
@@ -19,7 +23,7 @@ function onClose() {
     class="fixed inset-0 bg-black/50 flex items-center justify-center px-4"
   >
     <BaseCard
-      class="max-w-screen-md w-full"
+      :class="['w-full', size === 'md' ? 'max-w-screen-md' : 'max-w-screen-sm']"
       :title="title"
       v-click-outside="onClose"
       v-motion-slide-visible-top
