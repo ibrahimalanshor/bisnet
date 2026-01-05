@@ -29,7 +29,12 @@ const suppliers = { data: data.slice(0, 10) };
   <BaseTable :columns="columns" :data="suppliers.data">
     <template #column-action>
       <div class="flex gap-2">
-        <BaseButton icon="ri:edit-fill" color="success" size="sm" />
+        <BaseButton
+          icon="ri:edit-fill"
+          color="success"
+          size="sm"
+          @click="visible = true"
+        />
         <BaseButton icon="ri:delete-bin-fill" color="error" size="sm" />
       </div>
     </template>

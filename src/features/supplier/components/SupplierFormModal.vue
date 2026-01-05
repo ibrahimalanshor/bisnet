@@ -4,17 +4,20 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
+import BaseSkeleton from '../../../components/base/BaseSkeleton.vue';
 import { ref } from 'vue';
 
 const visible = defineModel('visible');
 
-const loading = ref(false);
+const loadingForm = ref(false);
+const loadingSave = ref(false);
 const error = ref(false);
 </script>
 
 <template>
   <BaseModal title="Tambah Supplier" size="sm" v-model:visible="visible">
-    <form class="space-y-4">
+    <BaseSkeleton v-if="loadingForm" />
+    <form v-else class="space-y-4">
       <BaseAlert v-if="error"> Gagal menyimpan supplier baru. </BaseAlert>
       <BaseFormItem id="supplier_form.name" label="Nama" v-slot="{ id }">
         <BaseInput :id="id" placeholder="Unilever" required />
@@ -38,7 +41,7 @@ const error = ref(false);
           @click="visible = false"
           >Batal</BaseButton
         >
-        <BaseButton :loading="loading">Simpan</BaseButton>
+        <BaseButton :loading="loadingSave">Simpan</BaseButton>
       </div>
     </form>
   </BaseModal>
