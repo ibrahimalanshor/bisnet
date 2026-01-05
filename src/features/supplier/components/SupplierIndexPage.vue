@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
-import BaseModal from '../../../components/base/BaseModal.vue';
+import SupplierFormModal from './SupplierFormModal.vue';
 
 const visible = ref(false);
 const columns = [
@@ -34,5 +34,5 @@ const suppliers = { data: data.slice(0, 10) };
       </div>
     </template>
   </BaseTable>
-  <BaseModal title="Tambah Supplier" v-model:visible="visible"> </BaseModal>
+  <SupplierFormModal v-model:visible="visible" />
 </template>
