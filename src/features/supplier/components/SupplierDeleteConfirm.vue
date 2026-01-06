@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
 
+const emit = defineEmits(['deleted']);
 const toastStore = useToastStore();
 
 const visible = defineModel('visible');
@@ -21,6 +22,8 @@ async function onConfirmed() {
   visible.value = false;
 
   loading.value = false;
+
+  emit('deleted');
 }
 </script>
 

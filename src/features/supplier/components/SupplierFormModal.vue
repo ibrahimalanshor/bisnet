@@ -13,6 +13,7 @@ const props = defineProps({
   id: null,
 });
 const visible = defineModel('visible');
+const emit = defineEmits(['saved']);
 
 const toastStore = useToastStore();
 const loadingForm = ref(false);
@@ -58,6 +59,8 @@ async function onSubmit() {
   visible.value = false;
 
   loadingSave.value = false;
+
+  emit('saved');
 }
 </script>
 

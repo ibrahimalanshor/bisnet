@@ -1,4 +1,6 @@
 <script setup>
+import { Icon } from '@iconify/vue';
+
 defineProps({
   columns: {
     type: Array,
@@ -8,11 +10,18 @@ defineProps({
     type: Array,
     default: () => [],
   },
+  loading: Boolean,
 });
 </script>
 
 <template>
-  <div class="overflow-y-auto">
+  <div class="overflow-y-auto relative">
+    <div
+      v-if="loading"
+      class="absolute inset-0 flex items-center justify-center bg-gray-300/20"
+    >
+      <Icon icon="ri:loader-4-line" class="size-8 animate-spin text-gray-500" />
+    </div>
     <table class="w-full">
       <thead>
         <tr>
