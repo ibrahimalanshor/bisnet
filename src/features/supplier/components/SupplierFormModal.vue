@@ -9,6 +9,9 @@ import { ref, reactive } from 'vue';
 import { sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
 
+const props = defineProps({
+  id: null,
+});
 const visible = defineModel('visible');
 
 const toastStore = useToastStore();
@@ -21,13 +24,25 @@ const form = reactive({
   address: null,
 });
 
+async function loadForm() {
+  loadingForm.value = true;
+
+  await sleep();
+
+  loadingForm.value = false;
+}
+
 function onOpen() {
+  loadingSave.value = false;
+  error.value = false;
+
   form.name = null;
   form.phone = null;
   form.address = null;
 
-  loadingSave.value = false;
-  error.value = false;
+  if (props.id) {
+    loadForm();
+  }
 }
 async function onSubmit() {
   loadingSave.value = true;
@@ -35,7 +50,9 @@ async function onSubmit() {
   await sleep();
 
   toastStore.create({
-    message: 'Berhasil menambahkan supplier baru',
+    message: props.id
+      ? 'Berhasil memperbarui supplier'
+      : 'Berhasil menambahkan supplier baru',
     type: 'success',
   });
   visible.value = false;
@@ -46,12 +63,12 @@ async function onSubmit() {
 
 <template>
   <BaseModal
-    title="Tambah Supplier"
+    :title="props.id ? 'Edit Supplier' : 'Tambah Supplier'"
     size="sm"
     v-model:visible="visible"
     @open="onOpen"
   >
-    <BaseSkeleton v-if="loadingForm" />
+    <BaseSkeleton v-if="loadingForm" class="h-40" />
     <form v-else class="space-y-4" @submit.prevent="onSubmit">
       <BaseAlert v-if="error"> Gagal menyimpan supplier baru. </BaseAlert>
       <BaseFormItem id="supplier_form.name" label="Nama" v-slot="{ id }">
