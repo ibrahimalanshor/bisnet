@@ -5,6 +5,7 @@ import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
+import BasePagination from '../../../components/base/BasePagination.vue';
 import SupplierFormModal from './SupplierFormModal.vue';
 import SupplierDeleteConfirm from './SupplierDeleteConfirm.vue';
 import { sleep } from '../../../utils/common';
@@ -18,6 +19,9 @@ const columns = [
 const loading = ref(true);
 const error = ref(false);
 const suppliers = ref({ data: [] });
+const query = reactive({
+  page: 1,
+});
 const formModal = reactive({
   id: null,
   visible: false,
@@ -82,6 +86,7 @@ loadSuppliers();
       </div>
     </template>
   </BaseTable>
+  <BasePagination :total-pages="10" v-model="query.page" />
   <SupplierFormModal
     :id="formModal.id"
     v-model:visible="formModal.visible"

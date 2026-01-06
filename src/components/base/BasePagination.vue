@@ -1,4 +1,6 @@
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
   sideCount: {
     type: Number,
@@ -21,10 +23,18 @@ const pages = computed(() => {
     right++;
   }
 
-  return Array.from({ length: right - left }, (_, i) => i + 1);
+  return Array.from({ length: right - left + 1 }, (_, i) => i + 1);
 });
+const hasEllipsisLeft = computed(
+  () => currentPage.value >= props.sideCount + 4,
+);
+const hasEllipsisRight = computed(
+  () => currentPage.value < props.totalPages - (2 + props.sideCount),
+);
 </script>
 
 <template>
+  {{ hasEllipsisLeft }}
   <nav>{{ pages }}</nav>
+  {{ hasEllipsisRight }}
 </template>
