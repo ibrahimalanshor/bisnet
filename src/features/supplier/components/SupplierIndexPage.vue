@@ -4,6 +4,7 @@ import { reactive, ref } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
+import BaseAlert from '../../../components/base/BaseAlert.vue';
 import SupplierFormModal from './SupplierFormModal.vue';
 import SupplierDeleteConfirm from './SupplierDeleteConfirm.vue';
 import { sleep } from '../../../utils/common';
@@ -15,6 +16,7 @@ const columns = [
   { id: 'action', name: 'Aksi' },
 ];
 const loading = ref(true);
+const error = ref(false);
 const suppliers = ref({ data: [] });
 const formModal = reactive({
   id: null,
@@ -61,6 +63,7 @@ loadSuppliers();
       >
     </template>
   </BaseHeading>
+  <BaseAlert v-if="error">Gagal memuat data supplier.</BaseAlert>
   <BaseTable :columns="columns" :data="suppliers.data" :loading="loading">
     <template #column-action="{ item }">
       <div class="flex gap-2">
