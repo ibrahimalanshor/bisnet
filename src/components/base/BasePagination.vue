@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, h } from 'vue';
 
 const props = defineProps({
   sideCount: {
@@ -31,10 +31,22 @@ const hasEllipsisLeft = computed(
 const hasEllipsisRight = computed(
   () => currentPage.value < props.totalPages - (2 + props.sideCount),
 );
+
+const PaginationButton = ({ name = '', type = 'link' }) => {
+  if (type === 'ellipsis') {
+    return h('span', '…');
+  }
+
+  return h('a', { href: '' }, name);
+};
 </script>
 
 <template>
-  {{ hasEllipsisLeft }}
-  <nav>{{ pages }}</nav>
-  {{ hasEllipsisRight }}
+  <nav>
+    <PaginationButton name="1" />
+    <PaginationButton v-if="hasEllipsisLeft" type="ellipsis" />
+    <PaginationButton v-for="page in pages" :key="page" :name="page" />
+    <PaginationButton v-if="hasEllipsisLeft" type="ellipsis" />
+    <PaginationButton :name="totalPages" />
+  </nav>
 </template>
