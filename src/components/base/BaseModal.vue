@@ -1,9 +1,9 @@
 <script setup>
 import BaseCard from './BaseCard.vue';
 import BaseButton from './BaseButton.vue';
-import { watch } from 'vue';
+import { watch, computed } from 'vue';
 
-defineProps({
+const props = defineProps({
   title: String,
   size: {
     type: String,
@@ -11,8 +11,15 @@ defineProps({
   },
 });
 const emit = defineEmits(['open', 'close']);
-
 const visible = defineModel('visible');
+
+const sizeClass = computed(() => {
+  return {
+    md: 'max-w-screen-md',
+    sm: 'max-w-screen-sm',
+    xs: 'max-w-lg',
+  }[props.size];
+});
 
 function onClose() {
   visible.value = false;
@@ -33,7 +40,7 @@ watch(visible, (val) => {
     class="fixed inset-0 bg-black/50 flex items-center justify-center px-4"
   >
     <BaseCard
-      :class="['w-full', size === 'md' ? 'max-w-screen-md' : 'max-w-screen-sm']"
+      :class="['w-full', sizeClass]"
       :title="title"
       v-click-outside="onClose"
       v-motion-slide-visible-top

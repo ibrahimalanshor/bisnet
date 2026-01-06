@@ -29,6 +29,7 @@ const buttonColorClass = computed(() => {
     success: 'bg-green-600 text-white hover:bg-green-700',
     error: 'bg-red-600 text-white hover:bg-red-700',
     primary: 'bg-blue-600 text-white hover:bg-blue-700',
+    light: 'bg-white border border-gray-300',
   };
 
   return colors[props.color];
@@ -63,7 +64,7 @@ const iconSizeClass = computed(() => {
     :class="[
       buttonSizeClass,
       buttonColorClass,
-      'inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
+      'font-medium inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
     ]"
     :disabled="loading"
   >

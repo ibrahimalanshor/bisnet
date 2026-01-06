@@ -5,6 +5,7 @@ import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import SupplierFormModal from './SupplierFormModal.vue';
+import SupplierDeleteConfirm from './SupplierDeleteConfirm.vue';
 
 const columns = [
   { id: 'name', name: 'Nama', value: (item) => item.name },
@@ -17,6 +18,10 @@ const formModal = reactive({
   id: null,
   visible: false,
 });
+const deleteConfirm = reactive({
+  id: null,
+  visible: false,
+});
 
 function onAdd() {
   formModal.id = null;
@@ -25,6 +30,10 @@ function onAdd() {
 function onEdit(id) {
   formModal.id = id;
   formModal.visible = true;
+}
+function onDelete(id) {
+  deleteConfirm.id = id;
+  deleteConfirm.visible = true;
 }
 </script>
 
@@ -47,9 +56,18 @@ function onEdit(id) {
           size="sm"
           @click="onEdit(item.id)"
         />
-        <BaseButton icon="ri:delete-bin-fill" color="error" size="sm" />
+        <BaseButton
+          icon="ri:delete-bin-fill"
+          color="error"
+          size="sm"
+          @click="onDelete(item.id)"
+        />
       </div>
     </template>
   </BaseTable>
   <SupplierFormModal :id="formModal.id" v-model:visible="formModal.visible" />
+  <SupplierDeleteConfirm
+    :id="deleteConfirm.id"
+    v-model:visible="deleteConfirm.visible"
+  />
 </template>
