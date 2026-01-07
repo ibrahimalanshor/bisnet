@@ -1,0 +1,18 @@
+[
+  { "id": 1, "name": "Wireless Mouse", "barcode": "1234567890123", "price": 150000, "stock": 25 },
+  { "id": 2, "name": "Keyboard Mechanical", "barcode": "2345678901234", "price": 350000, "stock": 15 },
+  { "id": 3, "name": "USB Flash Drive 32GB", "barcode": "3456789012345", "price": 80000, "stock": 50 },
+  { "id": 4, "name": "External Hard Disk 1TB", "barcode": "4567890123456", "price": 750000, "stock": 20 },
+  { "id": 5, "name": "Laptop Stand", "barcode": "5678901234567", "price": 120000, "stock": 30 },
+  { "id": 6, "name": "Webcam HD", "barcode": "6789012345678", "price": 250000, "stock": 18 },
+  { "id": 7, "name": "Gaming Headset", "barcode": "7890123456789", "price": 300000, "stock": 22 },
+  { "id": 8, "name": "Smartphone Charger", "barcode": "8901234567890", "price": 90000, "stock": 40 },
+  { "id": 9, "name": "Bluetooth Speaker", "barcode": "9012345678901", "price": 220000, "stock": 28 },
+  { "id": 10, "name": "Power Bank 10000mAh", "barcode": "0123456789012", "price": 180000, "stock": 35 },
+  { "id": 11, "name": "HDMI Cable 2m", "barcode": "1123456789012", "price": 50000, "stock": 60 },
+  { "id": 12, "name": "Laptop Backpack", "barcode": "2123456789012", "price": 280000, "stock": 12 },
+  { "id": 13, "name": "Monitor 24 inch", "barcode": "3123456789012", "price": 1800000, "stock": 10 },
+  { "id": 14, "name": "Mouse Pad Gaming", "barcode": "4123456789012", "price": 70000, "stock": 45 },
+  { "id": 15, "name": "Earphone In-Ear", "barcode": "5123456789012", "price": 120000, "stock": 33 }
+]
+

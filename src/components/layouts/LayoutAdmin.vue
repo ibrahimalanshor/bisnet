@@ -21,7 +21,7 @@ const menus = [
   },
   {
     id: 'product',
-    to: { name: 'dashboard' },
+    to: { name: 'product' },
     name: 'Barang',
     icon: 'ri:archive-2-fill',
   },
