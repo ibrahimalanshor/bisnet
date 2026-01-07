@@ -1,4 +1,6 @@
 <script setup>
+import { debounce } from '../../utils/common';
+
 defineProps({
   id: String,
   type: {
@@ -10,8 +12,16 @@ defineProps({
     default: 'input',
   },
 });
+const emit = defineEmits(['input', 'input-debounce']);
 
 const value = defineModel();
+
+const emitInputDebounce = debounce(() => emit('input-debounce'), 500);
+
+function onInput() {
+  emit('input');
+  emitInputDebounce();
+}
 </script>
 
 <template>
@@ -21,6 +31,7 @@ const value = defineModel();
     :type="type"
     class="w-full h-10 px-2.5 border-gray-300 rounded-md focus:ring-1 focus:ring-blue-600 focus:border-blue-600"
     v-model="value"
+    @input="onInput"
   />
   <textarea
     v-else

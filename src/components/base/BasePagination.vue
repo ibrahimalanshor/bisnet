@@ -9,6 +9,7 @@ const props = defineProps({
   },
   totalPages: Number,
 });
+const emit = defineEmits(['change']);
 const currentPage = defineModel();
 
 const pages = computed(() => {
@@ -85,6 +86,8 @@ const PaginationButton = ({ name = '', type = 'link', active = false }) => {
 function onChangePage(page) {
   if (page !== currentPage.value) {
     currentPage.value = page;
+
+    emit('change');
   }
 }
 </script>

@@ -5,6 +5,7 @@ import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
+import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import SupplierFormModal from './SupplierFormModal.vue';
 import SupplierDeleteConfirm from './SupplierDeleteConfirm.vue';
@@ -22,6 +23,9 @@ const suppliers = ref({ data: [] });
 const query = reactive({
   page: 1,
 });
+const filter = reactive({
+  search: null,
+});
 const formModal = reactive({
   id: null,
   visible: false,
@@ -31,7 +35,16 @@ const deleteConfirm = reactive({
   visible: false,
 });
 
-async function loadSuppliers() {
+async function loadSuppliers({ refresh, reload } = {}) {
+  if (refresh) {
+    query.page = 1;
+    filter.search = null;
+  }
+
+  if (reload) {
+    query.page = 1;
+  }
+
   loading.value = true;
 
   await sleep();
@@ -62,9 +75,17 @@ loadSuppliers();
     Supplier
 
     <template #action>
-      <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
-        >Tambah Supplier</BaseButton
-      >
+      <div class="flex flex-col gap-2 sm:flex-row">
+        <BaseInput
+          type="search"
+          placeholder="Cari supplier"
+          v-model="filter.search"
+          @input-debounce="loadSuppliers({ reload: true })"
+        />
+        <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
+          >Tambah Supplier</BaseButton
+        >
+      </div>
     </template>
   </BaseHeading>
   <BaseAlert v-if="error">Gagal memuat data supplier.</BaseAlert>
@@ -86,15 +107,19 @@ loadSuppliers();
       </div>
     </template>
   </BaseTable>
-  <BasePagination :total-pages="10" v-model="query.page" />
+  <BasePagination
+    :total-pages="10"
+    v-model="query.page"
+    @change="loadSuppliers"
+  />
   <SupplierFormModal
     :id="formModal.id"
     v-model:visible="formModal.visible"
-    @saved="loadSuppliers"
+    @saved="loadSuppliers({ refresh: true })"
   />
   <SupplierDeleteConfirm
     :id="deleteConfirm.id"
     v-model:visible="deleteConfirm.visible"
-    @deleted="loadSuppliers"
+    @deleted="loadSuppliers({ refresh: true })"
   />
 </template>
