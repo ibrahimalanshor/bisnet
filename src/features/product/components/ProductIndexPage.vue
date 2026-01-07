@@ -1,6 +1,6 @@
 <script setup>
 import data from '../data/product.json';
-import { reactive, ref } from 'vue';
+import { reactive, ref, h } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
@@ -9,10 +9,20 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import ProductFormModal from './ProductFormModal.vue';
 import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
+import VueBarcode from '@chenfengyuan/vue-barcode';
 import { sleep, formatCurrency } from '../../../utils/common';
 
 const columns = [
-  { id: 'barcode', name: 'Barcode', value: (item) => item.barcode },
+  {
+    id: 'barcode',
+    name: 'Barcode',
+    render: ({ item }) =>
+      h(VueBarcode, {
+        value: item.barcode,
+        options: { height: 80, width: 1.5, fontSize: 12 },
+      }),
+    classList: 'w-[200px]',
+  },
   { id: 'name', name: 'Nama', value: (item) => item.name },
   { id: 'price', name: 'Harga', value: (item) => formatCurrency(item.price) },
   { id: 'Stock', name: 'Stok', value: (item) => item.stock },

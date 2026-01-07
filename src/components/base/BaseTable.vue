@@ -48,9 +48,17 @@ defineProps({
             <td
               v-for="column in columns"
               :key="column.id"
-              class="border border-gray-300 px-4 py-3 whitespace-nowrap"
+              :class="[
+                'border border-gray-300 px-4 py-3 whitespace-nowrap',
+                column.classList,
+              ]"
             >
-              <slot :name="`column-${column.id}`" :item="item">
+              <component
+                v-if="column.render"
+                :is="column.render"
+                :item="item"
+              />
+              <slot v-else :name="`column-${column.id}`" :item="item">
                 {{
                   typeof column.value === 'function'
                     ? column.value(item)
