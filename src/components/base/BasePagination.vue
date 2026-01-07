@@ -1,5 +1,6 @@
 <script setup>
 import { computed, h } from 'vue';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps({
   sideCount: {
@@ -23,8 +24,18 @@ const pages = computed(() => {
     right++;
   }
 
-  return Array.from({ length: right - left + 1 }, (_, i) => i + 1);
+  const res = [];
+
+  for (let i = left; i <= right; i++) {
+    res.push(i);
+  }
+
+  return res;
 });
+const hasFirstPage = computed(() => currentPage.value >= 2 + props.sideCount);
+const hasLastPage = computed(
+  () => currentPage.value <= props.totalPages - (1 + props.sideCount),
+);
 const hasEllipsisLeft = computed(
   () => currentPage.value >= props.sideCount + 4,
 );
@@ -32,26 +43,84 @@ const hasEllipsisRight = computed(
   () => currentPage.value < props.totalPages - (2 + props.sideCount),
 );
 
-const PaginationButton = ({ name = '', type = 'link' }) => {
-  const classList =
-    'block w-10 h-10 flex items-center justify-center hover:bg-gray-100';
+const PaginationButton = ({ name = '', type = 'link', active = false }) => {
+  const classList = computed(() => {
+    return [
+      'block w-10 h-10 flex items-center justify-center',
+      active ? 'bg-blue-600 text-white' : 'hover:bg-gray-100',
+    ];
+  });
 
   if (type === 'ellipsis') {
-    return h('span', { class: classList }, '…');
+    return h(
+      'span',
+      { class: classList.value },
+      h(Icon, { icon: 'ri:more-fill' }),
+    );
   }
 
-  return h('a', { href: '', class: classList }, name);
+  if (type === 'prev') {
+    return h(
+      'span',
+      { class: classList.value },
+      h(Icon, { icon: 'ri:arrow-drop-left-line', class: 'size-6' }),
+    );
+  }
+
+  if (type === 'next') {
+    return h(
+      'span',
+      { class: classList.value },
+      h(Icon, { icon: 'ri:arrow-drop-right-line', class: 'size-6' }),
+    );
+  }
+
+  if (active) {
+    return h('span', { class: classList.value }, name);
+  }
+
+  return h('a', { href: '', class: classList.value }, name);
 };
+
+function onChangePage(page) {
+  if (page !== currentPage.value) {
+    currentPage.value = page;
+  }
+}
 </script>
 
 <template>
   <nav
-    class="w-fit flex items-center border divide-x border-gray-300 divide-gray-300 rounded-md mx-auto"
+    class="w-fit flex items-center border divide-x border-gray-300 divide-gray-300 rounded-md mx-auto overflow-hidden"
   >
-    <PaginationButton name="1" />
+    <PaginationButton
+      v-if="currentPage > 1"
+      type="prev"
+      @click.prevent="onChangePage(currentPage - 1)"
+    />
+    <PaginationButton
+      v-if="hasFirstPage"
+      name="1"
+      @click.prevent="onChangePage(1)"
+    />
     <PaginationButton v-if="hasEllipsisLeft" type="ellipsis" />
-    <PaginationButton v-for="page in pages" :key="page" :name="page" />
+    <PaginationButton
+      v-for="page in pages"
+      :key="page"
+      :name="page"
+      :active="currentPage === page"
+      @click.prevent="onChangePage(page)"
+    />
     <PaginationButton v-if="hasEllipsisRight" type="ellipsis" />
-    <PaginationButton :name="totalPages" />
+    <PaginationButton
+      v-if="hasLastPage"
+      :name="totalPages"
+      @click.prevent="onChangePage(totalPages)"
+    />
+    <PaginationButton
+      v-if="currentPage < totalPages"
+      type="next"
+      @click.prevent="onChangePage(currentPage + 1)"
+    />
   </nav>
 </template>
