@@ -9,12 +9,12 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import ProductFormModal from './ProductFormModal.vue';
 import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
-import { sleep } from '../../../utils/common';
+import { sleep, formatCurrency } from '../../../utils/common';
 
 const columns = [
   { id: 'barcode', name: 'Barcode', value: (item) => item.barcode },
   { id: 'name', name: 'Nama', value: (item) => item.name },
-  { id: 'price', name: 'Harga', value: (item) => item.price },
+  { id: 'price', name: 'Harga', value: (item) => formatCurrency(item.price) },
   { id: 'Stock', name: 'Stok', value: (item) => item.stock },
   { id: 'action', name: 'Aksi' },
 ];

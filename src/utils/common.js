@@ -15,3 +15,7 @@ export function debounce(callback, wait) {
     }, wait);
   };
 }
+
+export function formatCurrency(num) {
+  return new Intl.NumberFormat().format(num);
+}

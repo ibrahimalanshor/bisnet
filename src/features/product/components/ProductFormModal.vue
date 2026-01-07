@@ -20,9 +20,9 @@ const loadingForm = ref(false);
 const loadingSave = ref(false);
 const error = ref(false);
 const form = reactive({
+  barcode: null,
   name: null,
-  phone: null,
-  address: null,
+  price: null,
 });
 
 async function loadForm() {
@@ -37,9 +37,9 @@ function onOpen() {
   loadingSave.value = false;
   error.value = false;
 
+  form.barcode = null;
   form.name = null;
-  form.phone = null;
-  form.address = null;
+  form.price = null;
 
   if (props.id) {
     loadForm();
@@ -74,25 +74,29 @@ async function onSubmit() {
     <BaseSkeleton v-if="loadingForm" class="h-40" />
     <form v-else class="space-y-4" @submit.prevent="onSubmit">
       <BaseAlert v-if="error"> Gagal menyimpan barang baru. </BaseAlert>
+      <BaseFormItem id="product_form.barcode" label="Barcode" v-slot="{ id }">
+        <BaseInput
+          :id="id"
+          placeholder="112391827382"
+          required
+          v-model="form.barcode"
+        />
+      </BaseFormItem>
       <BaseFormItem id="product_form.name" label="Nama" v-slot="{ id }">
         <BaseInput
           :id="id"
-          placeholder="Unilever"
+          placeholder="Pasta Gigi"
           required
           v-model="form.name"
         />
       </BaseFormItem>
-      <BaseFormItem id="product_form.phone" label="No. Telp" v-slot="{ id }">
-        <BaseInput :id="id" placeholder="08x" required v-model="form.phone" />
-      </BaseFormItem>
-      <BaseFormItem id="product_form.address" label="Alamat" v-slot="{ id }">
+      <BaseFormItem id="product_form.price" label="Harga" v-slot="{ id }">
         <BaseInput
           :id="id"
-          placeholder="Jakarta"
-          tag="textarea"
-          rows="3"
+          placeholder="10,000"
           required
-          v-model="form.address"
+          currency
+          v-model="form.price"
         />
       </BaseFormItem>
       <div class="flex gap-2 justify-end">
