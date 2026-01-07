@@ -33,20 +33,25 @@ const hasEllipsisRight = computed(
 );
 
 const PaginationButton = ({ name = '', type = 'link' }) => {
+  const classList =
+    'block w-10 h-10 flex items-center justify-center hover:bg-gray-100';
+
   if (type === 'ellipsis') {
-    return h('span', '…');
+    return h('span', { class: classList }, '…');
   }
 
-  return h('a', { href: '' }, name);
+  return h('a', { href: '', class: classList }, name);
 };
 </script>
 
 <template>
-  <nav>
+  <nav
+    class="w-fit flex items-center border divide-x border-gray-300 divide-gray-300 rounded-md mx-auto"
+  >
     <PaginationButton name="1" />
     <PaginationButton v-if="hasEllipsisLeft" type="ellipsis" />
     <PaginationButton v-for="page in pages" :key="page" :name="page" />
-    <PaginationButton v-if="hasEllipsisLeft" type="ellipsis" />
+    <PaginationButton v-if="hasEllipsisRight" type="ellipsis" />
     <PaginationButton :name="totalPages" />
   </nav>
 </template>
