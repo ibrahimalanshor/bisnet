@@ -15,20 +15,23 @@ defineProps({
 </script>
 
 <template>
-  <div class="overflow-y-auto relative">
+  <div class="overflow-y-auto relative bg-white">
     <div
       v-if="loading"
       class="absolute inset-0 flex items-center justify-center bg-gray-300/20"
     >
-      <Icon icon="ri:loader-4-line" class="size-8 animate-spin text-gray-500" />
+      <Icon
+        icon="ri:loader-4-line"
+        class="size-8 animate-spin text-gray-500/50"
+      />
     </div>
-    <table class="w-full">
+    <table class="w-full border border-gray-300">
       <thead>
         <tr>
           <th
             v-for="column in columns"
             :key="column.id"
-            class="text-left border px-4 py-3 font-medium border-gray-300 bg-gray-50"
+            class="whitespace-nowrap text-left border-b px-4 py-3 font-medium border-gray-300 bg-gray-100"
           >
             {{ column.name }}
           </th>
@@ -38,7 +41,7 @@ defineProps({
         <tr v-if="!data.length">
           <td
             :colspan="columns.length"
-            class="border border-gray-300 px-4 py-3 text-center text-gray-700"
+            class="border-b border-gray-300 px-4 py-3 text-center text-gray-700"
           >
             Tidak ada data
           </td>
@@ -49,7 +52,7 @@ defineProps({
               v-for="column in columns"
               :key="column.id"
               :class="[
-                'border border-gray-300 px-4 py-3 whitespace-nowrap',
+                'border-b border-gray-300 px-4 py-3 whitespace-nowrap',
                 column.classList,
               ]"
             >

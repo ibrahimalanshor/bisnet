@@ -13,32 +13,32 @@ const menus = [
     id: 'dashboard',
     to: { name: 'dashboard' },
     name: 'Dashboard',
-    icon: 'ri:dashboard-2-fill',
+    icon: 'ri:dashboard-2-line',
   },
   {
     id: 'supplier',
     to: { name: 'supplier' },
     name: 'Supplier',
-    icon: 'ri:truck-fill',
+    icon: 'ri:truck-line',
   },
   {
     id: 'product',
     to: { name: 'product' },
     name: 'Barang',
-    icon: 'ri:archive-2-fill',
+    icon: 'ri:archive-2-line',
   },
   {
     id: 'restock',
     to: { name: 'restock.index' },
-    activeKey: ['restock.index'],
+    activeKey: ['restock.index', 'restock.new'],
     name: 'Restock',
-    icon: 'ri:box-3-fill',
+    icon: 'ri:box-3-line',
   },
   {
     id: 'order',
     to: { name: 'dashboard' },
     name: 'Penjualan',
-    icon: 'ri:calculator-fill',
+    icon: 'ri:calculator-line',
   },
 ];
 
@@ -60,7 +60,7 @@ function onClickOutsideSidebar(e) {
 </script>
 
 <template>
-  <div class="bg-white text-gray-900">
+  <div class="bg-gray-50 min-h-screen text-gray-900">
     <div
       v-if="toastStore.toasts.length"
       class="fixed top-0 right-0 w-full p-4 z-10 space-y-2 sm:w-fit"
@@ -86,10 +86,10 @@ function onClickOutsideSidebar(e) {
         :key="menu.id"
         :to="menu.to"
         :class="[
-          'rounded-md px-3.5 py-2.5 flex items-center',
+          'rounded-md px-3.5 py-2.5 flex items-center transition',
           checkMenuIsActive(menu)
             ? 'bg-blue-600 font-medium'
-            : 'hover:bg-gray-800',
+            : 'text-gray-400 hover:bg-gray-800 hover:text-white',
         ]"
       >
         <div class="w-7">
@@ -100,7 +100,7 @@ function onClickOutsideSidebar(e) {
     </aside>
     <div class="lg:ml-72">
       <nav
-        class="h-14 px-4 flex items-center border-b border-gray-300 justify-between lg:justify-end lg:h-16"
+        class="h-14 bg-white px-4 flex items-center border-b border-gray-300 justify-between lg:justify-end lg:h-16"
       >
         <button
           class="cursor-pointer open-sidebar lg:hidden"

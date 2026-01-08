@@ -71,7 +71,11 @@ loadRestocks();
           v-model="filter.search"
           @input-debounce="loadRestocks({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill" class="w-full"
+        <BaseButton
+          icon="ri:add-fill"
+          class="w-full"
+          tag="router-link"
+          :to="{ name: 'restock.new' }"
           >Tambah Restock</BaseButton
         >
       </div>

@@ -1,11 +1,21 @@
 <script setup>
 defineProps({
   title: String,
+  bordered: {
+    type: Boolean,
+    default: true,
+  },
 });
 </script>
 
 <template>
-  <div :class="['bg-white shadow-xl rounded-lg', !!title ? '' : 'p-4']">
+  <div
+    :class="[
+      'bg-white rounded-lg',
+      !!title ? '' : 'p-4',
+      bordered ? 'border border-gray-300' : '',
+    ]"
+  >
     <div
       v-if="title"
       class="border-b border-gray-300 px-4 py-3 flex items-center justify-between"
@@ -13,7 +23,7 @@ defineProps({
       <h3 class="font-bold text-xl">{{ title }}</h3>
       <slot name="action" />
     </div>
-    <div class="p-4">
+    <div :class="title ? 'p-4' : ''">
       <slot />
     </div>
   </div>

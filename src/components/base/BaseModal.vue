@@ -40,7 +40,8 @@ watch(visible, (val) => {
     class="fixed inset-0 bg-black/50 flex items-center justify-center px-4"
   >
     <BaseCard
-      :class="['w-full', sizeClass]"
+      :bordered="false"
+      :class="['w-full shadow-xl', sizeClass]"
       :title="title"
       v-click-outside="onClose"
       v-motion-slide-visible-top

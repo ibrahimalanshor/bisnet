@@ -17,6 +17,10 @@ const props = defineProps({
     default: 'md',
   },
   loading: Boolean,
+  tag: {
+    type: String,
+    default: 'button',
+  },
 });
 const slot = useSlots();
 
@@ -60,7 +64,8 @@ const iconSizeClass = computed(() => {
 </script>
 
 <template>
-  <button
+  <component
+    :is="tag"
     :class="[
       buttonSizeClass,
       buttonColorClass,
@@ -76,5 +81,5 @@ const iconSizeClass = computed(() => {
     <Icon v-else-if="icon" :icon="icon" :class="iconSizeClass" />
 
     <slot />
-  </button>
+  </component>
 </template>
