@@ -24,5 +24,19 @@ export const router = createRouter({
       component: () =>
         import('./features/product/components/ProductIndexPage.vue'),
     },
+    {
+      path: '/restock',
+      children: [
+        {
+          path: '',
+          name: 'restock.index',
+          meta: {
+            layout: 'LayoutAdmin',
+          },
+          component: () =>
+            import('./features/restock/components/RestockIndexPage.vue'),
+        },
+      ],
+    },
   ],
 });

@@ -1,0 +1,73 @@
+[
+  {
+    "code": "RST-001",
+    "createdAt": "2026-01-01T09:15:00Z",
+    "validAt": "2026-01-05T23:59:59Z",
+    "itemsCount": 3,
+    "totalPrice": 4500000
+  },
+  {
+    "code": "RST-002",
+    "createdAt": "2026-01-02T10:30:00Z",
+    "validAt": "2026-01-06T23:59:59Z",
+    "itemsCount": 2,
+    "totalPrice": 3200000
+  },
+  {
+    "code": "RST-003",
+    "createdAt": "2026-01-03T08:45:00Z",
+    "validAt": "2026-01-07T23:59:59Z",
+    "itemsCount": 5,
+    "totalPrice": 7100000
+  },
+  {
+    "code": "RST-004",
+    "createdAt": "2026-01-04T11:20:00Z",
+    "validAt": "2026-01-08T23:59:59Z",
+    "itemsCount": 1,
+    "totalPrice": 1950000
+  },
+  {
+    "code": "RST-005",
+    "createdAt": "2026-01-05T14:10:00Z",
+    "validAt": "2026-01-09T23:59:59Z",
+    "itemsCount": 4,
+    "totalPrice": 5400000
+  },
+  {
+    "code": "RST-006",
+    "createdAt": "2026-01-06T09:00:00Z",
+    "validAt": "2026-01-10T23:59:59Z",
+    "itemsCount": 3,
+    "totalPrice": 3600000
+  },
+  {
+    "code": "RST-007",
+    "createdAt": "2026-01-07T16:35:00Z",
+    "validAt": "2026-01-11T23:59:59Z",
+    "itemsCount": 5,
+    "totalPrice": 8200000
+  },
+  {
+    "code": "RST-008",
+    "createdAt": "2026-01-08T13:25:00Z",
+    "validAt": "2026-01-12T23:59:59Z",
+    "itemsCount": 2,
+    "totalPrice": 1750000
+  },
+  {
+    "code": "RST-009",
+    "createdAt": "2026-01-09T10:05:00Z",
+    "validAt": "2026-01-13T23:59:59Z",
+    "itemsCount": 4,
+    "totalPrice": 4950000
+  },
+  {
+    "code": "RST-010",
+    "createdAt": "2026-01-10T15:40:00Z",
+    "validAt": "2026-01-14T23:59:59Z",
+    "itemsCount": 3,
+    "totalPrice": 3050000
+  }
+]
+

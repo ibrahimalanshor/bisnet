@@ -3,8 +3,10 @@ import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import BaseAlert from '../base/BaseAlert.vue';
 import { useToastStore } from '../../cores/toast/toast.store';
+import { useRoute } from 'vue-router';
 
 const toastStore = useToastStore();
+const route = useRoute();
 
 const menus = [
   {
@@ -27,7 +29,8 @@ const menus = [
   },
   {
     id: 'restock',
-    to: { name: 'dashboard' },
+    to: { name: 'restock.index' },
+    activeKey: ['restock.index'],
     name: 'Restock',
     icon: 'ri:box-3-fill',
   },
@@ -40,6 +43,14 @@ const menus = [
 ];
 
 const sidebarVisible = ref(false);
+
+function checkMenuIsActive(menu) {
+  if (!menu.activeKey) {
+    return menu.id === route.name;
+  }
+
+  return menu.activeKey.includes(route.name);
+}
 
 function onClickOutsideSidebar(e) {
   if (!e.target.classList.contains('.open-sidebar')) {
@@ -76,7 +87,7 @@ function onClickOutsideSidebar(e) {
         :to="menu.to"
         :class="[
           'rounded-md px-3.5 py-2.5 flex items-center',
-          $route.name === menu.id
+          checkMenuIsActive(menu)
             ? 'bg-blue-600 font-medium'
             : 'hover:bg-gray-800',
         ]"
