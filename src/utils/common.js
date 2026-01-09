@@ -28,3 +28,15 @@ export function formatCurrency(num) {
 export function formatDate(str) {
   return dayjs(str).format('DD MMMM YYYY HH:mm');
 }
+
+export function currencyToNum(cur) {
+  if (typeof cur === 'number') {
+    return cur;
+  }
+
+  if (typeof cur !== 'string') {
+    return null;
+  }
+
+  return parseInt(cur.replace(/\D/, ''));
+}
