@@ -43,6 +43,7 @@ const buttonSizeClass = computed(() => {
     const sizes = {
       md: 'w-10 h-10 rounded-md',
       sm: 'w-8 h-8 rounded-md',
+      xs: 'w-6 h-6 rounded',
     };
 
     return sizes[props.size];

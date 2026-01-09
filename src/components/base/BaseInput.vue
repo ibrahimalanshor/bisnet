@@ -1,7 +1,7 @@
 <script setup>
 import { debounce } from '../../utils/common';
 import { vMaska } from 'maska/vue';
-import { computed } from 'vue';
+import { computed, useTemplateRef } from 'vue';
 
 const props = defineProps({
   id: String,
@@ -26,6 +26,7 @@ const props = defineProps({
 const emit = defineEmits(['input', 'input-debounce']);
 
 const value = defineModel();
+const input = useTemplateRef('input');
 
 const emitInputDebounce = debounce(() => emit('input-debounce'), 500);
 
@@ -52,6 +53,8 @@ function onInput() {
   emit('input');
   emitInputDebounce();
 }
+
+defineExpose({ input });
 </script>
 
 <template>
@@ -66,6 +69,7 @@ function onInput() {
   />
   <input
     v-else-if="tag === 'input'"
+    ref="input"
     :id="id"
     :type="type"
     :class="[classList]"

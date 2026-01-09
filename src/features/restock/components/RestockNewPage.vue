@@ -5,6 +5,7 @@ import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
+import SupplierSelectSearch from '../../supplier/components/SupplierSelectSearch.vue';
 import { ref } from 'vue';
 import { formatCurrency } from '../../../utils/common';
 
@@ -74,7 +75,7 @@ function onAddProductReady() {
         label="Pilih Supplier"
         v-slot="{ id }"
       >
-        <BaseInput :id="id" placeholder="Cari supplier" />
+        <SupplierSelectSearch :id="id" placeholder="Cari supplier" />
       </BaseFormItem>
       <BaseFormItem id="restock_form.date" label="Tanggal" v-slot="{ id }">
         <BaseInput :id="id" type="date" />
