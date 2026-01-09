@@ -11,7 +11,14 @@ defineProps({
     default: () => [],
   },
   loading: Boolean,
-  scrollX: Boolean,
+  scrollX: {
+    type: Boolean,
+    default: true,
+  },
+  emptyText: {
+    type: String,
+    default: 'Tidak ada data',
+  },
 });
 </script>
 
@@ -44,11 +51,11 @@ defineProps({
             :colspan="columns.length"
             class="border-b border-gray-300 px-4 py-3 text-center text-gray-700"
           >
-            Tidak ada data
+            {{ emptyText }}
           </td>
         </tr>
         <template v-else>
-          <tr v-for="item in data" :key="item.id">
+          <tr v-for="(item, index) in data" :key="item.id">
             <td
               v-for="column in columns"
               :key="column.id"
@@ -61,8 +68,14 @@ defineProps({
                 v-if="column.render"
                 :is="column.render"
                 :item="item"
+                :index="index"
               />
-              <slot v-else :name="`column-${column.id}`" :item="item">
+              <slot
+                v-else
+                :name="`column-${column.id}`"
+                :item="item"
+                :index="index"
+              >
                 {{
                   typeof column.value === 'function'
                     ? column.value(item)

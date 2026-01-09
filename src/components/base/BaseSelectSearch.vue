@@ -11,8 +11,9 @@ defineProps({
     type: Array,
     default: () => [],
   },
+  iconStart: String,
 });
-const emit = defineEmits(['focus', 'search', 'open', 'close']);
+const emit = defineEmits(['focus', 'search', 'open', 'close', 'change']);
 
 const visible = ref(false);
 const loading = defineModel('loading');
@@ -27,13 +28,13 @@ function onClose() {
 }
 function onClickOption(option) {
   selected.value = option;
-  search.value = option.name;
 
   visible.value = false;
+
+  emit('change');
 }
 function onClear() {
   selected.value = null;
-  search.value = null;
 
   visible.value = false;
 }
@@ -49,14 +50,28 @@ function onFocus() {
 watch(visible, (newValue) => {
   emit(newValue ? 'open' : 'close');
 });
+
+watch(selected, () => {
+  if (selected.value) {
+    search.value = selected.value.name;
+  } else {
+    search.value = null;
+  }
+});
 </script>
 
 <template>
   <div class="relative" v-click-outside="onClose">
+    <Icon
+      v-if="iconStart"
+      :icon="iconStart"
+      class="absolute top-[12px] left-[10px]"
+    />
     <BaseInput
       ref="input"
       :id="id"
       :placeholder="placeholder"
+      :class="iconStart ? 'ps-8' : ''"
       v-model="search"
       @focus="onFocus"
       @input-debounce="$emit('search')"
@@ -64,7 +79,7 @@ watch(visible, (newValue) => {
     <Icon
       v-if="loading"
       icon="ri:loader-4-line"
-      class="absolute top-[12px] right-[8px] animate-spin"
+      class="absolute top-[12px] right-[10px] animate-spin"
     />
     <BaseButton
       v-else-if="!selected"

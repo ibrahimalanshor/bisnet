@@ -26,7 +26,12 @@ const slot = useSlots();
 
 const buttonColorClass = computed(() => {
   if (props.colorVariant === 'transparent') {
-    return 'bg-transparent text-gray-900 hover:bg-gray-100';
+    const colors = {
+      primary: 'bg-transparent text-gray-900 hover:bg-gray-100',
+      error: 'bg-transparent text-gray-900 hover:bg-red-600 hover:text-white',
+    };
+
+    return colors[props.color];
   }
 
   const colors = {
