@@ -19,9 +19,15 @@ async function loadOptions() {
     .filter((item) =>
       !search.value
         ? true
-        : item.name.toLowerCase().includes(search.value.toLowerCase()),
+        : item.name.toLowerCase().includes(search.value.toLowerCase()) ||
+          item.barcode.toLowerCase().includes(search.value.toLowerCase()),
     )
-    .slice(0, 10);
+    .slice(0, 10)
+    .map((item) => ({
+      ...item,
+      originalName: item.name,
+      name: `${item.barcode} - ${item.name}`,
+    }));
 
   loading.value = false;
 }
