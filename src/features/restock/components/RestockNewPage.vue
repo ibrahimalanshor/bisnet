@@ -6,6 +6,7 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import SupplierSelectSearch from '../../supplier/components/SupplierSelectSearch.vue';
+import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
 import { ref } from 'vue';
 import { formatCurrency } from '../../../utils/common';
 
@@ -38,6 +39,7 @@ const items = ref([
   },
 ]);
 const grandTotal = 634500;
+const scrollItems = ref(true);
 
 function onAddProductReady() {
   items.value[items.value.length - 1].ready = true;
@@ -53,93 +55,96 @@ function onAddProductReady() {
 </script>
 
 <template>
-  <BaseHeading>
-    Tambah Restock
+  <div class="overflow-hidden space-y-4 xl:space-y-6">
+    <BaseHeading>
+      Tambah Restock
 
-    <template #action>
-      <BaseButton
-        class="w-full"
-        color="light"
-        icon="ri:arrow-go-back-fill"
-        tag="router-link"
-        :to="{ name: 'restock.index' }"
-        >Kembali</BaseButton
-      >
-    </template>
-  </BaseHeading>
+      <template #action>
+        <BaseButton
+          class="w-full"
+          color="light"
+          icon="ri:arrow-go-back-fill"
+          tag="router-link"
+          :to="{ name: 'restock.index' }"
+          >Kembali</BaseButton
+        >
+      </template>
+    </BaseHeading>
 
-  <BaseCard title="Informasi Restock">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <BaseFormItem
-        id="restock_form.supplier"
-        label="Pilih Supplier"
-        v-slot="{ id }"
-      >
-        <SupplierSelectSearch :id="id" placeholder="Cari supplier" />
-      </BaseFormItem>
-      <BaseFormItem id="restock_form.date" label="Tanggal" v-slot="{ id }">
-        <BaseInput :id="id" type="date" />
-      </BaseFormItem>
-    </div>
-  </BaseCard>
-
-  <BaseTable :columns="itemsColumn" :data="items">
-    <template #column-product_id="{ item }">
-      <BaseButton
-        v-if="!item.ready"
-        icon="ri:add-fill"
-        @click="onAddProductReady"
-        >Tambah Barang</BaseButton
-      >
-      <BaseInput
-        v-else
-        placeholder="Cari nama atau scan barcode"
-        width="unset"
-        class="w-[260px]"
-      />
-    </template>
-    <template #column-qty="{ item }">
-      <BaseInput
-        v-if="item.ready"
-        placeholder="0"
-        width="unset"
-        class="w-[100px]"
-        disabled
-      />
-    </template>
-    <template #column-price="{ item }">
-      <BaseInput
-        v-if="item.ready"
-        placeholder="0"
-        width="unset"
-        class="w-[200px]"
-        disabled
-      />
-    </template>
-  </BaseTable>
-
-  <BaseCard class="ml-auto w-full sm:w-fit sm:min-w-[400px]">
-    <div class="space-y-4">
-      <div class="flex items-center justify-between gap-8">
-        <p class="font-bold text-xl">Grand Total</p>
-        <p class="text-blue-600 text-3xl font-bold">
-          {{ formatCurrency(grandTotal) }}
-        </p>
+    <BaseCard title="Informasi Restock">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <BaseFormItem
+          id="restock_form.supplier"
+          label="Pilih Supplier"
+          v-slot="{ id }"
+        >
+          <SupplierSelectSearch :id="id" placeholder="Cari supplier" />
+        </BaseFormItem>
+        <BaseFormItem id="restock_form.date" label="Tanggal" v-slot="{ id }">
+          <BaseInput :id="id" type="date" />
+        </BaseFormItem>
       </div>
-      <BaseFormItem
-        id="restock_form.payment_amount"
-        label="Jumlah Bayar"
-        v-slot="{ id }"
-      >
-        <BaseInput :id="id" currency placeholder="100,000" />
-      </BaseFormItem>
-      <div class="flex items-center justify-between gap-8">
-        <p class="font-semibold text-gray-500">Kembali</p>
-        <p class="text-gray-900 text-2xl font-bold">
-          {{ formatCurrency(grandTotal) }}
-        </p>
+    </BaseCard>
+
+    <BaseTable :columns="itemsColumn" :data="items" :scroll-x="scrollItems">
+      <template #column-product_id="{ item }">
+        <BaseButton
+          v-if="!item.ready"
+          icon="ri:add-fill"
+          @click="onAddProductReady"
+          >Tambah Barang</BaseButton
+        >
+        <ProductSelectSearch
+          v-else
+          placeholder="Cari nama atau scan barcode"
+          class="w-[260px]"
+          @open="scrollItems = false"
+          @close="scrollItems = true"
+        />
+      </template>
+      <template #column-qty="{ item }">
+        <BaseInput
+          v-if="item.ready"
+          placeholder="0"
+          width="unset"
+          class="w-[100px]"
+          disabled
+        />
+      </template>
+      <template #column-price="{ item }">
+        <BaseInput
+          v-if="item.ready"
+          placeholder="0"
+          width="unset"
+          class="w-[200px]"
+          disabled
+        />
+      </template>
+    </BaseTable>
+
+    <BaseCard class="ml-auto w-full sm:w-fit sm:min-w-[400px]">
+      <div class="space-y-4">
+        <div class="flex items-center justify-between gap-8">
+          <p class="font-bold text-xl">Grand Total</p>
+          <p class="text-blue-600 text-3xl font-bold">
+            {{ formatCurrency(grandTotal) }}
+          </p>
+        </div>
+        <BaseFormItem
+          id="restock_form.payment_amount"
+          label="Jumlah Bayar"
+          v-slot="{ id }"
+        >
+          <BaseInput :id="id" currency placeholder="100,000" />
+        </BaseFormItem>
+        <div class="flex items-center justify-between gap-8">
+          <p class="font-semibold text-gray-500">Kembali</p>
+          <p class="text-gray-900 text-2xl font-bold">
+            {{ formatCurrency(grandTotal) }}
+          </p>
+        </div>
+        <BaseButton class="w-full" icon="ri:save-3-fill">Simpan</BaseButton>
       </div>
-      <BaseButton class="w-full" icon="ri:save-3-fill">Simpan</BaseButton>
-    </div>
-  </BaseCard>
+    </BaseCard>
+  </div>
 </template>

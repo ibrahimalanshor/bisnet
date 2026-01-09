@@ -11,11 +11,12 @@ defineProps({
     default: () => [],
   },
   loading: Boolean,
+  scrollX: Boolean,
 });
 </script>
 
 <template>
-  <div class="overflow-y-auto relative bg-white">
+  <div :class="['relative bg-white', scrollX ? 'overflow-x-auto' : '']">
     <div
       v-if="loading"
       class="absolute inset-0 flex items-center justify-center bg-gray-300/20"

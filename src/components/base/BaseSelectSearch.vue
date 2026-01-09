@@ -1,5 +1,5 @@
 <script setup>
-import { ref, useTemplateRef } from 'vue';
+import { ref, useTemplateRef, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import BaseInput from './BaseInput.vue';
 import BaseButton from './BaseButton.vue';
@@ -12,7 +12,7 @@ defineProps({
     default: () => [],
   },
 });
-const emit = defineEmits(['focus', 'search']);
+const emit = defineEmits(['focus', 'search', 'open', 'close']);
 
 const visible = ref(false);
 const loading = defineModel('loading');
@@ -45,6 +45,10 @@ function onFocus() {
 
   emit('focus');
 }
+
+watch(visible, (newValue) => {
+  emit(newValue ? 'open' : 'close');
+});
 </script>
 
 <template>
