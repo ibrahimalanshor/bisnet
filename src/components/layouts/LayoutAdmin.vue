@@ -3,9 +3,10 @@ import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import BaseAlert from '../base/BaseAlert.vue';
 import { useToastStore } from '../../cores/toast/toast.store';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const toastStore = useToastStore();
+const router = useRouter();
 const route = useRoute();
 
 const menus = [
@@ -53,10 +54,16 @@ function checkMenuIsActive(menu) {
 }
 
 function onClickOutsideSidebar(e) {
-  if (!e.target.classList.contains('.open-sidebar')) {
+  const toggleSidebarButton = document.querySelector('#toggle-sidebar-button');
+
+  if (!toggleSidebarButton.contains(e.target)) {
     sidebarVisible.value = false;
   }
 }
+
+router.beforeEach(() => {
+  sidebarVisible.value = false;
+});
 </script>
 
 <template>
@@ -67,7 +74,7 @@ function onClickOutsideSidebar(e) {
     >
       <BaseAlert
         v-for="toast in toastStore.toasts"
-        :key="toast.ud"
+        :key="toast.id"
         closable
         :color="toast.type"
         @close="toastStore.close(toast.id)"
@@ -76,7 +83,7 @@ function onClickOutsideSidebar(e) {
     </div>
     <aside
       :class="[
-        'bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 px-4 py-6 flex flex-col gap-1 transition lg:translate-x-0',
+        'z-10 bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 px-4 py-6 flex flex-col gap-1 transition lg:translate-x-0',
         sidebarVisible ? 'translate-x-0' : '-translate-x-full',
       ]"
       v-click-outside="onClickOutsideSidebar"
@@ -103,7 +110,8 @@ function onClickOutsideSidebar(e) {
         class="h-14 bg-white px-4 flex items-center border-b border-gray-300 justify-between lg:justify-end lg:h-16"
       >
         <button
-          class="cursor-pointer open-sidebar lg:hidden"
+          class="cursor-pointer lg:hidden"
+          id="toggle-sidebar-button"
           @click="sidebarVisible = true"
         >
           <Icon icon="ri:menu-fill" class="size-4" />
