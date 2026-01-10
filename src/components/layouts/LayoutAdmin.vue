@@ -36,8 +36,9 @@ const menus = [
     icon: 'ri:box-3-line',
   },
   {
-    id: 'order',
-    to: { name: 'dashboard' },
+    id: 'sale',
+    to: { name: 'sale.index' },
+    activeKey: ['sale.index', 'sale.new'],
     name: 'Penjualan',
     icon: 'ri:calculator-line',
   },

@@ -1,0 +1,108 @@
+[
+  {
+    "id": 1,
+    "code": "SAL-20260101-001",
+    "createdAt": "2026-01-01T09:15:23",
+    "itemsCount": 3,
+    "totalPrice": 125000
+  },
+  {
+    "id": 2,
+    "code": "SAL-20260101-002",
+    "createdAt": "2026-01-01T10:02:11",
+    "itemsCount": 5,
+    "totalPrice": 248000
+  },
+  {
+    "id": 3,
+    "code": "SAL-20260102-001",
+    "createdAt": "2026-01-02T08:47:55",
+    "itemsCount": 2,
+    "totalPrice": 76000
+  },
+  {
+    "id": 4,
+    "code": "SAL-20260102-002",
+    "createdAt": "2026-01-02T11:30:42",
+    "itemsCount": 6,
+    "totalPrice": 315000
+  },
+  {
+    "id": 5,
+    "code": "SAL-20260103-001",
+    "createdAt": "2026-01-03T09:05:18",
+    "itemsCount": 1,
+    "totalPrice": 15000
+  },
+  {
+    "id": 6,
+    "code": "SAL-20260103-002",
+    "createdAt": "2026-01-03T12:20:09",
+    "itemsCount": 4,
+    "totalPrice": 184000
+  },
+  {
+    "id": 7,
+    "code": "SAL-20260104-001",
+    "createdAt": "2026-01-04T08:55:31",
+    "itemsCount": 7,
+    "totalPrice": 402000
+  },
+  {
+    "id": 8,
+    "code": "SAL-20260104-002",
+    "createdAt": "2026-01-04T10:40:16",
+    "itemsCount": 2,
+    "totalPrice": 98000
+  },
+  {
+    "id": 9,
+    "code": "SAL-20260105-001",
+    "createdAt": "2026-01-05T09:12:44",
+    "itemsCount": 5,
+    "totalPrice": 260000
+  },
+  {
+    "id": 10,
+    "code": "SAL-20260105-002",
+    "createdAt": "2026-01-05T13:05:27",
+    "itemsCount": 3,
+    "totalPrice": 135000
+  },
+  {
+    "id": 11,
+    "code": "SAL-20260106-001",
+    "createdAt": "2026-01-06T08:33:50",
+    "itemsCount": 6,
+    "totalPrice": 289000
+  },
+  {
+    "id": 12,
+    "code": "SAL-20260106-002",
+    "createdAt": "2026-01-06T11:18:02",
+    "itemsCount": 2,
+    "totalPrice": 67000
+  },
+  {
+    "id": 13,
+    "code": "SAL-20260107-001",
+    "createdAt": "2026-01-07T09:45:14",
+    "itemsCount": 8,
+    "totalPrice": 520000
+  },
+  {
+    "id": 14,
+    "code": "SAL-20260107-002",
+    "createdAt": "2026-01-07T12:59:36",
+    "itemsCount": 4,
+    "totalPrice": 198000
+  },
+  {
+    "id": 15,
+    "code": "SAL-20260108-001",
+    "createdAt": "2026-01-08T10:22:08",
+    "itemsCount": 3,
+    "totalPrice": 142000
+  }
+]
+

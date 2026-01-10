@@ -47,5 +47,27 @@ export const router = createRouter({
         },
       ],
     },
+    {
+      path: '/sale',
+      children: [
+        {
+          path: '',
+          name: 'sale.index',
+          meta: {
+            layout: 'LayoutAdmin',
+          },
+          component: () =>
+            import('./features/sale/components/SaleIndexPage.vue'),
+        },
+        {
+          path: 'new',
+          name: 'sale.new',
+          meta: {
+            layout: 'LayoutAdmin',
+          },
+          component: () => import('./features/sale/components/SaleNewPage.vue'),
+        },
+      ],
+    },
   ],
 });
