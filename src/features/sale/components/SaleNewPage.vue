@@ -27,15 +27,19 @@ const itemsColumn = [
     classList: 'w-[400px]',
   },
   { id: 'qty', name: 'Jumlah', classList: 'w-[150px]' },
-  { id: 'price', name: 'Harga', classList: 'w-[250px]' },
+  {
+    id: 'product_price',
+    name: 'Harga',
+    classList: 'w-[250px]',
+    value: (item) => formatCurrency(item.product_price),
+  },
   {
     id: 'total_price',
     name: 'Total Harga',
     classList: 'w-[250px]',
     value: (item) =>
       formatCurrency(
-        currencyToNum(item.qty, { failToZero: true }) *
-          currencyToNum(item.price, { failToZero: true }),
+        currencyToNum(item.qty, { failToZero: true }) * item.product_price,
       ),
   },
   { id: 'action', name: 'Aksi', classList: 'w-[100px]' },
@@ -53,8 +57,7 @@ const grandTotal = computed(() =>
   items.value.reduce(
     (total, item) =>
       total +
-      currencyToNum(item.qty, { failToZero: true }) *
-        currencyToNum(item.price, { failToZero: true }),
+      currencyToNum(item.qty, { failToZero: true }) * item.product_price,
     0,
   ),
 );
@@ -80,8 +83,8 @@ function onChangeProduct() {
       id: form.product.id,
       product_name: form.product.originalName,
       product_barcode: form.product.barcode,
+      product_price: form.product.price,
       qty: null,
-      price: null,
     });
   }
 
@@ -145,15 +148,6 @@ async function onConfirm() {
         class="w-[100px]"
         currency
         v-model="items[index].qty"
-      />
-    </template>
-    <template #column-price="{ index }">
-      <BaseInput
-        placeholder="0"
-        width="unset"
-        class="w-[200px]"
-        currency
-        v-model="items[index].price"
       />
     </template>
     <template #column-action="{ index }">
