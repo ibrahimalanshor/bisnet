@@ -6,7 +6,6 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseConfirm from '../../../components/base/BaseConfirm.vue';
-import SupplierSelectSearch from '../../supplier/components/SupplierSelectSearch.vue';
 import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
 import { ref, reactive, computed } from 'vue';
 import {
@@ -43,7 +42,6 @@ const itemsColumn = [
 ];
 
 const form = reactive({
-  supplier: null,
   date: formatDate(new Date(), 'YYYY-MM-DD'),
   product: null,
   paymentAmount: null,
@@ -65,7 +63,6 @@ const paymentChange = computed(
 );
 const valid = computed(
   () =>
-    form.supplier &&
     form.date &&
     items.value.length > 0 &&
     items.value.every((item) => currencyToNum(item.qty) > 0),
@@ -124,22 +121,9 @@ async function onConfirm() {
   </BaseHeading>
 
   <BaseCard title="Informasi Penjualan">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <BaseFormItem
-        id="sale_form.supplier"
-        label="Pilih Supplier"
-        v-slot="{ id }"
-      >
-        <SupplierSelectSearch
-          :id="id"
-          placeholder="Cari supplier"
-          v-model="form.supplier"
-        />
-      </BaseFormItem>
-      <BaseFormItem id="sale_form.date" label="Tanggal" v-slot="{ id }">
-        <BaseInput :id="id" type="date" v-model="form.date" />
-      </BaseFormItem>
-    </div>
+    <BaseFormItem id="sale_form.date" label="Tanggal" v-slot="{ id }">
+      <BaseInput :id="id" type="date" v-model="form.date" />
+    </BaseFormItem>
   </BaseCard>
 
   <BaseCard>
