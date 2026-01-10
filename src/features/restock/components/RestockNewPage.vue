@@ -7,8 +7,12 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import SupplierSelectSearch from '../../supplier/components/SupplierSelectSearch.vue';
 import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
-import { ref, reactive } from 'vue';
-import { formatCurrency, currencyToNum } from '../../../utils/common';
+import { ref, reactive, computed } from 'vue';
+import {
+  formatCurrency,
+  currencyToNum,
+  formatDate,
+} from '../../../utils/common';
 
 const itemsColumn = [
   {
@@ -30,11 +34,21 @@ const itemsColumn = [
 
 const form = reactive({
   supplier: null,
-  date: null,
+  date: formatDate(new Date(), 'YYYY-MM-DD'),
   product: null,
+  paymentAmount: null,
 });
 const items = ref([]);
-const grandTotal = 634500;
+const grandTotal = computed(() =>
+  items.value.reduce(
+    (total, item) =>
+      total + currencyToNum(item.qty) * currencyToNum(item.price),
+    0,
+  ),
+);
+const paymentChange = computed(
+  () => currencyToNum(form.paymentAmount) - grandTotal.value,
+);
 
 function onChangeProduct() {
   const existingIndex = items.value.findIndex(
@@ -149,12 +163,20 @@ function onChangeProduct() {
         label="Jumlah Bayar"
         v-slot="{ id }"
       >
-        <BaseInput :id="id" currency placeholder="100,000" />
+        <BaseInput
+          :id="id"
+          currency
+          :placeholder="formatCurrency(grandTotal)"
+          v-model="form.paymentAmount"
+        />
       </BaseFormItem>
-      <div class="flex items-center justify-between gap-8">
+      <div
+        v-if="paymentChange > 0"
+        class="flex items-center justify-between gap-8"
+      >
         <p class="font-semibold text-gray-500">Kembali</p>
         <p class="text-gray-900 text-2xl font-bold">
-          {{ formatCurrency(grandTotal) }}
+          {{ formatCurrency(paymentChange) }}
         </p>
       </div>
       <BaseButton class="w-full" icon="ri:save-3-fill">Simpan</BaseButton>

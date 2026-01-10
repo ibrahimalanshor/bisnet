@@ -25,8 +25,8 @@ export function formatCurrency(num) {
   return new Intl.NumberFormat().format(num);
 }
 
-export function formatDate(str) {
-  return dayjs(str).format('DD MMMM YYYY HH:mm');
+export function formatDate(str, format = 'DD MMMM YYYY HH:mm') {
+  return dayjs(str).format(format);
 }
 
 export function currencyToNum(cur) {
@@ -38,5 +38,5 @@ export function currencyToNum(cur) {
     return null;
   }
 
-  return parseInt(cur.replace(/\D/, ''));
+  return parseInt(cur.replace(/\D/gi, ''));
 }
