@@ -29,14 +29,14 @@ export function formatDate(str, format = 'DD MMMM YYYY HH:mm') {
   return dayjs(str).format(format);
 }
 
-export function currencyToNum(cur) {
+export function currencyToNum(cur, options = { failToZero: false }) {
   if (typeof cur === 'number') {
     return cur;
   }
 
   if (typeof cur !== 'string') {
-    return null;
+    return options.failToZero ? 0 : null;
   }
 
-  return parseInt(cur.replace(/\D/gi, ''));
+  return Number(cur.replace(/\D/gi, ''));
 }

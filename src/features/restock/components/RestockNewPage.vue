@@ -27,7 +27,10 @@ const itemsColumn = [
     name: 'Total Harga',
     classList: 'w-[250px]',
     value: (item) =>
-      formatCurrency(currencyToNum(item.qty) * currencyToNum(item.price)),
+      formatCurrency(
+        currencyToNum(item.qty, { failToZero: true }) *
+          currencyToNum(item.price, { failToZero: true }),
+      ),
   },
   { id: 'action', name: 'Aksi', classList: 'w-[100px]' },
 ];
@@ -42,12 +45,21 @@ const items = ref([]);
 const grandTotal = computed(() =>
   items.value.reduce(
     (total, item) =>
-      total + currencyToNum(item.qty) * currencyToNum(item.price),
+      total +
+      currencyToNum(item.qty, { failToZero: true }) *
+        currencyToNum(item.price, { failToZero: true }),
     0,
   ),
 );
 const paymentChange = computed(
   () => currencyToNum(form.paymentAmount) - grandTotal.value,
+);
+const valid = computed(
+  () =>
+    form.supplier &&
+    form.date &&
+    items.value.length > 0 &&
+    items.value.every((item) => currencyToNum(item.qty) > 0),
 );
 
 function onChangeProduct() {
@@ -179,7 +191,9 @@ function onChangeProduct() {
           {{ formatCurrency(paymentChange) }}
         </p>
       </div>
-      <BaseButton class="w-full" icon="ri:save-3-fill">Simpan</BaseButton>
+      <BaseButton class="w-full" icon="ri:save-3-fill" :disabled="!valid"
+        >Simpan</BaseButton
+      >
     </div>
   </BaseCard>
 </template>
