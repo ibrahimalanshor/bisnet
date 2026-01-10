@@ -5,6 +5,7 @@ import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
+import BaseConfirm from '../../../components/base/BaseConfirm.vue';
 import SupplierSelectSearch from '../../supplier/components/SupplierSelectSearch.vue';
 import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
 import { ref, reactive, computed } from 'vue';
@@ -12,7 +13,13 @@ import {
   formatCurrency,
   currencyToNum,
   formatDate,
+  sleep,
 } from '../../../utils/common';
+import { useRouter } from 'vue-router';
+import { useToastStore } from '../../../cores/toast/toast.store';
+
+const router = useRouter();
+const toastStore = useToastStore();
 
 const itemsColumn = [
   {
@@ -41,6 +48,8 @@ const form = reactive({
   product: null,
   paymentAmount: null,
 });
+const visibleConfirm = ref(false);
+const loadingConfirm = ref(false);
 const items = ref([]);
 const grandTotal = computed(() =>
   items.value.reduce(
@@ -80,6 +89,21 @@ function onChangeProduct() {
   }
 
   form.product = null;
+}
+async function onConfirm() {
+  loadingConfirm.value = true;
+
+  await sleep();
+
+  toastStore.create({
+    message: 'Restock berhasil disimpan',
+    type: 'success',
+  });
+  router.push({
+    name: 'restock.index',
+  });
+
+  loadingConfirm.value = false;
 }
 </script>
 
@@ -191,9 +215,25 @@ function onChangeProduct() {
           {{ formatCurrency(paymentChange) }}
         </p>
       </div>
-      <BaseButton class="w-full" icon="ri:save-3-fill" :disabled="!valid"
+      <BaseButton
+        class="w-full"
+        icon="ri:save-3-fill"
+        :disabled="!valid"
+        @click="visibleConfirm = true"
         >Simpan</BaseButton
       >
     </div>
   </BaseCard>
+
+  <BaseConfirm
+    type="info"
+    confirm-color="primary"
+    title="Konfirmasi Restock"
+    message="Stok barang akan diperbarui sesuai data restock yang dimasukkan."
+    confirm-text="Simpan"
+    cancel-text="Kembali"
+    :loading="loadingConfirm"
+    v-model:visible="visibleConfirm"
+    @confirm="onConfirm"
+  />
 </template>

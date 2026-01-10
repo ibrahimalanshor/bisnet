@@ -13,6 +13,10 @@ defineProps({
   },
   cancelText: String,
   loading: Boolean,
+  type: {
+    type: String,
+    default: 'error',
+  },
 });
 defineEmits(['confirm']);
 
@@ -22,7 +26,13 @@ const visible = defineModel('visible');
 <template>
   <BaseModal size="xs" v-model:visible="visible">
     <div class="text-center mb-6 space-y-2">
-      <Icon icon="ri:alert-line" class="size-12 text-red-600 mx-auto" />
+      <Icon
+        :icon="type === 'error' ? 'ri:alert-line' : 'ri:information-line'"
+        :class="[
+          'size-12 mx-auto',
+          type === 'error' ? 'text-red-600' : 'text-blue-600',
+        ]"
+      />
       <h2 class="font-bold text-2xl">{{ title }}</h2>
       <p class="text-gray-700">{{ message }}</p>
     </div>
