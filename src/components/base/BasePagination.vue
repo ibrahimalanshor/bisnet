@@ -62,17 +62,17 @@ const PaginationButton = ({ name = '', type = 'link', active = false }) => {
 
   if (type === 'prev') {
     return h(
-      'span',
-      { class: classList.value },
-      h(Icon, { icon: 'ri:arrow-drop-left-line', class: 'size-6' }),
+      'a',
+      { href: '', class: classList.value },
+      h(Icon, { icon: 'ri:arrow-left-s-line', class: 'size-4' }),
     );
   }
 
   if (type === 'next') {
     return h(
-      'span',
-      { class: classList.value },
-      h(Icon, { icon: 'ri:arrow-drop-right-line', class: 'size-6' }),
+      'a',
+      { href: '', class: classList.value },
+      h(Icon, { icon: 'ri:arrow-right-s-line', class: 'size-4' }),
     );
   }
 
