@@ -23,6 +23,7 @@ const menus = [
     id: 'product',
     name: 'Barang',
     icon: 'ri:archive-2-line',
+    activeKey: ['product', 'product-category'],
     children: [
       {
         id: 'product',
@@ -30,8 +31,8 @@ const menus = [
         name: 'Kelola Barang',
       },
       {
-        id: 'category_product',
-        to: { name: 'product' },
+        id: 'product-category',
+        to: { name: 'product-category' },
         name: 'Kategori Barang',
       },
     ],
@@ -143,7 +144,11 @@ router.beforeEach(() => {
           />
         </div>
 
-        <div v-if="menusOpened.includes(menu.id)" v-motion-fade>
+        <div
+          v-if="menusOpened.includes(menu.id)"
+          class="space-y-1"
+          v-motion-fade
+        >
           <router-link
             v-for="child in menu.children"
             :key="child.id"

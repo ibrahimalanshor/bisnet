@@ -18,6 +18,13 @@ export const router = createRouter({
         import('./features/supplier/components/SupplierIndexPage.vue'),
     },
     {
+      path: '/product-category',
+      name: 'product-category',
+      meta: { layout: 'LayoutAdmin' },
+      component: () =>
+        import('./features/product-category/components/ProductCategoryIndexPage.vue'),
+    },
+    {
       path: '/product',
       name: 'product',
       meta: { layout: 'LayoutAdmin' },
