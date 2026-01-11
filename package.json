@@ -15,6 +15,7 @@
     "@vueuse/motion": "^3.0.3",
     "click-outside-vue3": "^4.0.1",
     "dayjs": "^1.11.19",
+    "floating-vue": "^5.2.2",
     "jsbarcode": "^3.12.3",
     "maska": "^3.2.0",
     "pinia": "^3.0.4",

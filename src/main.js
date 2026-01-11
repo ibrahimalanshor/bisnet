@@ -7,6 +7,8 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { router } from './router';
 import { layouts } from './layout';
 import { MotionPlugin } from '@vueuse/motion';
+import FloatingVue from 'floating-vue';
+import 'floating-vue/dist/style.css';
 
 const pinia = createPinia();
 
@@ -18,6 +20,7 @@ app.use(pinia);
 app.use(vClickOutside);
 app.use(router);
 app.use(MotionPlugin);
+app.use(FloatingVue);
 
 for (const layout in layouts) {
   app.component(layout, layouts[layout]);

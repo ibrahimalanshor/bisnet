@@ -5,6 +5,7 @@ import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vue';
 import ProductStockHistoryTable from './ProductStockHistoryTable.vue';
 import ProductBarcode from './ProductBarcode.vue';
+import ProductStock from './ProductStock.vue';
 import { sleep, formatCurrency } from '../../../utils/common.js';
 import { ref, h } from 'vue';
 import mocks from '../data/product.json';
@@ -34,7 +35,7 @@ const columns = [
   {
     id: 'stock',
     name: 'Stock',
-    value: (data) => formatCurrency(data.stock),
+    render: ({ data }) => h(ProductStock, { product: data }),
   },
   {
     id: 'barcode',

@@ -10,6 +10,7 @@ import BasePagination from '../../../components/base/BasePagination.vue';
 import ProductFormModal from './ProductFormModal.vue';
 import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
 import ProductDetailModal from './ProductDetailModal.vue';
+import ProductStock from './ProductStock.vue';
 import { sleep, formatCurrency } from '../../../utils/common';
 
 const columns = [
@@ -23,7 +24,11 @@ const columns = [
       ]),
   },
   { id: 'price', name: 'Harga', value: (item) => formatCurrency(item.price) },
-  { id: 'Stock', name: 'Stok', value: (item) => item.stock },
+  {
+    id: 'Stock',
+    name: 'Stok',
+    render: ({ item }) => h(ProductStock, { product: item }),
+  },
   { id: 'action', name: 'Aksi' },
 ];
 const loading = ref(true);
