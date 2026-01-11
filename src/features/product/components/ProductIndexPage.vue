@@ -7,6 +7,7 @@ import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
+import BaseSelect from '../../../components/base/BaseSelect.vue';
 import ProductFormModal from './ProductFormModal.vue';
 import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
 import ProductDetailModal from './ProductDetailModal.vue';
@@ -30,6 +31,12 @@ const columns = [
     render: ({ item }) => h(ProductStock, { product: item }),
   },
   { id: 'action', name: 'Aksi' },
+];
+const filterStockStatusOptions = [
+  { id: 'null', name: 'Semua Stok' },
+  { id: 'has_stock', name: 'Stok Ada' },
+  { id: 'low_stock', name: 'Stok Hampir Habis' },
+  { id: 'out_stock', name: 'Stok Habis' },
 ];
 const loading = ref(true);
 const error = ref(false);
@@ -106,6 +113,7 @@ loadProducts();
           v-model="filter.search"
           @input-debounce="loadProducts({ reload: true })"
         />
+        <BaseSelect :options="filterStockStatusOptions" />
         <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
           >Tambah Barang</BaseButton
         >
