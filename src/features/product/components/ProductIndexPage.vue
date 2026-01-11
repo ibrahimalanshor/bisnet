@@ -10,20 +10,18 @@ import BasePagination from '../../../components/base/BasePagination.vue';
 import ProductFormModal from './ProductFormModal.vue';
 import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
 import ProductDetailModal from './ProductDetailModal.vue';
-import ProductBarcode from './ProductBarcode.vue';
 import { sleep, formatCurrency } from '../../../utils/common';
 
 const columns = [
   {
-    id: 'barcode',
-    name: 'Barcode',
+    id: 'name',
+    name: 'Nama',
     render: ({ item }) =>
-      h(ProductBarcode, {
-        product: item,
-      }),
-    classList: 'w-[200px]',
+      h('div', {}, [
+        h('p', { class: 'text-sm text-gray-500' }, item.category_name),
+        h('p', { class: 'font-medium' }, item.name),
+      ]),
   },
-  { id: 'name', name: 'Nama', value: (item) => item.name },
   { id: 'price', name: 'Harga', value: (item) => formatCurrency(item.price) },
   { id: 'Stock', name: 'Stok', value: (item) => item.stock },
   { id: 'action', name: 'Aksi' },

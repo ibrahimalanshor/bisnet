@@ -19,13 +19,12 @@ const data = ref({});
 
 const columns = [
   {
-    id: 'barcode',
-    name: 'Barcode',
-    render: ({ data }) => h(ProductBarcode, { product: data }),
-  },
-  {
     id: 'name',
     name: 'Nama',
+  },
+  {
+    id: 'category_name',
+    name: 'Kategori',
   },
   {
     id: 'price',
@@ -36,6 +35,11 @@ const columns = [
     id: 'stock',
     name: 'Stock',
     value: (data) => formatCurrency(data.stock),
+  },
+  {
+    id: 'barcode',
+    name: 'Barcode',
+    render: ({ data }) => h(ProductBarcode, { product: data }),
   },
   {
     id: 'stock_histories',
