@@ -37,7 +37,7 @@ watch(visible, (val) => {
 <template>
   <div
     v-if="visible"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center px-4"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center px-4 z-10"
   >
     <BaseCard
       :bordered="false"

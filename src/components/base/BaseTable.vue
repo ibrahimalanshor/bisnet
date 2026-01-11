@@ -1,7 +1,7 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 
-defineProps({
+const props = defineProps({
   columns: {
     type: Array,
     default: () => [],
@@ -19,7 +19,15 @@ defineProps({
     type: String,
     default: 'Tidak ada data',
   },
+  clickable: Boolean,
 });
+const emit = defineEmits(['click-row']);
+
+function onClickRow(row) {
+  if (props.clickable) {
+    emit('click-row', row);
+  }
+}
 </script>
 
 <template>
@@ -55,7 +63,12 @@ defineProps({
           </td>
         </tr>
         <template v-else>
-          <tr v-for="(item, index) in data" :key="item.id">
+          <tr
+            v-for="(item, index) in data"
+            :key="item.id"
+            :class="[clickable ? 'cursor-pointer hover:bg-gray-50' : '']"
+            @click="onClickRow(item)"
+          >
             <td
               v-for="column in columns"
               :key="column.id"

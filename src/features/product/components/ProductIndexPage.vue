@@ -19,7 +19,7 @@ const columns = [
     render: ({ item }) =>
       h(VueBarcode, {
         value: item.barcode,
-        options: { height: 80, width: 1.5, fontSize: 12 },
+        options: { height: 60, width: 1.4, fontSize: 12 },
       }),
     classList: 'w-[200px]',
   },
