@@ -7,6 +7,7 @@ import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
+import RestockDetailModal from './RestockDetailModal.vue';
 import { sleep, formatDate, formatCurrency } from '../../../utils/common';
 
 const columns = [
@@ -36,6 +37,10 @@ const query = reactive({
 const filter = reactive({
   search: null,
 });
+const detailModal = reactive({
+  id: null,
+  visible: false,
+});
 
 async function loadRestocks({ refresh, reload } = {}) {
   if (refresh) {
@@ -54,6 +59,11 @@ async function loadRestocks({ refresh, reload } = {}) {
   restocks.value = { data: data.slice(0, 10) };
 
   loading.value = false;
+}
+
+function onOpenDetail(item) {
+  detailModal.id = item.id;
+  detailModal.visible = true;
 }
 
 loadRestocks();
@@ -82,10 +92,20 @@ loadRestocks();
     </template>
   </BaseHeading>
   <BaseAlert v-if="error">Gagal memuat data restock.</BaseAlert>
-  <BaseTable :columns="columns" :data="restocks.data" :loading="loading" />
+  <BaseTable
+    :columns="columns"
+    :data="restocks.data"
+    :loading="loading"
+    clickable
+    @click-row="onOpenDetail"
+  />
   <BasePagination
     :total-pages="10"
     v-model="query.page"
     @change="loadRestocks"
+  />
+  <RestockDetailModal
+    :id="detailModal.id"
+    v-model:visible="detailModal.visible"
   />
 </template>
