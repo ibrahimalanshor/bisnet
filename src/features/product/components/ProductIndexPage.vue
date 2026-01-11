@@ -9,6 +9,8 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import ProductFormModal from './ProductFormModal.vue';
 import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
+import ProductDetailModal from './ProductDetailModal.vue';
+import ProductBarcode from './ProductBarcode.vue';
 import VueBarcode from '@chenfengyuan/vue-barcode';
 import { sleep, formatCurrency } from '../../../utils/common';
 
@@ -17,9 +19,8 @@ const columns = [
     id: 'barcode',
     name: 'Barcode',
     render: ({ item }) =>
-      h(VueBarcode, {
-        value: item.barcode,
-        options: { height: 60, width: 1.4, fontSize: 12 },
+      h(ProductBarcode, {
+        product: item,
       }),
     classList: 'w-[200px]',
   },
@@ -42,6 +43,10 @@ const formModal = reactive({
   visible: false,
 });
 const deleteConfirm = reactive({
+  id: null,
+  visible: false,
+});
+const detailModal = reactive({
   id: null,
   visible: false,
 });
@@ -77,6 +82,12 @@ function onDelete(id) {
   deleteConfirm.id = id;
   deleteConfirm.visible = true;
 }
+function onOpenDetail(item, e) {
+  if (!e.target.closest('button')) {
+    detailModal.id = item.id;
+    detailModal.visible = true;
+  }
+}
 
 loadProducts();
 </script>
@@ -100,7 +111,13 @@ loadProducts();
     </template>
   </BaseHeading>
   <BaseAlert v-if="error">Gagal memuat data barang.</BaseAlert>
-  <BaseTable :columns="columns" :data="products.data" :loading="loading">
+  <BaseTable
+    :columns="columns"
+    :data="products.data"
+    :loading="loading"
+    clickable
+    @click-row="onOpenDetail"
+  >
     <template #column-action="{ item }">
       <div class="flex gap-2">
         <BaseButton
@@ -132,5 +149,9 @@ loadProducts();
     :id="deleteConfirm.id"
     v-model:visible="deleteConfirm.visible"
     @deleted="loadProducts({ refresh: true })"
+  />
+  <ProductDetailModal
+    :id="detailModal.id"
+    v-model:visible="detailModal.visible"
   />
 </template>

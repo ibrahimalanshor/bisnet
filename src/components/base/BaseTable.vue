@@ -23,9 +23,9 @@ const props = defineProps({
 });
 const emit = defineEmits(['click-row']);
 
-function onClickRow(row) {
+function onClickRow(e, row) {
   if (props.clickable) {
-    emit('click-row', row);
+    emit('click-row', row, e);
   }
 }
 </script>
@@ -67,7 +67,7 @@ function onClickRow(row) {
             v-for="(item, index) in data"
             :key="item.id"
             :class="[clickable ? 'cursor-pointer hover:bg-gray-50' : '']"
-            @click="onClickRow(item)"
+            @click="(e) => onClickRow(e, item)"
           >
             <td
               v-for="column in columns"

@@ -1,0 +1,73 @@
+[
+  {
+    "id": 1,
+    "amount": 50,
+    "currentStock": 50,
+    "description": "Restock awal dari supplier",
+    "createdAt": "2026-01-01T09:15:00Z"
+  },
+  {
+    "id": 2,
+    "amount": -3,
+    "currentStock": 47,
+    "description": "Penjualan via POS",
+    "createdAt": "2026-01-01T10:02:30Z"
+  },
+  {
+    "id": 3,
+    "amount": -2,
+    "currentStock": 45,
+    "description": "Penjualan via marketplace",
+    "createdAt": "2026-01-01T11:45:10Z"
+  },
+  {
+    "id": 4,
+    "amount": 20,
+    "currentStock": 65,
+    "description": "Restock tambahan",
+    "createdAt": "2026-01-02T08:30:00Z"
+  },
+  {
+    "id": 5,
+    "amount": -1,
+    "currentStock": 64,
+    "description": "Barang rusak",
+    "createdAt": "2026-01-02T14:20:45Z"
+  },
+  {
+    "id": 6,
+    "amount": -5,
+    "currentStock": 59,
+    "description": "Penjualan grosir",
+    "createdAt": "2026-01-03T09:10:00Z"
+  },
+  {
+    "id": 7,
+    "amount": 10,
+    "currentStock": 69,
+    "description": "Retur dari customer",
+    "createdAt": "2026-01-03T16:05:12Z"
+  },
+  {
+    "id": 8,
+    "amount": -2,
+    "currentStock": 67,
+    "description": "Penyesuaian stok (opname)",
+    "createdAt": "2026-01-04T07:50:00Z"
+  },
+  {
+    "id": 9,
+    "amount": 30,
+    "currentStock": 97,
+    "description": "Restock bulanan",
+    "createdAt": "2026-01-05T08:00:00Z"
+  },
+  {
+    "id": 10,
+    "amount": -4,
+    "currentStock": 93,
+    "description": "Penjualan offline",
+    "createdAt": "2026-01-05T12:40:30Z"
+  }
+]
+
