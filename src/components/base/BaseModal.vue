@@ -30,8 +30,12 @@ function onClose() {
 watch(visible, (val) => {
   if (val) {
     emit('open');
+
+    document.body.classList.add('overflow-hidden');
   } else {
     emit('close');
+
+    document.body.classList.remove('overflow-hidden');
   }
 });
 </script>
@@ -39,7 +43,7 @@ watch(visible, (val) => {
 <template>
   <div
     v-if="visible"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center px-4 z-10"
+    class="fixed inset-0 bg-black/50 flex items-start justify-center px-4 py-16 z-10 overflow-y-auto"
   >
     <BaseCard
       :bordered="false"
