@@ -33,8 +33,13 @@ const columns = [
     value: (data) => formatCurrency(data.price),
   },
   {
+    id: 'min_stock',
+    name: 'Min Stok',
+    value: (data) => formatCurrency(data.min_stock),
+  },
+  {
     id: 'stock',
-    name: 'Stock',
+    name: 'Stok',
     render: ({ data }) => h(ProductStock, { product: data }),
   },
   {

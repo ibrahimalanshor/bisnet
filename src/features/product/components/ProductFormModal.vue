@@ -25,6 +25,7 @@ const form = reactive({
   barcode: null,
   name: null,
   price: null,
+  minStock: null,
   category: null,
 });
 
@@ -43,6 +44,7 @@ function onOpen() {
   form.barcode = null;
   form.name = null;
   form.price = null;
+  form.minStock = null;
 
   if (props.id) {
     form.category = {
@@ -107,6 +109,19 @@ async function onSubmit() {
           :id="id"
           placeholder="Makanan"
           v-model="form.category"
+        />
+      </BaseFormItem>
+      <BaseFormItem
+        id="product_form.min_stock"
+        label="Minimal Stok"
+        v-slot="{ id }"
+      >
+        <BaseInput
+          :id="id"
+          placeholder="10"
+          required
+          currency
+          v-model="form.minStock"
         />
       </BaseFormItem>
       <BaseFormItem id="product_form.price" label="Harga" v-slot="{ id }">
