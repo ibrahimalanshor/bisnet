@@ -1,0 +1,73 @@
+[
+  {
+    "id": 1,
+    "product_name": "Beras Ramos 5kg",
+    "qty": 10,
+    "price": 72000,
+    "total_price": 720000
+  },
+  {
+    "id": 2,
+    "product_name": "Gula Pasir 1kg",
+    "qty": 25,
+    "price": 13500,
+    "total_price": 337500
+  },
+  {
+    "id": 3,
+    "product_name": "Minyak Goreng 2L",
+    "qty": 15,
+    "price": 28000,
+    "total_price": 420000
+  },
+  {
+    "id": 4,
+    "product_name": "Tepung Terigu 1kg",
+    "qty": 20,
+    "price": 12000,
+    "total_price": 240000
+  },
+  {
+    "id": 5,
+    "product_name": "Susu UHT 1L",
+    "qty": 30,
+    "price": 18000,
+    "total_price": 540000
+  },
+  {
+    "id": 6,
+    "product_name": "Kopi Bubuk 200g",
+    "qty": 40,
+    "price": 15000,
+    "total_price": 600000
+  },
+  {
+    "id": 7,
+    "product_name": "Teh Celup 50pcs",
+    "qty": 18,
+    "price": 22000,
+    "total_price": 396000
+  },
+  {
+    "id": 8,
+    "product_name": "Indomie Goreng",
+    "qty": 100,
+    "price": 3200,
+    "total_price": 320000
+  },
+  {
+    "id": 9,
+    "product_name": "Air Mineral 600ml",
+    "qty": 120,
+    "price": 2800,
+    "total_price": 336000
+  },
+  {
+    "id": 10,
+    "product_name": "Sabun Mandi Batang",
+    "qty": 50,
+    "price": 4500,
+    "total_price": 225000
+  }
+]
+
