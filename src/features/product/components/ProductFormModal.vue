@@ -5,9 +5,11 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseSkeleton from '../../../components/base/BaseSkeleton.vue';
+import ProductCategorySelectSearch from '../../product-category/components/ProductCategorySelectSearch.vue';
 import { ref, reactive } from 'vue';
 import { sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
+import categories from '../../product-category/data/product-category.json';
 
 const props = defineProps({
   id: null,
@@ -23,6 +25,7 @@ const form = reactive({
   barcode: null,
   name: null,
   price: null,
+  category: null,
 });
 
 async function loadForm() {
@@ -40,6 +43,15 @@ function onOpen() {
   form.barcode = null;
   form.name = null;
   form.price = null;
+
+  if (props.id) {
+    form.category = {
+      id: categories[0].id,
+      name: categories[0].name,
+    };
+  } else {
+    form.category = null;
+  }
 
   if (props.id) {
     loadForm();
@@ -88,6 +100,13 @@ async function onSubmit() {
           placeholder="Pasta Gigi"
           required
           v-model="form.name"
+        />
+      </BaseFormItem>
+      <BaseFormItem id="product_form.category" label="Kategori" v-slot="{ id }">
+        <ProductCategorySelectSearch
+          :id="id"
+          placeholder="Makanan"
+          v-model="form.category"
         />
       </BaseFormItem>
       <BaseFormItem id="product_form.price" label="Harga" v-slot="{ id }">

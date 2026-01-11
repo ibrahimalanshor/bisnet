@@ -1,12 +1,13 @@
 <script setup>
 import BaseSelectSearch from '../../../components/base/BaseSelectSearch.vue';
 import { ref } from 'vue';
-import data from '../data/supplier.json';
+import data from '../data/product-category.json';
 import { sleep } from '../../../utils/common';
 
+const selected = defineModel();
 const options = ref([]);
 const loading = ref(false);
-const search = ref('');
+const search = ref(selected.value ? selected.value.name : '');
 
 async function loadOptions() {
   loading.value = true;
@@ -33,6 +34,7 @@ async function onSearch() {
     :options="options"
     :loading="loading"
     v-model:search="search"
+    v-model="selected"
     @focus="loadOptions"
     @search="onSearch"
   />
