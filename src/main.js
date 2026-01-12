@@ -9,6 +9,28 @@ import { layouts } from './layout';
 import { MotionPlugin } from '@vueuse/motion';
 import FloatingVue from 'floating-vue';
 import 'floating-vue/dist/style.css';
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Legend,
+  Tooltip,
+  BarElement,
+} from 'chart.js';
+
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Legend,
+  Tooltip,
+  BarElement,
+);
 
 const pinia = createPinia();
 

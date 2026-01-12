@@ -3,6 +3,7 @@ import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseStats from '../../../components/base/BaseStats.vue';
 import BaseCard from '../../../components/base/BaseCard.vue';
 import SaleLineChart from './SaleLineChart.vue';
+import ProductBarChart from './ProductBarChart.vue';
 
 const stats = [
   {
@@ -59,6 +60,8 @@ const stats = [
     <BaseCard title="Penjualan Minggu Ini">
       <SaleLineChart />
     </BaseCard>
-    <BaseCard title="Produk Terlaris Minggu Ini"> </BaseCard>
+    <BaseCard title="Barang Terlaris Minggu Ini">
+      <ProductBarChart />
+    </BaseCard>
   </div>
 </template>
