@@ -250,7 +250,7 @@ function onChangeQty(index) {
 
     <template #action>
       <div class="grid sm:grid-cols-2 gap-2">
-        <BaseButton class="col-span-full" icon="ri:printer-fill" color="success"
+        <BaseButton class="col-span-full" icon="ri:receipt-fill" color="success"
           >Cetak Struk</BaseButton
         >
         <BaseButton color="light" icon="ri:add-fill" @click="onReset"
