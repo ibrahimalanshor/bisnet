@@ -26,7 +26,13 @@ const itemsColumn = [
     name: 'Nama Barang',
     classList: 'w-[400px]',
   },
-  { id: 'qty', name: 'Jumlah', classList: 'w-[150px]' },
+  { id: 'stock', name: 'Stok', classList: 'w-[150px]' },
+  {
+    id: 'qty',
+    name: 'Jumlah',
+    classList: 'w-[150px]',
+    value: (item) => formatCurrency(item.stock),
+  },
   {
     id: 'product_price',
     name: 'Harga',
@@ -84,7 +90,9 @@ function onChangeProduct() {
       product_name: form.product.originalName,
       product_barcode: form.product.barcode,
       product_price: form.product.price,
+      stock: 10,
       qty: null,
+      originalQty: null,
     });
   }
 
@@ -104,6 +112,17 @@ async function onConfirm() {
   });
 
   loadingConfirm.value = false;
+}
+function onChangeQty(index) {
+  const product = items.value[index];
+
+  const qty = currencyToNum(product.qty, { failToZero: true });
+
+  if (qty > product.stock || qty < 0) {
+    items.value[index].qty = product.originalQty;
+  } else {
+    items.value[index].originalQty = product.qty;
+  }
 }
 </script>
 
@@ -148,6 +167,7 @@ async function onConfirm() {
         class="w-[100px]"
         currency
         v-model="items[index].qty"
+        @change="onChangeQty(index)"
       />
     </template>
     <template #column-action="{ index }">
