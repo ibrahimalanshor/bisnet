@@ -41,7 +41,7 @@ const stats = [
 <template>
   <BaseHeading>Dashboard</BaseHeading>
 
-  <div class="grid gap-4">
+  <div class="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
     <BaseStats
       v-for="stat in stats"
       :key="stat.id"

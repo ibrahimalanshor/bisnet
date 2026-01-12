@@ -51,7 +51,7 @@ const colorClass = computed(() => {
     <div class="flex gap-3 items-center">
       <div
         :class="[
-          'w-14 h-14 rounded-md flex items-center justify-center',
+          'w-14 h-14 rounded-md flex items-center justify-center shrink-0',
           colorClass.bg,
         ]"
       >
@@ -65,8 +65,19 @@ const colorClass = computed(() => {
           {{ formatCurrency(value) }}
         </p>
       </div>
-      <span>
-        {{ trend }}
+      <span
+        v-if="trend"
+        :class="[
+          'self-end ml-auto inline-flex items-center gap-1 text-sm font-semibold',
+          trend > 0 ? 'text-green-700' : 'text-red-700',
+        ]"
+      >
+        <Icon
+          :icon="
+            trend > 0 ? 'ri:arrow-right-up-fill' : 'ri:arrow-right-down-fill'
+          "
+        />
+        {{ trend }}%
       </span>
     </div>
   </BaseCard>
