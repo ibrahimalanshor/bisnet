@@ -14,11 +14,6 @@ import {
   formatDate,
   sleep,
 } from '../../../utils/common';
-import { useRouter } from 'vue-router';
-import { useToastStore } from '../../../cores/toast/toast.store';
-
-const router = useRouter();
-const toastStore = useToastStore();
 
 const itemsColumn = [
   {
@@ -57,6 +52,10 @@ const form = reactive({
   paymentAmount: null,
 });
 const visibleConfirm = ref(false);
+const successDetail = reactive({
+  visible: false,
+  code: 'RS-89231',
+});
 const loadingConfirm = ref(false);
 const items = ref([]);
 const grandTotal = computed(() =>
@@ -103,15 +102,19 @@ async function onConfirm() {
 
   await sleep();
 
-  toastStore.create({
-    message: 'Penjualan berhasil disimpan',
-    type: 'success',
-  });
-  router.push({
-    name: 'sale.index',
-  });
+  visibleConfirm.value = false;
+  successDetail.visible = true;
 
   loadingConfirm.value = false;
+}
+function onReset() {
+  successDetail.visible = false;
+
+  items.value = [];
+
+  form.date = formatDate(new Date(), 'YYYY-MM-DD');
+  form.product = null;
+  form.paymentAmount = null;
 }
 function onChangeQty(index) {
   const product = items.value[index];
@@ -231,4 +234,34 @@ function onChangeQty(index) {
     v-model:visible="visibleConfirm"
     @confirm="onConfirm"
   />
+  <BaseConfirm
+    type="success"
+    confirm-color="primary"
+    title="Penjualan berhasil disimpan"
+    v-model:visible="successDetail.visible"
+    @close-outside="$router.push({ name: 'restock.index' })"
+  >
+    <template #message>
+      <p class="text-gray-700">
+        Penjualan dengan kode
+        <b class="text-gray-900">{{ successDetail.code }}</b> berhasil disimpan
+      </p>
+    </template>
+
+    <template #action>
+      <div class="grid sm:grid-cols-2 gap-2">
+        <BaseButton class="col-span-full" icon="ri:printer-fill" color="success"
+          >Cetak Struk</BaseButton
+        >
+        <BaseButton color="light" icon="ri:add-fill" @click="onReset"
+          >Buat Penjualan Baru</BaseButton
+        >
+        <BaseButton
+          color="light"
+          @click="$router.push({ name: 'restock.index' })"
+          >Kembali</BaseButton
+        >
+      </div>
+    </template>
+  </BaseConfirm>
 </template>

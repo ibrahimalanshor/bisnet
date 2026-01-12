@@ -38,7 +38,7 @@ const buttonColorClass = computed(() => {
     success: 'bg-green-600 text-white hover:bg-green-700',
     error: 'bg-red-600 text-white hover:bg-red-700',
     primary: 'bg-blue-600 text-white hover:bg-blue-700',
-    light: 'bg-white border border-gray-300',
+    light: 'bg-white border border-gray-300 hover:bg-gray-100',
   };
 
   return colors[props.color];

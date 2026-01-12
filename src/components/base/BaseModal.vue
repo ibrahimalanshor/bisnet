@@ -10,7 +10,7 @@ const props = defineProps({
     default: 'md',
   },
 });
-const emit = defineEmits(['open', 'close']);
+const emit = defineEmits(['open', 'close', 'close-outside']);
 const visible = defineModel('visible');
 
 const sizeClass = computed(() => {
@@ -23,6 +23,8 @@ const sizeClass = computed(() => {
 
 function onClose() {
   visible.value = false;
+
+  emit('close-outside');
 }
 
 watch(visible, (val) => {

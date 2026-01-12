@@ -2,8 +2,9 @@
 import BaseModal from './BaseModal.vue';
 import BaseButton from './BaseButton.vue';
 import { Icon } from '@iconify/vue';
+import { computed } from 'vue';
 
-defineProps({
+const props = defineProps({
   title: String,
   message: String,
   confirmText: String,
@@ -21,31 +22,44 @@ defineProps({
 defineEmits(['confirm']);
 
 const visible = defineModel('visible');
+
+const icon = computed(() => {
+  return {
+    error: 'ri:alert-fill',
+    info: 'ri:information-fill',
+    success: 'ri:checkbox-circle-fill',
+  }[props.type];
+});
+const iconColorClass = computed(() => {
+  return {
+    error: 'text-red-600',
+    info: 'text-blue-600',
+    success: 'text-green-600',
+  }[props.type];
+});
 </script>
 
 <template>
   <BaseModal size="xs" v-model:visible="visible">
     <div class="text-center mb-6 space-y-2">
-      <Icon
-        :icon="type === 'error' ? 'ri:alert-line' : 'ri:information-line'"
-        :class="[
-          'size-12 mx-auto',
-          type === 'error' ? 'text-red-600' : 'text-blue-600',
-        ]"
-      />
+      <Icon :icon="icon" :class="['size-12 mx-auto', iconColorClass]" />
       <h2 class="font-bold text-2xl">{{ title }}</h2>
-      <p class="text-gray-700">{{ message }}</p>
+      <slot name="message">
+        <p class="text-gray-700">{{ message }}</p>
+      </slot>
     </div>
-    <div class="grid grid-cols-2 gap-2">
-      <BaseButton
-        :color="confirmColor"
-        :loading="loading"
-        @click="$emit('confirm')"
-        >{{ confirmText }}</BaseButton
-      >
-      <BaseButton color="light" @click="visible = false">{{
-        cancelText
-      }}</BaseButton>
-    </div>
+    <slot name="action">
+      <div class="grid grid-cols-2 gap-2">
+        <BaseButton
+          :color="confirmColor"
+          :loading="loading"
+          @click="$emit('confirm')"
+          >{{ confirmText }}</BaseButton
+        >
+        <BaseButton color="light" @click="visible = false">{{
+          cancelText
+        }}</BaseButton>
+      </div>
+    </slot>
   </BaseModal>
 </template>
