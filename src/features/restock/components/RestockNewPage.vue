@@ -84,6 +84,7 @@ function onChangeProduct() {
       product_name: form.product.originalName,
       product_barcode: form.product.barcode,
       qty: null,
+      originalQty: null,
       price: null,
     });
   }
@@ -104,6 +105,17 @@ async function onConfirm() {
   });
 
   loadingConfirm.value = false;
+}
+function onChangeQty(index) {
+  const product = items.value[index];
+
+  const qty = currencyToNum(product.qty, { failToZero: true });
+
+  if (qty < 0) {
+    items.value[index].qty = product.originalQty;
+  } else {
+    items.value[index].originalQty = product.qty;
+  }
 }
 </script>
 
@@ -164,6 +176,7 @@ async function onConfirm() {
         class="w-[100px]"
         currency
         v-model="items[index].qty"
+        @change="onChangeQty(index)"
       />
     </template>
     <template #column-price="{ index }">

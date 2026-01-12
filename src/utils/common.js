@@ -38,5 +38,5 @@ export function currencyToNum(cur, options = { failToZero: false }) {
     return options.failToZero ? 0 : null;
   }
 
-  return Number(cur.replace(/\D/gi, ''));
+  return Number(cur.replace(/,/gi, ''));
 }
