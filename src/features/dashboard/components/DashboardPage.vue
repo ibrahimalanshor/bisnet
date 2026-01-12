@@ -1,6 +1,8 @@
 <script setup>
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseStats from '../../../components/base/BaseStats.vue';
+import BaseCard from '../../../components/base/BaseCard.vue';
+import SaleLineChart from './SaleLineChart.vue';
 
 const stats = [
   {
@@ -51,5 +53,12 @@ const stats = [
       :trend="stat.trend"
       :color="stat.color"
     />
+  </div>
+
+  <div class="grid gap-4 xl:grid-cols-2">
+    <BaseCard title="Penjualan Minggu Ini">
+      <SaleLineChart />
+    </BaseCard>
+    <BaseCard title="Produk Terlaris Minggu Ini"> </BaseCard>
   </div>
 </template>
