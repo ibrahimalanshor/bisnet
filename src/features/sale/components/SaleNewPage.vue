@@ -7,6 +7,7 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseConfirm from '../../../components/base/BaseConfirm.vue';
 import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
+import { Icon } from '@iconify/vue';
 import { ref, reactive, computed } from 'vue';
 import {
   formatCurrency,
@@ -64,6 +65,7 @@ const successDetail = reactive({
 });
 const loadingConfirm = ref(false);
 const items = ref([]);
+
 const grandTotal = computed(() =>
   items.value.reduce(
     (total, item) =>
@@ -82,6 +84,26 @@ const valid = computed(
     items.value.length > 0 &&
     items.value.every((item) => currencyToNum(item.qty) > 0),
 );
+
+async function onConfirm() {
+  loadingConfirm.value = true;
+
+  await sleep();
+
+  visibleConfirm.value = false;
+  successDetail.visible = true;
+
+  loadingConfirm.value = false;
+}
+function onReset() {
+  successDetail.visible = false;
+
+  items.value = [];
+
+  form.date = formatDate(new Date(), 'YYYY-MM-DD');
+  form.product = null;
+  form.paymentAmount = null;
+}
 
 function onChangeProduct() {
   const existingIndex = items.value.findIndex(
@@ -107,25 +129,6 @@ function onChangeProduct() {
   }
 
   form.product = null;
-}
-async function onConfirm() {
-  loadingConfirm.value = true;
-
-  await sleep();
-
-  visibleConfirm.value = false;
-  successDetail.visible = true;
-
-  loadingConfirm.value = false;
-}
-function onReset() {
-  successDetail.visible = false;
-
-  items.value = [];
-
-  form.date = formatDate(new Date(), 'YYYY-MM-DD');
-  form.product = null;
-  form.paymentAmount = null;
 }
 function onChangeQty(index) {
   const product = items.value[index];
@@ -165,6 +168,12 @@ function onChangeDiscount(index) {
       items.value[index].originalDiscount = product.discount;
     }
   }
+}
+function onAddDiscount(index) {
+  items.value[index].withDiscount = true;
+  items.value[index].discount = null;
+  items.value[index].originalDiscount = null;
+  items.value[index].discountType = 'percent';
 }
 </script>
 
@@ -218,10 +227,10 @@ function onChangeDiscount(index) {
         icon="ri:add-line"
         color="light"
         size="sm"
-        @click="items[index].withDiscount = true"
+        @click="onAddDiscount(index)"
         >Diskon</BaseButton
       >
-      <div v-else class="flex items-center">
+      <div v-else class="flex items-center relative">
         <VDropdown>
           <BaseButton
             icon="ri:arrow-down-s-line"
@@ -248,17 +257,26 @@ function onChangeDiscount(index) {
             </div>
           </template>
         </VDropdown>
-        <BaseInput
-          placeholder="0"
-          width="unset"
+        <div
           :class="[
-            item.discountType === 'percent' ? 'w-[60px]' : 'w-[100px]',
-            'rounded-l-none border-l-0',
+            item.discountType === 'percent' ? 'w-[70px]' : 'w-[100px]',
+            'relative',
           ]"
-          currency
-          v-model="items[index].discount"
-          @change="onChangeDiscount(index)"
-        />
+        >
+          <BaseInput
+            placeholder="0"
+            :class="['rounded-l-none border-l-0']"
+            currency
+            v-model="items[index].discount"
+            @change="onChangeDiscount(index)"
+          />
+          <button
+            class="bg-red-600 text-white w-4 h-4 rounded-full flex items-center justify-center absolute -top-1 -right-1.5 cursor-pointer"
+            @click="items[index].withDiscount = false"
+          >
+            <Icon icon="ri:close-line" />
+          </button>
+        </div>
       </div>
     </template>
     <template #column-action="{ index }">
