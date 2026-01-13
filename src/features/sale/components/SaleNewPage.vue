@@ -17,41 +17,50 @@ import {
   extractPriceTax,
 } from '../../../utils/common';
 
-const itemsColumn = [
-  {
-    id: 'product_name',
-    name: 'Nama Barang',
-    classList: 'w-[400px]',
-  },
-  { id: 'stock', name: 'Stok', classList: 'w-[150px]' },
-  {
-    id: 'qty',
-    name: 'Jumlah',
-    classList: 'w-[150px]',
-    value: (item) => formatCurrency(item.stock),
-  },
-  {
-    id: 'product_price',
-    name: 'Harga',
-    classList: 'w-[250px]',
-    value: (item) => formatCurrency(item.product_price),
-  },
-  {
-    id: 'total_price',
-    name: 'Total',
-    classList: 'w-[250px]',
-    value: (item) =>
-      formatCurrency(
-        currencyToNum(item.qty, { failToZero: true }) * item.product_price,
-      ),
-  },
-  {
-    id: 'discount',
-    name: 'Diskon',
-    classList: 'w-[250px]',
-  },
-  { id: 'action', name: 'Aksi', classList: 'w-[100px]' },
-];
+const itemsColumn = computed(() => {
+  return [
+    {
+      id: 'product_name',
+      name: 'Nama Barang',
+      classList: 'w-[400px]',
+    },
+    { id: 'stock', name: 'Stok', classList: 'w-[150px]' },
+    {
+      id: 'qty',
+      name: 'Jumlah',
+      classList: 'w-[150px]',
+      value: (item) => formatCurrency(item.stock),
+    },
+    {
+      id: 'product_price',
+      name: 'Harga',
+      classList: 'w-[250px]',
+      value: (item) => formatCurrency(item.product_price),
+    },
+    {
+      id: 'total_price',
+      name: 'Total',
+      classList: 'w-[250px]',
+      value: (item) => formatCurrency(countItemTotalPrice(item)),
+    },
+    {
+      id: 'discount',
+      name: 'Diskon',
+      classList: 'w-[250px]',
+    },
+    ...(items.value.some((item) => item.withDiscount)
+      ? [
+          {
+            id: 'subtotal',
+            name: 'Subtotal',
+            classList: 'w-[250px]',
+            value: (item) => formatCurrency(countItemSubTotal(item)),
+          },
+        ]
+      : []),
+    { id: 'action', name: 'Aksi', classList: 'w-[100px]' },
+  ];
+});
 
 const form = reactive({
   date: formatDate(new Date(), 'YYYY-MM-DD'),
@@ -84,6 +93,27 @@ const valid = computed(
     items.value.length > 0 &&
     items.value.every((item) => currencyToNum(item.qty) > 0),
 );
+
+function countItemTotalPrice(item) {
+  return currencyToNum(item.qty, { failToZero: true }) * item.product_price;
+}
+function countItemSubTotal(item) {
+  const totalPrice = countItemTotalPrice(item);
+
+  if (!item.withDiscount) {
+    return totalPrice;
+  }
+
+  const discount = currencyToNum(item.discount, { failToZero: true });
+
+  if (item.discountType === 'value') {
+    return totalPrice - discount;
+  }
+
+  const discountVale = (discount / 100) * totalPrice;
+
+  return totalPrice - discountVale;
+}
 
 async function onConfirm() {
   loadingConfirm.value = true;
@@ -157,10 +187,7 @@ function onChangeDiscount(index) {
     items.value[index].discount = product.originalDiscount;
   } else {
     const max =
-      product.discountType === 'percent'
-        ? 100
-        : product.product_price *
-          currencyToNum(product.qty, { failToZero: true });
+      product.discountType === 'percent' ? 100 : countItemTotalPrice(product);
 
     if (discount > max) {
       items.value[index].discount = product.originalDiscount;
