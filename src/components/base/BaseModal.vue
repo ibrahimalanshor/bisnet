@@ -9,6 +9,10 @@ const props = defineProps({
     type: String,
     default: 'md',
   },
+  verticalAlign: {
+    type: String,
+    default: 'start',
+  },
 });
 const emit = defineEmits(['open', 'close', 'close-outside']);
 const visible = defineModel('visible');
@@ -43,7 +47,10 @@ watch(visible, (val) => {
 <template>
   <div
     v-if="visible"
-    class="fixed inset-0 bg-black/50 flex items-start justify-center px-4 py-16 z-10 overflow-y-auto"
+    :class="[
+      'fixed inset-0 bg-black/50 flex justify-center px-4 py-16 z-10 overflow-y-auto',
+      verticalAlign === 'start' ? 'items-start' : 'items-center',
+    ]"
   >
     <BaseCard
       :bordered="false"

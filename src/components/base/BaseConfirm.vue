@@ -40,7 +40,7 @@ const iconColorClass = computed(() => {
 </script>
 
 <template>
-  <BaseModal size="xs" v-model:visible="visible">
+  <BaseModal vertical-align="center" size="xs" v-model:visible="visible">
     <div class="text-center mb-6 space-y-2">
       <Icon :icon="icon" :class="['size-12 mx-auto', iconColorClass]" />
       <h2 class="font-bold text-2xl">{{ title }}</h2>

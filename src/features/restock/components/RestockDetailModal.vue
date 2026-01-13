@@ -7,6 +7,7 @@ import RestockItemsTable from './RestockItemsTable.vue';
 import { sleep, formatDate, formatCurrency } from '../../../utils/common.js';
 import { ref, h } from 'vue';
 import mocks from '../data/restock.json';
+import suppliers from '../../supplier/data/supplier.json';
 
 const props = defineProps({
   id: null,
@@ -25,6 +26,11 @@ const columns = [
     id: 'createdAt',
     name: 'Tanggal',
     value: (data) => formatDate(data.createdAt),
+  },
+  {
+    id: 'supplier_name',
+    name: 'Supplier',
+    value: (data) => suppliers[0].name,
   },
   {
     id: 'itemsCount',

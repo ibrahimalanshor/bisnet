@@ -57,7 +57,7 @@ function onClickRow(e, row) {
         <tr v-if="!data.length">
           <td
             :colspan="columns.length"
-            class="border-b border-gray-300 px-4 py-3 text-center text-gray-700"
+            class="border-b border-gray-300 px-4 py-3 text-center text-gray-700 font-normal"
           >
             {{ emptyText }}
           </td>
@@ -73,7 +73,7 @@ function onClickRow(e, row) {
               v-for="column in columns"
               :key="column.id"
               :class="[
-                'border-b border-gray-300 px-4 py-3 whitespace-nowrap',
+                'border-b border-gray-300 px-4 py-3 whitespace-nowrap font-normal',
                 column.classList,
               ]"
             >

@@ -1,5 +1,6 @@
 <script setup>
 import data from '../data/restock.json';
+import suppliers from '../../supplier/data/supplier.json';
 import { reactive, ref } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
@@ -17,6 +18,7 @@ const columns = [
     name: 'Tanggal',
     value: (item) => formatDate(item.createdAt),
   },
+  { id: 'supplier_name', name: 'Supplier', value: (item) => suppliers[0].name },
   {
     id: 'itemsCount',
     name: 'Jumlah',
