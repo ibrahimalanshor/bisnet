@@ -47,7 +47,7 @@ const itemsColumn = [
   {
     id: 'discount',
     name: 'Diskon',
-    classList: 'w-[150px]',
+    classList: 'w-[250px]',
   },
   { id: 'action', name: 'Aksi', classList: 'w-[100px]' },
 ];
@@ -99,6 +99,10 @@ function onChangeProduct() {
       stock: 10,
       qty: null,
       originalQty: null,
+      withDiscount: null,
+      discount: null,
+      originalDiscount: null,
+      discountType: 'percent',
     });
   }
 
@@ -132,6 +136,34 @@ function onChangeQty(index) {
     items.value[index].qty = product.originalQty;
   } else {
     items.value[index].originalQty = product.qty;
+  }
+}
+function onChangeDiscontType(index, value, hide) {
+  items.value[index].discountType = value;
+  items.value[index].discount = null;
+  items.value[index].originalDiscount = null;
+
+  hide();
+}
+function onChangeDiscount(index) {
+  const product = items.value[index];
+
+  const discount = currencyToNum(product.discount, { failToZero: true });
+
+  if (discount < 0) {
+    items.value[index].discount = product.originalDiscount;
+  } else {
+    const max =
+      product.discountType === 'percent'
+        ? 100
+        : product.product_price *
+          currencyToNum(product.qty, { failToZero: true });
+
+    if (discount > max) {
+      items.value[index].discount = product.originalDiscount;
+    } else {
+      items.value[index].originalDiscount = product.discount;
+    }
   }
 }
 </script>
@@ -180,8 +212,54 @@ function onChangeQty(index) {
         @change="onChangeQty(index)"
       />
     </template>
-    <template #column-discount>
-      <BaseButton icon="ri:add-line" color="light" size="sm">Diskon</BaseButton>
+    <template #column-discount="{ item, index }">
+      <BaseButton
+        v-if="!item.withDiscount"
+        icon="ri:add-line"
+        color="light"
+        size="sm"
+        @click="items[index].withDiscount = true"
+        >Diskon</BaseButton
+      >
+      <div v-else class="flex items-center">
+        <VDropdown>
+          <BaseButton
+            icon="ri:arrow-down-s-line"
+            icon-position="end"
+            color="light"
+            class="rounded-r-none"
+            >{{ item.discountType === 'percent' ? '%' : 'Rp' }}</BaseButton
+          >
+
+          <template #popper="{ hide }">
+            <div class="py-1">
+              <div
+                class="px-4 py-1 cursor-pointer hover:bg-gray-50"
+                @click="onChangeDiscontType(index, 'percent', hide)"
+              >
+                %
+              </div>
+              <div
+                class="px-4 py-1 cursor-pointer hover:bg-gray-50"
+                @click="onChangeDiscontType(index, 'value', hide)"
+              >
+                Rp
+              </div>
+            </div>
+          </template>
+        </VDropdown>
+        <BaseInput
+          placeholder="0"
+          width="unset"
+          :class="[
+            item.discountType === 'percent' ? 'w-[60px]' : 'w-[100px]',
+            'rounded-l-none border-l-0',
+          ]"
+          currency
+          v-model="items[index].discount"
+          @change="onChangeDiscount(index)"
+        />
+      </div>
     </template>
     <template #column-action="{ index }">
       <BaseButton
