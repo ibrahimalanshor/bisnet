@@ -38,6 +38,7 @@ const query = reactive({
 });
 const filter = reactive({
   search: null,
+  createdAt: formatDate(new Date(), 'YYYY-MM-DD'),
 });
 const detailModal = reactive({
   id: null,
@@ -82,6 +83,11 @@ loadRestocks();
           placeholder="Cari restock"
           v-model="filter.search"
           @input-debounce="loadRestocks({ reload: true })"
+        />
+        <BaseInput
+          type="date"
+          v-model="filter.createdAt"
+          @change="loadRestocks({ reload: true })"
         />
         <BaseButton
           icon="ri:add-fill"
