@@ -37,12 +37,17 @@ const itemsColumn = [
   },
   {
     id: 'total_price',
-    name: 'Total Harga',
+    name: 'Total',
     classList: 'w-[250px]',
     value: (item) =>
       formatCurrency(
         currencyToNum(item.qty, { failToZero: true }) * item.product_price,
       ),
+  },
+  {
+    id: 'discount',
+    name: 'Diskon',
+    classList: 'w-[150px]',
   },
   { id: 'action', name: 'Aksi', classList: 'w-[100px]' },
 ];
@@ -174,6 +179,9 @@ function onChangeQty(index) {
         v-model="items[index].qty"
         @change="onChangeQty(index)"
       />
+    </template>
+    <template #column-discount>
+      <BaseButton icon="ri:add-line" color="light" size="sm">Diskon</BaseButton>
     </template>
     <template #column-action="{ index }">
       <BaseButton

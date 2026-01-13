@@ -55,6 +55,7 @@ const buttonSizeClass = computed(() => {
   }
 
   const sizes = {
+    sm: 'h-8 px-3 rounded-md',
     md: 'h-10 px-3 rounded-md',
   };
 
