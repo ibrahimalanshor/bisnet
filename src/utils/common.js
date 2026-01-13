@@ -52,3 +52,10 @@ export function currencyToNum(cur, options = { failToZero: false }) {
 
   return Number(cur.replace(/,/gi, ''));
 }
+
+export function extractPriceTax(price, tax) {
+  const dpp = Math.round(price / (1 + tax));
+  const ppn = price - dpp;
+
+  return { ppn, dpp };
+}

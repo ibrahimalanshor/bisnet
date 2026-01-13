@@ -13,6 +13,7 @@ import {
   currencyToNum,
   formatDate,
   sleep,
+  extractPriceTax,
 } from '../../../utils/common';
 
 const itemsColumn = [
@@ -69,6 +70,7 @@ const grandTotal = computed(() =>
 const paymentChange = computed(
   () => currencyToNum(form.paymentAmount) - grandTotal.value,
 );
+const tax = computed(() => extractPriceTax(grandTotal.value, 11 / 100));
 const valid = computed(
   () =>
     form.date &&
@@ -220,6 +222,10 @@ function onChangeQty(index) {
         @click="visibleConfirm = true"
         >Simpan</BaseButton
       >
+      <p v-if="grandTotal > 0" class="text-sm text-gray-600 flex gap-4">
+        <span>PPN: {{ formatCurrency(tax.ppn) }}</span>
+        <span>DPP: {{ formatCurrency(tax.dpp) }}</span>
+      </p>
     </div>
   </BaseCard>
 
