@@ -76,12 +76,7 @@ const loadingConfirm = ref(false);
 const items = ref([]);
 
 const grandTotal = computed(() =>
-  items.value.reduce(
-    (total, item) =>
-      total +
-      currencyToNum(item.qty, { failToZero: true }) * item.product_price,
-    0,
-  ),
+  items.value.reduce((total, item) => total + countItemSubTotal(item), 0),
 );
 const paymentChange = computed(
   () => currencyToNum(form.paymentAmount) - grandTotal.value,
@@ -298,10 +293,10 @@ function onAddDiscount(index) {
             @change="onChangeDiscount(index)"
           />
           <button
-            class="bg-red-600 text-white w-4 h-4 rounded-full flex items-center justify-center absolute -top-1 -right-1.5 cursor-pointer"
+            class="bg-red-600 text-white w-4 h-4 rounded-full flex items-center justify-center absolute -top-1 -right-1.5 cursor-pointer hover:bg-red-700"
             @click="items[index].withDiscount = false"
           >
-            <Icon icon="ri:close-line" />
+            <Icon icon="ri:close-line" class="size-3" />
           </button>
         </div>
       </div>
