@@ -7,6 +7,7 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseConfirm from '../../../components/base/BaseConfirm.vue';
 import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
+import SaleDiscountInput from './SaleDiscountInput.vue';
 import { Icon } from '@iconify/vue';
 import { ref, reactive, computed } from 'vue';
 import {
@@ -66,13 +67,19 @@ const form = reactive({
   date: formatDate(new Date(), 'YYYY-MM-DD'),
   product: null,
   paymentAmount: null,
+  withDiscount: false,
+  discountType: 'percent',
+  discount: null,
+  originalDiscount: null,
 });
-const visibleConfirm = ref(false);
+const submitConfirm = reactive({
+  visible: false,
+  loading: false,
+});
 const successDetail = reactive({
   visible: false,
   code: 'RS-89231',
 });
-const loadingConfirm = ref(false);
 const items = ref([]);
 
 const grandTotal = computed(() =>
@@ -111,14 +118,14 @@ function countItemSubTotal(item) {
 }
 
 async function onConfirm() {
-  loadingConfirm.value = true;
+  submitConfirm.loading = true;
 
   await sleep();
 
-  visibleConfirm.value = false;
+  submitConfirm.visible = false;
   successDetail.visible = true;
 
-  loadingConfirm.value = false;
+  submitConfirm.loading = false;
 }
 function onReset() {
   successDetail.visible = false;
@@ -166,36 +173,17 @@ function onChangeQty(index) {
     items.value[index].originalQty = product.qty;
   }
 }
-function onChangeDiscontType(index, value, hide) {
-  items.value[index].discountType = value;
-  items.value[index].discount = null;
-  items.value[index].originalDiscount = null;
-
-  hide();
-}
-function onChangeDiscount(index) {
-  const product = items.value[index];
-
-  const discount = currencyToNum(product.discount, { failToZero: true });
-
-  if (discount < 0) {
-    items.value[index].discount = product.originalDiscount;
-  } else {
-    const max =
-      product.discountType === 'percent' ? 100 : countItemTotalPrice(product);
-
-    if (discount > max) {
-      items.value[index].discount = product.originalDiscount;
-    } else {
-      items.value[index].originalDiscount = product.discount;
-    }
-  }
-}
-function onAddDiscount(index) {
+function onAddItemDiscount(index) {
   items.value[index].withDiscount = true;
   items.value[index].discount = null;
   items.value[index].originalDiscount = null;
   items.value[index].discountType = 'percent';
+}
+function onAddDiscount(index) {
+  form.withDiscount = true;
+  form.discount = null;
+  form.originalDiscount = null;
+  form.discountType = 'percent';
 }
 </script>
 
@@ -249,57 +237,15 @@ function onAddDiscount(index) {
         icon="ri:add-line"
         color="light"
         size="sm"
-        @click="onAddDiscount(index)"
+        @click="onAddItemDiscount(index)"
         >Diskon</BaseButton
       >
-      <div v-else class="flex items-center relative">
-        <VDropdown>
-          <BaseButton
-            icon="ri:arrow-down-s-line"
-            icon-position="end"
-            color="light"
-            class="rounded-r-none"
-            >{{ item.discountType === 'percent' ? '%' : 'Rp' }}</BaseButton
-          >
-
-          <template #popper="{ hide }">
-            <div class="py-1">
-              <div
-                class="px-4 py-1 cursor-pointer hover:bg-gray-50"
-                @click="onChangeDiscontType(index, 'percent', hide)"
-              >
-                %
-              </div>
-              <div
-                class="px-4 py-1 cursor-pointer hover:bg-gray-50"
-                @click="onChangeDiscontType(index, 'value', hide)"
-              >
-                Rp
-              </div>
-            </div>
-          </template>
-        </VDropdown>
-        <div
-          :class="[
-            item.discountType === 'percent' ? 'w-[70px]' : 'w-[100px]',
-            'relative',
-          ]"
-        >
-          <BaseInput
-            placeholder="0"
-            :class="['rounded-l-none border-l-0']"
-            currency
-            v-model="items[index].discount"
-            @change="onChangeDiscount(index)"
-          />
-          <button
-            class="bg-red-600 text-white w-4 h-4 rounded-full flex items-center justify-center absolute -top-1 -right-1.5 cursor-pointer hover:bg-red-700"
-            @click="items[index].withDiscount = false"
-          >
-            <Icon icon="ri:close-line" class="size-3" />
-          </button>
-        </div>
-      </div>
+      <SaleDiscountInput
+        v-else
+        :total-price="countItemTotalPrice(item)"
+        v-model="items[index]"
+        @remove="item.withDiscount = false"
+      />
     </template>
     <template #column-action="{ index }">
       <BaseButton
@@ -314,6 +260,40 @@ function onAddDiscount(index) {
 
   <BaseCard class="ml-auto w-full sm:w-fit sm:min-w-[400px]">
     <div class="space-y-4">
+      <BaseButton
+        v-if="!form.withDiscount"
+        size="sm"
+        color="light"
+        icon="ri:add-line"
+        @click="onAddDiscount"
+        >Diskon</BaseButton
+      >
+
+      <template v-else>
+        <BaseFormItem id="sale_form.discount" label="Diskon">
+          <template #default="{ id }">
+            <SaleDiscountInput
+              :id="id"
+              :auto-width="false"
+              :total-price="grandTotal"
+              v-model="form"
+              @remove="form.withDiscount = false"
+            />
+          </template>
+        </BaseFormItem>
+        <hr class="border-dashed border-gray-300" />
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <p>Subtotal</p>
+            <p>{{ formatCurrency(grandTotal) }}</p>
+          </div>
+          <div class="flex items-center justify-between">
+            <p>Diskon</p>
+            <p>{{ formatCurrency(grandTotal) }}</p>
+          </div>
+        </div>
+        <hr class="border-dashed border-gray-300" />
+      </template>
       <div class="flex items-center justify-between gap-8">
         <p class="font-bold text-xl">Grand Total</p>
         <p class="text-blue-600 text-3xl font-bold">
@@ -345,7 +325,7 @@ function onAddDiscount(index) {
         class="w-full"
         icon="ri:save-3-fill"
         :disabled="!valid"
-        @click="visibleConfirm = true"
+        @click="submitConfirm.visible = true"
         >Simpan</BaseButton
       >
       <p v-if="grandTotal > 0" class="text-sm text-gray-600 flex gap-4">
@@ -362,8 +342,8 @@ function onAddDiscount(index) {
     message="Stok barang akan diperbarui sesuai data penjualan yang dimasukkan."
     confirm-text="Simpan"
     cancel-text="Kembali"
-    :loading="loadingConfirm"
-    v-model:visible="visibleConfirm"
+    :loading="submitConfirm.loading"
+    v-model:visible="submitConfirm.visible"
     @confirm="onConfirm"
   />
   <BaseConfirm
