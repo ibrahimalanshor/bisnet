@@ -63,7 +63,7 @@ const itemsColumn = computed(() => {
   ];
 });
 
-const form = reactive({
+const form = ref({
   date: formatDate(new Date(), 'YYYY-MM-DD'),
   product: null,
   paymentAmount: null,
@@ -86,22 +86,22 @@ const subTotal = computed(() =>
   items.value.reduce((total, item) => total + countItemSubTotal(item), 0),
 );
 const discountTotal = computed(() => {
-  if (!form.withDiscount) {
+  if (!form.value.withDiscount) {
     return 0;
   }
 
-  const discount = currencyToNum(form.discount, { failToZero: true });
+  const discount = currencyToNum(form.value.discount, { failToZero: true });
 
-  return calculateDiscount(form.discountType, discount, subTotal.value);
+  return calculateDiscount(form.value.discountType, discount, subTotal.value);
 });
 const grandTotal = computed(() => subTotal.value - discountTotal.value);
 const paymentChange = computed(
-  () => currencyToNum(form.paymentAmount) - grandTotal.value,
+  () => currencyToNum(form.value.paymentAmount) - grandTotal.value,
 );
 const tax = computed(() => extractPriceTax(grandTotal.value, 11 / 100));
 const valid = computed(
   () =>
-    form.date &&
+    form.value.date &&
     items.value.length > 0 &&
     items.value.every((item) => currencyToNum(item.qty) > 0),
 );
@@ -141,24 +141,24 @@ function onReset() {
 
   items.value = [];
 
-  form.date = formatDate(new Date(), 'YYYY-MM-DD');
-  form.product = null;
-  form.paymentAmount = null;
+  form.value.date = formatDate(new Date(), 'YYYY-MM-DD');
+  form.value.product = null;
+  form.value.paymentAmount = null;
 }
 
 function onChangeProduct() {
   const existingIndex = items.value.findIndex(
-    (item) => item.product_barcode === form.product.barcode,
+    (item) => item.product_barcode === form.value.product.barcode,
   );
 
   if (existingIndex !== -1) {
     items.value[existingIndex].qty++;
   } else {
     items.value.push({
-      id: form.product.id,
-      product_name: form.product.originalName,
-      product_barcode: form.product.barcode,
-      product_price: form.product.price,
+      id: form.value.product.id,
+      product_name: form.value.product.originalName,
+      product_barcode: form.value.product.barcode,
+      product_price: form.value.product.price,
       stock: 10,
       qty: null,
       originalQty: null,
@@ -169,7 +169,7 @@ function onChangeProduct() {
     });
   }
 
-  form.product = null;
+  form.value.product = null;
 }
 function onChangeQty(index) {
   const product = items.value[index];
@@ -188,11 +188,11 @@ function onAddItemDiscount(index) {
   items.value[index].originalDiscount = null;
   items.value[index].discountType = 'percent';
 }
-function onAddDiscount(index) {
-  form.withDiscount = true;
-  form.discount = null;
-  form.originalDiscount = null;
-  form.discountType = 'percent';
+function onAddDiscount() {
+  form.value.withDiscount = true;
+  form.value.discount = null;
+  form.value.originalDiscount = null;
+  form.value.discountType = 'percent';
 }
 </script>
 
