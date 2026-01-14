@@ -8,7 +8,6 @@ import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseConfirm from '../../../components/base/BaseConfirm.vue';
 import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
 import SaleDiscountInput from './SaleDiscountInput.vue';
-import { Icon } from '@iconify/vue';
 import { ref, reactive, computed } from 'vue';
 import {
   formatCurrency,
@@ -16,6 +15,7 @@ import {
   formatDate,
   sleep,
   extractPriceTax,
+  calculateDiscount,
 } from '../../../utils/common';
 
 const itemsColumn = computed(() => {
@@ -82,9 +82,19 @@ const successDetail = reactive({
 });
 const items = ref([]);
 
-const grandTotal = computed(() =>
+const subTotal = computed(() =>
   items.value.reduce((total, item) => total + countItemSubTotal(item), 0),
 );
+const discountTotal = computed(() => {
+  if (!form.withDiscount) {
+    return 0;
+  }
+
+  const discount = currencyToNum(form.discount, { failToZero: true });
+
+  return calculateDiscount(form.discountType, discount, subTotal.value);
+});
+const grandTotal = computed(() => subTotal.value - discountTotal.value);
 const paymentChange = computed(
   () => currencyToNum(form.paymentAmount) - grandTotal.value,
 );
@@ -107,14 +117,13 @@ function countItemSubTotal(item) {
   }
 
   const discount = currencyToNum(item.discount, { failToZero: true });
+  const discountValue = calculateDiscount(
+    item.discountType,
+    discount,
+    totalPrice,
+  );
 
-  if (item.discountType === 'value') {
-    return totalPrice - discount;
-  }
-
-  const discountVale = (discount / 100) * totalPrice;
-
-  return totalPrice - discountVale;
+  return totalPrice - discountValue;
 }
 
 async function onConfirm() {
@@ -285,11 +294,14 @@ function onAddDiscount(index) {
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <p>Subtotal</p>
-            <p>{{ formatCurrency(grandTotal) }}</p>
+            <p>{{ formatCurrency(subTotal) }}</p>
           </div>
           <div class="flex items-center justify-between">
             <p>Diskon</p>
-            <p>{{ formatCurrency(grandTotal) }}</p>
+            <p>
+              <span v-if="discountTotal > 0">-</span
+              >{{ formatCurrency(discountTotal) }}
+            </p>
           </div>
         </div>
         <hr class="border-dashed border-gray-300" />

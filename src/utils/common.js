@@ -59,3 +59,13 @@ export function extractPriceTax(price, tax) {
 
   return { ppn, dpp };
 }
+
+export function calculateDiscount(type, value, totalPrice) {
+  const discount = currencyToNum(value, { failToZero: true });
+
+  if (type === 'value') {
+    return discount;
+  }
+
+  return (discount / 100) * totalPrice;
+}
