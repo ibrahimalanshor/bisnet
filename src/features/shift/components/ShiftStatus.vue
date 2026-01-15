@@ -1,6 +1,7 @@
 <script setup>
 import BaseButton from '../../../components/base/BaseButton.vue';
 import ShiftOpenConfirm from './ShiftOpenConfirm.vue';
+import ShiftTransactionModal from './ShiftTransactionModal.vue';
 import { ref } from 'vue';
 import { formatCurrency, formatDate } from '../../../utils/common.js';
 import { Icon } from '@iconify/vue';
@@ -8,6 +9,7 @@ import data from '../data/transactions.json';
 
 const status = ref(false);
 const visibleOpen = ref(false);
+const visibleAddTrx = ref(false);
 const cash = 1874500;
 const transactions = data.slice(0, 5);
 </script>
@@ -40,7 +42,11 @@ const transactions = data.slice(0, 5);
           <div class="divide-y divide-gray-200 w-[350px]">
             <div class="px-4 py-3 flex items-center justify-between">
               <h3 class="font-bold">Riwayat Transaksi</h3>
-              <BaseButton size="sm" icon="ri:add-line" color="light"
+              <BaseButton
+                size="sm"
+                icon="ri:add-line"
+                color="light"
+                @click="visibleAddTrx = true"
                 >Transaksi</BaseButton
               >
             </div>
@@ -65,7 +71,7 @@ const transactions = data.slice(0, 5);
                 >{{ formatCurrency(trx.amount) }}
               </p>
             </div>
-            <div class="px-3 py-3 text-center bg-gray-50">
+            <div class="px-3 py-2 text-center bg-gray-50">
               <a
                 href=""
                 class="text-blue-600 font-medium inline-flex items-center gap-2 hover:text-blue-700"
@@ -83,5 +89,6 @@ const transactions = data.slice(0, 5);
     </div>
 
     <ShiftOpenConfirm v-model:visible="visibleOpen" @confirm="status = true" />
+    <ShiftTransactionModal v-model:visible="visibleAddTrx" />
   </div>
 </template>
