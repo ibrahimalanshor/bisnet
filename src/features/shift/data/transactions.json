@@ -1,0 +1,13 @@
+[
+  { "id": 1, "date": "2026-01-14 08:00", "amount": 500000,  "name": "Modal awal shift" },
+  { "id": 2, "date": "2026-01-14 08:45", "amount": 150000,  "name": "Penjualan tunai" },
+  { "id": 3, "date": "2026-01-14 09:30", "amount": 275000,  "name": "Penjualan tunai" },
+  { "id": 4, "date": "2026-01-14 10:10", "amount": -50000,  "name": "Pengeluaran kas (beli plastik)" },
+  { "id": 5, "date": "2026-01-14 10:50", "amount": 200000,  "name": "Penjualan tunai" },
+  { "id": 6, "date": "2026-01-14 11:20", "amount": -30000,  "name": "Pengeluaran kas (parkir & snack)" },
+  { "id": 7, "date": "2026-01-14 11:45", "amount": 180000,  "name": "Penjualan tunai" },
+  { "id": 8, "date": "2026-01-14 12:00", "amount": -200000, "name": "Setor kas sementara" },
+  { "id": 9, "date": "2026-01-14 13:10", "amount": 120000,  "name": "Penjualan tunai" },
+  { "id": 10,"date": "2026-01-14 14:00", "amount": -100000, "name": "Penarikan kas / tutup shift" }
+]
+
