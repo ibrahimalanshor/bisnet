@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import BaseAlert from '../base/BaseAlert.vue';
 import AppSidebar from '../app/AppSidebar.vue';
-import AppShiftStatus from '../app/AppShiftStatus.vue';
+import ShiftStatus from '../../features/shift/components/ShiftStatus.vue';
 import { useToastStore } from '../../cores/toast/toast.store';
 
 const toastStore = useToastStore();
@@ -41,7 +41,7 @@ const sidebarVisible = ref(false);
           <Icon icon="ri:menu-fill" class="size-4" />
         </button>
         <div class="flex gap-4">
-          <AppShiftStatus />
+          <ShiftStatus />
           <button class="cursor-pointer">
             <Icon icon="ri:user-3-line" class="size-4" />
           </button>

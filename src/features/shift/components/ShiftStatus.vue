@@ -1,11 +1,13 @@
 <script setup>
-import BaseButton from '../base/BaseButton.vue';
+import BaseButton from '../../../components/base/BaseButton.vue';
+import ShiftOpenConfirm from './ShiftOpenConfirm.vue';
 import { ref } from 'vue';
-import { formatCurrency, formatDate } from '../../utils/common.js';
+import { formatCurrency, formatDate } from '../../../utils/common.js';
 import { Icon } from '@iconify/vue';
-import data from '../../features/shift/data/transactions.json';
+import data from '../data/transactions.json';
 
 const status = ref(false);
+const visibleOpen = ref(false);
 const cash = 1874500;
 const transactions = data.slice(0, 5);
 </script>
@@ -17,7 +19,7 @@ const transactions = data.slice(0, 5);
       size="sm"
       icon="ri:play-fill"
       color="success"
-      @click="status = true"
+      @click="visibleOpen = true"
       >Mulai Shift</BaseButton
     >
     <div v-else class="flex items-center gap-4 divide-x divide-gray-200">
@@ -73,5 +75,7 @@ const transactions = data.slice(0, 5);
         >Tutup Shift</BaseButton
       >
     </div>
+
+    <ShiftOpenConfirm v-model:visible="visibleOpen" @confirm="status = true" />
   </div>
 </template>

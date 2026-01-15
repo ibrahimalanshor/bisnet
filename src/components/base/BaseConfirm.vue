@@ -18,6 +18,7 @@ const props = defineProps({
     type: String,
     default: 'error',
   },
+  disabled: Boolean,
 });
 defineEmits(['confirm']);
 
@@ -53,6 +54,7 @@ const iconColorClass = computed(() => {
         <BaseButton
           :color="confirmColor"
           :loading="loading"
+          :disabled="disabled"
           @click="$emit('confirm')"
           >{{ confirmText }}</BaseButton
         >
