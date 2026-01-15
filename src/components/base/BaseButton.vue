@@ -25,6 +25,7 @@ const props = defineProps({
     type: String,
     default: 'start',
   },
+  disabled: Boolean,
 });
 const slot = useSlots();
 
@@ -83,7 +84,7 @@ const iconSizeClass = computed(() => {
       buttonColorClass,
       'font-medium inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
     ]"
-    :disabled="loading"
+    :disabled="loading || disabled"
   >
     <Icon
       v-if="loading"

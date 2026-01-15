@@ -37,11 +37,17 @@ const transactions = data.slice(0, 5);
         </div>
 
         <template #popper>
-          <div class="divide-y divide-gray-200">
+          <div class="divide-y divide-gray-200 w-[350px]">
+            <div class="px-4 py-3 flex items-center justify-between">
+              <h3 class="font-bold">Riwayat Transaksi</h3>
+              <BaseButton size="sm" icon="ri:add-line" color="light"
+                >Transaksi</BaseButton
+              >
+            </div>
             <div
               v-for="trx in transactions"
               :key="trx.id"
-              class="px-3 py-2 flex items-center justify-between gap-8"
+              class="px-4 py-3 flex items-center justify-between gap-8"
             >
               <div>
                 <p class="font-medium">{{ trx.name }}</p>
@@ -59,7 +65,7 @@ const transactions = data.slice(0, 5);
                 >{{ formatCurrency(trx.amount) }}
               </p>
             </div>
-            <div class="px-3 py-2 text-center bg-gray-50">
+            <div class="px-3 py-3 text-center bg-gray-50">
               <a
                 href=""
                 class="text-blue-600 font-medium inline-flex items-center gap-2 hover:text-blue-700"
