@@ -31,7 +31,7 @@ const sidebarVisible = ref(false);
 
     <div class="lg:ml-72">
       <nav
-        class="h-14 bg-white px-4 flex items-center border-b border-gray-300 justify-between lg:justify-end lg:h-16"
+        class="h-14 bg-white px-4 flex items-center border-b border-gray-300 justify-between lg:justify-end lg:h-16 lg:px-6 xl:px-8"
       >
         <button
           class="cursor-pointer lg:hidden"
