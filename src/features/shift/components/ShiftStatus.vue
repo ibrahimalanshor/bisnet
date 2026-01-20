@@ -72,13 +72,13 @@ const transactions = data.slice(0, 5);
               </p>
             </div>
             <div class="px-3 py-2 text-center bg-gray-50">
-              <a
-                href=""
+              <router-link
+                :to="{ name: 'shift-active' }"
                 class="text-blue-600 font-medium inline-flex items-center gap-2 hover:text-blue-700"
               >
                 Lihat Semua Transaksi
                 <Icon icon="ri:arrow-right-long-line" />
-              </a>
+              </router-link>
             </div>
           </div>
         </template>

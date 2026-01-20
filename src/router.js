@@ -11,6 +11,13 @@ export const router = createRouter({
         import('./features/dashboard/components/DashboardPage.vue'),
     },
     {
+      path: '/shift-active',
+      name: 'shift-active',
+      meta: { layout: 'LayoutAdmin', layoutProps: { verticalAlign: 'center' } },
+      component: () =>
+        import('./features/shift/components/ShiftActivePage.vue'),
+    },
+    {
       path: '/supplier',
       name: 'supplier',
       meta: { layout: 'LayoutAdmin' },

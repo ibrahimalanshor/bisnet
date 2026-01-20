@@ -6,6 +6,9 @@ import AppSidebar from '../app/AppSidebar.vue';
 import ShiftStatus from '../../features/shift/components/ShiftStatus.vue';
 import { useToastStore } from '../../cores/toast/toast.store';
 
+defineProps({
+  verticalAlign: String,
+});
 const toastStore = useToastStore();
 
 const sidebarVisible = ref(false);
@@ -29,9 +32,9 @@ const sidebarVisible = ref(false);
 
     <AppSidebar v-model="sidebarVisible" />
 
-    <div class="lg:ml-72">
+    <div class="min-h-screen flex flex-col lg:ml-72">
       <nav
-        class="h-14 bg-white px-4 flex items-center border-b border-gray-300 justify-between lg:justify-end lg:h-16 lg:px-6 xl:px-8"
+        class="shrink-0 h-14 bg-white px-4 flex items-center border-b border-gray-300 justify-between lg:justify-end lg:h-16 lg:px-6 xl:px-8"
       >
         <button
           class="cursor-pointer lg:hidden"
@@ -47,7 +50,12 @@ const sidebarVisible = ref(false);
           </button>
         </div>
       </nav>
-      <main class="p-4 lg:p-6 xl:p-8 space-y-4 xl:space-y-6">
+      <main
+        :class="[
+          'p-4 grow lg:p-6 xl:p-8 space-y-4 xl:space-y-6',
+          verticalAlign === 'center' ? 'flex items-center' : '',
+        ]"
+      >
         <slot />
       </main>
     </div>

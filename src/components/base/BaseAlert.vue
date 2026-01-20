@@ -15,6 +15,7 @@ const colorClass = computed(() => {
   return {
     error: 'bg-red-100 border-red-400 text-red-900',
     success: 'bg-green-100 border-green-400 text-green-900',
+    warning: 'bg-yellow-100 border-yellow-400 text-yellow-900',
   }[props.color];
 });
 </script>
@@ -26,13 +27,15 @@ const colorClass = computed(() => {
       colorClass,
     ]"
   >
-    <div class="flex gap-2">
+    <div class="flex gap-2 font-medium">
       <Icon icon="ri:error-warning-line" class="size-4 mt-1" />
       <slot />
     </div>
 
-    <button v-if="closable" @click="$emit('close')">
-      <Icon icon="ri:close-fill" class="size-4" />
-    </button>
+    <slot name="action">
+      <button v-if="closable" @click="$emit('close')">
+        <Icon icon="ri:close-fill" class="size-4" />
+      </button>
+    </slot>
   </div>
 </template>
