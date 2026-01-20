@@ -38,7 +38,9 @@ async function onSubmit() {
 </script>
 
 <template>
-  <BaseHeading v-if="shiftStore.active"> Shift Aktif </BaseHeading>
+  <div v-if="shiftStore.active" class="self-start">
+    <BaseHeading v-if="shiftStore.active"> Shift Aktif </BaseHeading>
+  </div>
 
   <BaseCard v-else class="max-w-sm mx-auto text-center">
     <div class="space-y-2 mb-4">
