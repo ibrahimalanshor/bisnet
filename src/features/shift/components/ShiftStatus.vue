@@ -6,18 +6,18 @@ import { ref } from 'vue';
 import { formatCurrency, formatDate } from '../../../utils/common.js';
 import { Icon } from '@iconify/vue';
 import data from '../data/transactions.json';
+import { useShiftStore } from '../shift.store.js';
 
-const status = ref(false);
+const shiftStore = useShiftStore();
 const visibleOpen = ref(false);
 const visibleAddTrx = ref(false);
-const cash = 1874500;
 const transactions = data.slice(0, 5);
 </script>
 
 <template>
   <div>
     <BaseButton
-      v-if="!status"
+      v-if="!shiftStore.active"
       size="sm"
       icon="ri:play-fill"
       color="success"
@@ -34,7 +34,7 @@ const transactions = data.slice(0, 5);
             <Icon icon="ri:arrow-down-s-line" class="size-3" />
           </span>
           <span class="font-bold text-green-700 text-lg/6">{{
-            formatCurrency(cash)
+            formatCurrency(shiftStore.balance)
           }}</span>
         </div>
 
@@ -88,7 +88,7 @@ const transactions = data.slice(0, 5);
       >
     </div>
 
-    <ShiftOpenConfirm v-model:visible="visibleOpen" @confirm="status = true" />
+    <ShiftOpenConfirm v-model:visible="visibleOpen" />
     <ShiftTransactionModal v-model:visible="visibleAddTrx" />
   </div>
 </template>

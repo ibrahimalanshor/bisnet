@@ -4,9 +4,11 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import { ref, computed } from 'vue';
 import { currencyToNum, sleep } from '../../../utils/common';
+import { useShiftStore } from '../shift.store';
 
 const visible = defineModel('visible');
-const emit = defineEmits(['confirm']);
+
+const shiftStore = useShiftStore();
 
 const initCash = ref(null);
 const loading = ref(false);
@@ -20,9 +22,9 @@ async function onConfirm() {
 
   await sleep();
 
-  visible.value = false;
+  shiftStore.open(currencyToNum(initCash.value));
 
-  emit('confirm');
+  visible.value = false;
 
   loading.value = false;
 }
