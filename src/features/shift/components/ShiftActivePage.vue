@@ -38,8 +38,57 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div v-if="shiftStore.active" class="self-start">
+  <div v-if="shiftStore.active" class="self-start grow space-y-4 xl:space-y-6">
     <BaseHeading v-if="shiftStore.active"> Shift Aktif </BaseHeading>
+
+    <div class="grid xl:grid-cols-3">
+      <BaseCard :bordered="false">
+        <template #header>
+          <div
+            class="flex justify-between bg-gray-900 p-4 rounded-t-md text-white items-start"
+          >
+            <div class="space-y-2">
+              <p class="font-bold text-xl">Kamis, 23 Januari 2026</p>
+              <div class="text-gray-300">
+                <div class="flex gap-2 items-center">
+                  <Icon icon="ri:time-line" />
+                  <span>Buka:</span>
+                  <span>08:32</span>
+                </div>
+                <div class="flex gap-2 items-center">
+                  <Icon icon="ri:user-3-line" />
+                  <span>Kasir:</span>
+                  <span>Abdul Ghani</span>
+                </div>
+              </div>
+            </div>
+            <span
+              class="bg-green-600 text-white text-xs font-medium inline-flex h-6 items-center justify-center px-2 rounded uppercase"
+              >Aktif</span
+            >
+          </div>
+        </template>
+
+        <div class="border border-gray-300 border-t-0 rounded-b-md">
+          <div>
+            <p>Saldo Kas Awal</p>
+            <p>200.000</p>
+          </div>
+          <div>
+            <p>Pemasukkan</p>
+            <p>3.430.000</p>
+          </div>
+          <div>
+            <p>Pengeluaran</p>
+            <p>832.000</p>
+          </div>
+          <div>
+            <p>Saldo Kas</p>
+            <p>2.410.000</p>
+          </div>
+        </div>
+      </BaseCard>
+    </div>
   </div>
 
   <BaseCard v-else class="max-w-sm mx-auto text-center">
