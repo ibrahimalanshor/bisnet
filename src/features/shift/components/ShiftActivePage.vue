@@ -41,8 +41,8 @@ async function onSubmit() {
   <div v-if="shiftStore.active" class="self-start grow space-y-4 xl:space-y-6">
     <BaseHeading v-if="shiftStore.active"> Shift Aktif </BaseHeading>
 
-    <div class="grid xl:grid-cols-3">
-      <BaseCard :bordered="false">
+    <div class="grid xl:grid-cols-5 2xl:grid-cols-3">
+      <BaseCard :bordered="false" class="col-span-2 2xl:col-span-1">
         <template #header>
           <div
             class="flex justify-between bg-gray-900 p-4 rounded-t-md text-white items-start"
@@ -69,22 +69,24 @@ async function onSubmit() {
           </div>
         </template>
 
-        <div class="border border-gray-300 border-t-0 rounded-b-md">
-          <div>
-            <p>Saldo Kas Awal</p>
-            <p>200.000</p>
+        <div
+          class="border border-gray-300 border-t-0 rounded-b-md divide-y divide-gray-200 divide-dashed"
+        >
+          <div class="p-4 flex items-center justify-between">
+            <p class="text-gray-600">Saldo Kas Awal</p>
+            <p class="text-lg text-gray-900 font-bold">200.000</p>
           </div>
-          <div>
-            <p>Pemasukkan</p>
-            <p>3.430.000</p>
+          <div class="p-4 flex items-center justify-between">
+            <p class="text-gray-600">Pemasukkan</p>
+            <p class="text-lg text-green-700 font-bold">+3.430.000</p>
           </div>
-          <div>
-            <p>Pengeluaran</p>
-            <p>832.000</p>
+          <div class="p-4 flex items-center justify-between border-gray-400">
+            <p class="text-gray-600">Pengeluaran</p>
+            <p class="text-lg text-red-700 font-bold">-832.000</p>
           </div>
-          <div>
-            <p>Saldo Kas</p>
-            <p>2.410.000</p>
+          <div class="p-4 flex items-center justify-between">
+            <p class="text-gray-900 text-lg font-bold">Saldo Kas</p>
+            <p class="text-2xl text-green-700 font-bold">2.410.000</p>
           </div>
         </div>
       </BaseCard>
