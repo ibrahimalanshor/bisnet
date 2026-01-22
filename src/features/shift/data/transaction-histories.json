@@ -1,0 +1,203 @@
+[
+  {
+    "id": 1,
+    "time": "08:00",
+    "type": "Modal",
+    "title": "Setoran Modal Awal",
+    "reference": "SHIFT-OPEN-001",
+    "category": "Modal",
+    "amount": 200000,
+    "balance": 200000
+  },
+  {
+    "id": 2,
+    "time": "08:45",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-001",
+    "category": "Penjualan",
+    "amount": 2650000,
+    "balance": 2850000
+  },
+  {
+    "id": 3,
+    "time": "09:15",
+    "type": "Keluar",
+    "title": "Beli Galon Air & Tisu",
+    "reference": "EXP-001",
+    "category": "Operasional",
+    "amount": -50000,
+    "balance": 2800000
+  },
+  {
+    "id": 4,
+    "time": "10:30",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-004",
+    "category": "Penjualan",
+    "amount": 500000,
+    "balance": 3300000
+  },
+  {
+    "id": 5,
+    "time": "10:45",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-005",
+    "category": "Penjualan",
+    "amount": 150000,
+    "balance": 3450000
+  },
+  {
+    "id": 6,
+    "time": "11:20",
+    "type": "Keluar",
+    "title": "Beli Kantong Plastik",
+    "reference": "EXP-002",
+    "category": "Operasional",
+    "amount": -30000,
+    "balance": 3420000
+  },
+  {
+    "id": 7,
+    "time": "11:45",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-006",
+    "category": "Penjualan",
+    "amount": 275000,
+    "balance": 3695000
+  },
+  {
+    "id": 8,
+    "time": "12:10",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-007",
+    "category": "Penjualan",
+    "amount": 120000,
+    "balance": 3815000
+  },
+  {
+    "id": 9,
+    "time": "12:30",
+    "type": "Keluar",
+    "title": "Makan Siang Karyawan",
+    "reference": "EXP-003",
+    "category": "Operasional",
+    "amount": -60000,
+    "balance": 3755000
+  },
+  {
+    "id": 10,
+    "time": "13:00",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-008",
+    "category": "Penjualan",
+    "amount": 450000,
+    "balance": 4205000
+  },
+  {
+    "id": 11,
+    "time": "13:45",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-009",
+    "category": "Penjualan",
+    "amount": 90000,
+    "balance": 4295000
+  },
+  {
+    "id": 12,
+    "time": "14:15",
+    "type": "Keluar",
+    "title": "Beli Pulsa Internet",
+    "reference": "EXP-004",
+    "category": "Operasional",
+    "amount": -100000,
+    "balance": 4195000
+  },
+  {
+    "id": 13,
+    "time": "14:40",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-010",
+    "category": "Penjualan",
+    "amount": 350000,
+    "balance": 4545000
+  },
+  {
+    "id": 14,
+    "time": "15:05",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-011",
+    "category": "Penjualan",
+    "amount": 180000,
+    "balance": 4725000
+  },
+  {
+    "id": 15,
+    "time": "15:30",
+    "type": "Keluar",
+    "title": "Beli ATK",
+    "reference": "EXP-005",
+    "category": "Operasional",
+    "amount": -75000,
+    "balance": 4650000
+  },
+  {
+    "id": 16,
+    "time": "16:00",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-012",
+    "category": "Penjualan",
+    "amount": 600000,
+    "balance": 5250000
+  },
+  {
+    "id": 17,
+    "time": "16:25",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-013",
+    "category": "Penjualan",
+    "amount": 220000,
+    "balance": 5470000
+  },
+  {
+    "id": 18,
+    "time": "16:50",
+    "type": "Keluar",
+    "title": "Biaya Kebersihan",
+    "reference": "EXP-006",
+    "category": "Operasional",
+    "amount": -50000,
+    "balance": 5420000
+  },
+  {
+    "id": 19,
+    "time": "17:10",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-014",
+    "category": "Penjualan",
+    "amount": 130000,
+    "balance": 5550000
+  },
+  {
+    "id": 20,
+    "time": "17:30",
+    "type": "Masuk",
+    "title": "Penjualan Retail",
+    "reference": "INV-20260120-015",
+    "category": "Penjualan",
+    "amount": 95000,
+    "balance": 5645000
+  }
+]
+
