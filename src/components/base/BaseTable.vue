@@ -47,7 +47,10 @@ function onClickRow(e, row) {
           <th
             v-for="column in columns"
             :key="column.id"
-            class="whitespace-nowrap text-left border-b px-4 py-3 font-medium border-gray-300 bg-gray-100"
+            :class="[
+              'whitespace-nowrap text-left border-b px-4 py-3 font-medium border-gray-300 bg-gray-100',
+              column.theadClassList,
+            ]"
           >
             {{ column.name }}
           </th>
