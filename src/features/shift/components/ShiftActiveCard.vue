@@ -1,6 +1,7 @@
 <script setup>
 import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseBadge from '../../../components/base/BaseBadge.vue';
+import BaseButton from '../../../components/base/BaseButton.vue';
 import { Icon } from '@iconify/vue';
 </script>
 
@@ -8,7 +9,7 @@ import { Icon } from '@iconify/vue';
   <BaseCard :bordered="false">
     <template #header>
       <div
-        class="flex justify-between bg-gray-900 p-4 rounded-t-md text-white items-start"
+        class="flex justify-between bg-gray-900 p-4 rounded-t-lg text-white items-start"
       >
         <div class="space-y-2">
           <p class="font-bold text-xl">Kamis, 23 Januari 2026</p>
@@ -30,7 +31,7 @@ import { Icon } from '@iconify/vue';
     </template>
 
     <div
-      class="border border-gray-300 border-t-0 rounded-b-md divide-y divide-gray-200 divide-dashed"
+      class="rounded-b-lg border border-gray-300 border-t-0 divide-y divide-gray-200 divide-dashed"
     >
       <div class="p-4 flex items-center justify-between">
         <p class="text-gray-600">Saldo Kas Awal</p>
@@ -44,9 +45,13 @@ import { Icon } from '@iconify/vue';
         <p class="text-gray-600">Pengeluaran</p>
         <p class="text-lg text-red-700 font-bold">-832,000</p>
       </div>
-      <div class="p-4 flex items-center justify-between">
+      <div class="p-4 flex items-center justify-between border-solid">
         <p class="text-gray-900 text-lg font-bold">Saldo Kas</p>
         <p class="text-2xl text-green-700 font-bold">2,410,000</p>
+      </div>
+
+      <div class="p-4 bg-gray-50 rounded-b-lg flex justify-end">
+        <BaseButton icon="ri:stop-fill" color="warning">Tutup Shift</BaseButton>
       </div>
     </div>
   </BaseCard>
