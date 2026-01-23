@@ -5,6 +5,8 @@ import BaseBadge from '../../../components/base/BaseBadge.vue';
 import data from '../data/transaction-histories.json';
 import { h } from 'vue';
 import { formatCurrency } from '../../../utils/common.js';
+import BaseButton from '../../../components/base/BaseButton.vue';
+import BaseInput from '../../../components/base/BaseInput.vue';
 
 const columns = [
   {
@@ -67,7 +69,14 @@ const columns = [
 </script>
 
 <template>
-  <BaseCard title="Transaksi Kas">
+  <BaseCard title="Transaksi Kas" responsive>
+    <template #action>
+      <div class="grid grid-cols-2 sm:flex gap-2">
+        <BaseInput type="date" />
+        <BaseButton icon="ri:add-fill">Transaksi</BaseButton>
+      </div>
+    </template>
+
     <BaseTable :columns="columns" :data="data.slice(0, 5)"></BaseTable>
   </BaseCard>
 </template>

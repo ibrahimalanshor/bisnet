@@ -5,6 +5,7 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  responsive: Boolean,
 });
 </script>
 
@@ -19,7 +20,12 @@ defineProps({
     <slot name="header">
       <div
         v-if="title"
-        class="border-b border-gray-300 px-4 py-3 flex items-center justify-between"
+        :class="[
+          'border-b border-gray-300 px-4 py-3 flex',
+          responsive
+            ? 'flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0'
+            : 'items-center justify-between',
+        ]"
       >
         <h3 class="font-bold text-xl">{{ title }}</h3>
         <slot name="action" />

@@ -12,18 +12,12 @@ const shiftStore = useShiftStore();
   <div v-if="shiftStore.active" class="self-start grow space-y-4 xl:space-y-6">
     <BaseHeading v-if="shiftStore.active"> Shift Aktif </BaseHeading>
 
-    <div
-      class="grid gap-4 col-span-1 md:grid-cols-5 lg:grid-cols-1 xl:grid-cols-5 2xl:grid-cols-3"
-    >
-      <div
-        class="col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-2 2xl:col-span-1"
-      >
+    <div class="grid gap-4 col-span-1 xl:grid-cols-5 2xl:grid-cols-3">
+      <div class="col-span-1 xl:col-span-2 2xl:col-span-1">
         <ShiftActiveCard />
       </div>
 
-      <div
-        class="col-span-1 min-w-0 md:col-span-3 lg:col-span-1 xl:col-span-3 2xl:col-span-2"
-      >
+      <div class="col-span-1 min-w-0 xl:col-span-3 2xl:col-span-2">
         <ShiftTransactionTable />
       </div>
     </div>
