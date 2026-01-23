@@ -8,6 +8,7 @@ import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseConfirm from '../../../components/base/BaseConfirm.vue';
 import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
 import SaleDiscountInput from './SaleDiscountInput.vue';
+import ShiftOpenCard from '../../shift/components/ShiftOpenCard.vue';
 import { ref, reactive, computed } from 'vue';
 import {
   formatCurrency,
@@ -17,6 +18,9 @@ import {
   extractPriceTax,
   calculateDiscount,
 } from '../../../utils/common';
+import { useShiftStore } from '../../shift/shift.store';
+
+const shiftStore = useShiftStore();
 
 const itemsColumn = computed(() => {
   return [
@@ -197,195 +201,210 @@ function onAddDiscount() {
 </script>
 
 <template>
-  <BaseHeading>
-    Tambah Penjualan
+  <ShiftOpenCard v-if="!shiftStore.active" />
 
-    <template #action>
-      <BaseButton
-        class="w-full"
-        color="light"
-        icon="ri:arrow-go-back-fill"
-        tag="router-link"
-        :to="{ name: 'sale.index' }"
-        >Kembali</BaseButton
-      >
-    </template>
-  </BaseHeading>
+  <div v-else class="min-w-0 self-start grow space-y-4 xl:space-y-6">
+    <BaseHeading>
+      Tambah Penjualan
 
-  <BaseCard title="Informasi Penjualan">
-    <BaseFormItem id="sale_form.date" label="Tanggal" v-slot="{ id }">
-      <BaseInput :id="id" type="date" v-model="form.date" />
-    </BaseFormItem>
-  </BaseCard>
-
-  <BaseCard>
-    <BaseFormItem id="sale_form.product" label="Cari Barang atau Scan Barcode">
-      <ProductSelectSearch
-        placeholder="Cari Barang atau Scan Barcode"
-        icon-start="ri:qr-scan-2-line"
-        v-model="form.product"
-        @change="onChangeProduct"
-      />
-    </BaseFormItem>
-  </BaseCard>
-
-  <BaseTable :columns="itemsColumn" :data="items" empty-text="Belum ada barang">
-    <template #column-qty="{ index }">
-      <BaseInput
-        placeholder="0"
-        width="unset"
-        class="w-[100px]"
-        currency
-        v-model="items[index].qty"
-        @change="onChangeQty(index)"
-      />
-    </template>
-    <template #column-discount="{ item, index }">
-      <BaseButton
-        v-if="!item.withDiscount"
-        icon="ri:add-line"
-        color="light"
-        size="sm"
-        @click="onAddItemDiscount(index)"
-        >Diskon</BaseButton
-      >
-      <SaleDiscountInput
-        v-else
-        :total-price="countItemTotalPrice(item)"
-        v-model="items[index]"
-        @remove="item.withDiscount = false"
-      />
-    </template>
-    <template #column-action="{ index }">
-      <BaseButton
-        icon="ri:delete-bin-6-line"
-        color="error"
-        size="sm"
-        color-variant="transparent"
-        @click="items.splice(index, 1)"
-      />
-    </template>
-  </BaseTable>
-
-  <BaseCard class="ml-auto w-full sm:w-fit sm:min-w-[400px]">
-    <div class="space-y-4">
-      <BaseButton
-        v-if="!form.withDiscount"
-        size="sm"
-        color="light"
-        icon="ri:add-line"
-        @click="onAddDiscount"
-        >Diskon</BaseButton
-      >
-
-      <template v-else>
-        <BaseFormItem id="sale_form.discount" label="Diskon">
-          <template #default="{ id }">
-            <SaleDiscountInput
-              :id="id"
-              :auto-width="false"
-              :total-price="grandTotal"
-              v-model="form"
-              @remove="form.withDiscount = false"
-            />
-          </template>
-        </BaseFormItem>
-        <hr class="border-dashed border-gray-300" />
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <p>Subtotal</p>
-            <p>{{ formatCurrency(subTotal) }}</p>
-          </div>
-          <div class="flex items-center justify-between">
-            <p>Diskon</p>
-            <p>
-              <span v-if="discountTotal > 0">-</span
-              >{{ formatCurrency(discountTotal) }}
-            </p>
-          </div>
-        </div>
-        <hr class="border-dashed border-gray-300" />
-      </template>
-      <div class="flex items-center justify-between gap-8">
-        <p class="font-bold text-xl">Grand Total</p>
-        <p class="text-blue-600 text-3xl font-bold">
-          {{ formatCurrency(grandTotal) }}
-        </p>
-      </div>
-      <BaseFormItem
-        id="sale_form.payment_amount"
-        label="Jumlah Bayar"
-        v-slot="{ id }"
-      >
-        <BaseInput
-          :id="id"
-          currency
-          :placeholder="formatCurrency(grandTotal)"
-          v-model="form.paymentAmount"
-        />
-      </BaseFormItem>
-      <div
-        v-if="paymentChange > 0"
-        class="flex items-center justify-between gap-8"
-      >
-        <p class="font-semibold text-gray-500">Kembali</p>
-        <p class="text-gray-900 text-2xl font-bold">
-          {{ formatCurrency(paymentChange) }}
-        </p>
-      </div>
-      <BaseButton
-        class="w-full"
-        icon="ri:save-3-fill"
-        :disabled="!valid"
-        @click="submitConfirm.visible = true"
-        >Simpan</BaseButton
-      >
-      <p v-if="grandTotal > 0" class="text-sm text-gray-600 flex gap-4">
-        <span>PPN: {{ formatCurrency(tax.ppn) }}</span>
-        <span>DPP: {{ formatCurrency(tax.dpp) }}</span>
-      </p>
-    </div>
-  </BaseCard>
-
-  <BaseConfirm
-    type="info"
-    confirm-color="primary"
-    title="Konfirmasi Penjualan"
-    message="Stok barang akan diperbarui sesuai data penjualan yang dimasukkan."
-    confirm-text="Simpan"
-    cancel-text="Kembali"
-    :loading="submitConfirm.loading"
-    v-model:visible="submitConfirm.visible"
-    @confirm="onConfirm"
-  />
-  <BaseConfirm
-    type="success"
-    confirm-color="primary"
-    title="Penjualan berhasil disimpan"
-    v-model:visible="successDetail.visible"
-    @close-outside="$router.push({ name: 'restock.index' })"
-  >
-    <template #message>
-      <p class="text-gray-700">
-        Penjualan dengan kode
-        <b class="text-gray-900">{{ successDetail.code }}</b> berhasil disimpan
-      </p>
-    </template>
-
-    <template #action>
-      <div class="grid sm:grid-cols-2 gap-2">
-        <BaseButton class="col-span-full" icon="ri:receipt-fill" color="success"
-          >Cetak Struk</BaseButton
-        >
-        <BaseButton color="light" icon="ri:add-fill" @click="onReset"
-          >Buat Penjualan Baru</BaseButton
-        >
+      <template #action>
         <BaseButton
+          class="w-full"
           color="light"
-          @click="$router.push({ name: 'restock.index' })"
+          icon="ri:arrow-go-back-fill"
+          tag="router-link"
+          :to="{ name: 'sale.index' }"
           >Kembali</BaseButton
         >
+      </template>
+    </BaseHeading>
+
+    <BaseCard title="Informasi Penjualan">
+      <BaseFormItem id="sale_form.date" label="Tanggal" v-slot="{ id }">
+        <BaseInput :id="id" type="date" v-model="form.date" />
+      </BaseFormItem>
+    </BaseCard>
+
+    <BaseCard>
+      <BaseFormItem
+        id="sale_form.product"
+        label="Cari Barang atau Scan Barcode"
+      >
+        <ProductSelectSearch
+          placeholder="Cari Barang atau Scan Barcode"
+          icon-start="ri:qr-scan-2-line"
+          v-model="form.product"
+          @change="onChangeProduct"
+        />
+      </BaseFormItem>
+    </BaseCard>
+
+    <BaseTable
+      :columns="itemsColumn"
+      :data="items"
+      empty-text="Belum ada barang"
+    >
+      <template #column-qty="{ index }">
+        <BaseInput
+          placeholder="0"
+          width="unset"
+          class="w-[100px]"
+          currency
+          v-model="items[index].qty"
+          @change="onChangeQty(index)"
+        />
+      </template>
+      <template #column-discount="{ item, index }">
+        <BaseButton
+          v-if="!item.withDiscount"
+          icon="ri:add-line"
+          color="light"
+          size="sm"
+          @click="onAddItemDiscount(index)"
+          >Diskon</BaseButton
+        >
+        <SaleDiscountInput
+          v-else
+          :total-price="countItemTotalPrice(item)"
+          v-model="items[index]"
+          @remove="item.withDiscount = false"
+        />
+      </template>
+      <template #column-action="{ index }">
+        <BaseButton
+          icon="ri:delete-bin-6-line"
+          color="error"
+          size="sm"
+          color-variant="transparent"
+          @click="items.splice(index, 1)"
+        />
+      </template>
+    </BaseTable>
+
+    <BaseCard class="ml-auto w-full sm:w-fit sm:min-w-[400px]">
+      <div class="space-y-4">
+        <BaseButton
+          v-if="!form.withDiscount"
+          size="sm"
+          color="light"
+          icon="ri:add-line"
+          @click="onAddDiscount"
+          >Diskon</BaseButton
+        >
+
+        <template v-else>
+          <BaseFormItem id="sale_form.discount" label="Diskon">
+            <template #default="{ id }">
+              <SaleDiscountInput
+                :id="id"
+                :auto-width="false"
+                :total-price="grandTotal"
+                v-model="form"
+                @remove="form.withDiscount = false"
+              />
+            </template>
+          </BaseFormItem>
+          <hr class="border-dashed border-gray-300" />
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <p>Subtotal</p>
+              <p>{{ formatCurrency(subTotal) }}</p>
+            </div>
+            <div class="flex items-center justify-between">
+              <p>Diskon</p>
+              <p>
+                <span v-if="discountTotal > 0">-</span
+                >{{ formatCurrency(discountTotal) }}
+              </p>
+            </div>
+          </div>
+          <hr class="border-dashed border-gray-300" />
+        </template>
+        <div class="flex items-center justify-between gap-8">
+          <p class="font-bold text-xl">Grand Total</p>
+          <p class="text-blue-600 text-3xl font-bold">
+            {{ formatCurrency(grandTotal) }}
+          </p>
+        </div>
+        <BaseFormItem
+          id="sale_form.payment_amount"
+          label="Jumlah Bayar"
+          v-slot="{ id }"
+        >
+          <BaseInput
+            :id="id"
+            currency
+            :placeholder="formatCurrency(grandTotal)"
+            v-model="form.paymentAmount"
+          />
+        </BaseFormItem>
+        <div
+          v-if="paymentChange > 0"
+          class="flex items-center justify-between gap-8"
+        >
+          <p class="font-semibold text-gray-500">Kembali</p>
+          <p class="text-gray-900 text-2xl font-bold">
+            {{ formatCurrency(paymentChange) }}
+          </p>
+        </div>
+        <BaseButton
+          class="w-full"
+          icon="ri:save-3-fill"
+          :disabled="!valid"
+          @click="submitConfirm.visible = true"
+          >Simpan</BaseButton
+        >
+        <p v-if="grandTotal > 0" class="text-sm text-gray-600 flex gap-4">
+          <span>PPN: {{ formatCurrency(tax.ppn) }}</span>
+          <span>DPP: {{ formatCurrency(tax.dpp) }}</span>
+        </p>
       </div>
-    </template>
-  </BaseConfirm>
+    </BaseCard>
+
+    <BaseConfirm
+      type="info"
+      confirm-color="primary"
+      title="Konfirmasi Penjualan"
+      message="Stok barang akan diperbarui sesuai data penjualan yang dimasukkan."
+      confirm-text="Simpan"
+      cancel-text="Kembali"
+      :loading="submitConfirm.loading"
+      v-model:visible="submitConfirm.visible"
+      @confirm="onConfirm"
+    />
+    <BaseConfirm
+      type="success"
+      confirm-color="primary"
+      title="Penjualan berhasil disimpan"
+      v-model:visible="successDetail.visible"
+      @close-outside="$router.push({ name: 'restock.index' })"
+    >
+      <template #message>
+        <p class="text-gray-700">
+          Penjualan dengan kode
+          <b class="text-gray-900">{{ successDetail.code }}</b> berhasil
+          disimpan
+        </p>
+      </template>
+
+      <template #action>
+        <div class="grid sm:grid-cols-2 gap-2">
+          <BaseButton
+            class="col-span-full"
+            icon="ri:receipt-fill"
+            color="success"
+            >Cetak Struk</BaseButton
+          >
+          <BaseButton color="light" icon="ri:add-fill" @click="onReset"
+            >Buat Penjualan Baru</BaseButton
+          >
+          <BaseButton
+            color="light"
+            @click="$router.push({ name: 'restock.index' })"
+            >Kembali</BaseButton
+          >
+        </div>
+      </template>
+    </BaseConfirm>
+  </div>
 </template>

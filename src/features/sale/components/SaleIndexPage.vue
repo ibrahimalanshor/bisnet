@@ -9,6 +9,9 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import SaleDetailModal from './SaleDetailModal.vue';
 import { sleep, formatDate, formatCurrency } from '../../../utils/common';
+import { useShiftStore } from '../../shift/shift.store';
+
+const shiftStore = useShiftStore();
 
 const columns = [
   { id: 'code', name: 'Kode', value: (item) => item.code },
@@ -88,6 +91,15 @@ loadSales();
           @change="loadSales({ reload: true })"
         />
         <BaseButton
+          v-if="!shiftStore.active"
+          icon="ri:add-fill"
+          class="w-full"
+          disabled
+          v-tooltip="'Shift belum dibuka'"
+          >Tambah Penjualan</BaseButton
+        >
+        <BaseButton
+          v-else
           icon="ri:add-fill"
           class="w-full"
           tag="router-link"

@@ -78,6 +78,7 @@ export const router = createRouter({
           name: 'sale.new',
           meta: {
             layout: 'LayoutAdmin',
+            layoutProps: { verticalAlign: 'center' },
           },
           component: () => import('./features/sale/components/SaleNewPage.vue'),
         },
