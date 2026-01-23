@@ -3,6 +3,7 @@ import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import BaseAlert from '../base/BaseAlert.vue';
 import AppSidebar from '../app/AppSidebar.vue';
+import AppUserDropdown from '../app/AppUserDropdown.vue';
 import ShiftStatus from '../../features/shift/components/ShiftStatus.vue';
 import { useToastStore } from '../../cores/toast/toast.store';
 
@@ -45,9 +46,7 @@ const sidebarVisible = ref(false);
         </button>
         <div class="flex gap-4">
           <ShiftStatus />
-          <button class="cursor-pointer">
-            <Icon icon="ri:user-3-line" class="size-4" />
-          </button>
+          <AppUserDropdown />
         </div>
       </nav>
       <main

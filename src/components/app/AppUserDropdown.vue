@@ -1,0 +1,36 @@
+<script setup>
+import { Icon } from '@iconify/vue';
+
+const menus = [
+  { id: 'profile', name: 'Profil', icon: 'ri:user-3-line' },
+  { id: 'shift', name: 'Riwayat Shift', icon: 'ri:calendar-2-line' },
+  { id: 'setting', name: 'Pengaturan', icon: 'ri:settings-4-line' },
+  { id: 'logout', name: 'Logout', icon: 'ri:logout-box-r-line' },
+];
+</script>
+
+<template>
+  <VDropdown class="flex items-center" placement="bottom-end">
+    <button class="cursor-pointer">
+      <Icon icon="ri:user-3-line" class="size-4" />
+    </button>
+    <template #popper>
+      <div class="min-w-48">
+        <div class="border-b border-gray-200 px-4 py-3">
+          <p class="font-medium">Abdul Ghani</p>
+          <p class="text-sm text-gray-500">Kasir</p>
+        </div>
+        <div class="py-1">
+          <div
+            v-for="menu in menus"
+            :key="menu.id"
+            class="flex items-center gap-2 px-4 py-2 hover:bg-gray-50"
+          >
+            <Icon :icon="menu.icon" class="text-gray-900" />
+            {{ menu.name }}
+          </div>
+        </div>
+      </div>
+    </template>
+  </VDropdown>
+</template>
