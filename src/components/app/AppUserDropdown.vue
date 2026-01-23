@@ -3,7 +3,12 @@ import { Icon } from '@iconify/vue';
 
 const menus = [
   { id: 'profile', name: 'Profil', icon: 'ri:user-3-line' },
-  { id: 'shift', name: 'Riwayat Shift', icon: 'ri:calendar-2-line' },
+  {
+    id: 'shift',
+    to: { name: 'shift-history' },
+    name: 'Riwayat Shift',
+    icon: 'ri:calendar-2-line',
+  },
   { id: 'setting', name: 'Pengaturan', icon: 'ri:settings-4-line' },
   { id: 'logout', name: 'Logout', icon: 'ri:logout-box-r-line' },
 ];
@@ -21,14 +26,16 @@ const menus = [
           <p class="text-sm text-gray-500">Kasir</p>
         </div>
         <div class="py-1">
-          <div
+          <component
             v-for="menu in menus"
             :key="menu.id"
+            :is="menu.to ? 'router-link' : 'div'"
+            :to="menu.to"
             class="flex items-center gap-2 px-4 py-2 hover:bg-gray-50"
           >
             <Icon :icon="menu.icon" class="text-gray-900" />
             {{ menu.name }}
-          </div>
+          </component>
         </div>
       </div>
     </template>

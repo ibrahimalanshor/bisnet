@@ -32,7 +32,6 @@ const columns = [
         BaseBadge,
         {
           colorVariant: 'thin',
-          size: 'sm',
           color:
             item.type === 'Masuk'
               ? 'success'

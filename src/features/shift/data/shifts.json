@@ -1,0 +1,113 @@
+[
+  {
+    "id": 10,
+    "date": "2026-01-23",
+    "start": "08:00",
+    "end": null,
+    "init_amount": 17250000,
+    "income": 650000,
+    "outcome": 50000,
+    "balance": 17800000,
+    "active": true
+  },
+  {
+    "id": 9,
+    "date": "2026-01-22",
+    "start": "08:00",
+    "end": "16:00",
+    "init_amount": 15450000,
+    "income": 2200000,
+    "outcome": 400000,
+    "balance": 17250000,
+    "active": false
+  },
+  {
+    "id": 8,
+    "date": "2026-01-21",
+    "start": "08:00",
+    "end": "16:00",
+    "init_amount": 13900000,
+    "income": 1800000,
+    "outcome": 250000,
+    "balance": 15450000,
+    "active": false
+  },
+  {
+    "id": 7,
+    "date": "2026-01-20",
+    "start": "08:05",
+    "end": "16:10",
+    "init_amount": 11300000,
+    "income": 2950000,
+    "outcome": 350000,
+    "balance": 13900000,
+    "active": false
+  },
+  {
+    "id": 6,
+    "date": "2026-01-19",
+    "start": "08:00",
+    "end": "16:00",
+    "init_amount": 8800000,
+    "income": 3100000,
+    "outcome": 600000,
+    "balance": 11300000,
+    "active": false
+  },
+  {
+    "id": 5,
+    "date": "2026-01-18",
+    "start": "08:00",
+    "end": "15:50",
+    "init_amount": 7500000,
+    "income": 1400000,
+    "outcome": 100000,
+    "balance": 8800000,
+    "active": false
+  },
+  {
+    "id": 4,
+    "date": "2026-01-17",
+    "start": "08:10",
+    "end": "16:20",
+    "init_amount": 5350000,
+    "income": 2600000,
+    "outcome": 450000,
+    "balance": 7500000,
+    "active": false
+  },
+  {
+    "id": 3,
+    "date": "2026-01-16",
+    "start": "08:00",
+    "end": "16:00",
+    "init_amount": 3850000,
+    "income": 1700000,
+    "outcome": 200000,
+    "balance": 5350000,
+    "active": false
+  },
+  {
+    "id": 2,
+    "date": "2026-01-15",
+    "start": "08:05",
+    "end": "16:10",
+    "init_amount": 1900000,
+    "income": 2250000,
+    "outcome": 300000,
+    "balance": 3850000,
+    "active": false
+  },
+  {
+    "id": 1,
+    "date": "2026-01-14",
+    "start": "08:00",
+    "end": "16:00",
+    "init_amount": 200000,
+    "income": 1850000,
+    "outcome": 150000,
+    "balance": 1900000,
+    "active": false
+  }
+]
+

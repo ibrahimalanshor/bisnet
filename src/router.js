@@ -18,6 +18,13 @@ export const router = createRouter({
         import('./features/shift/components/ShiftActivePage.vue'),
     },
     {
+      path: '/shift-history',
+      name: 'shift-history',
+      meta: { layout: 'LayoutAdmin' },
+      component: () =>
+        import('./features/shift/components/ShiftHistoryIndex.vue'),
+    },
+    {
       path: '/supplier',
       name: 'supplier',
       meta: { layout: 'LayoutAdmin' },
