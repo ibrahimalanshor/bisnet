@@ -1,5 +1,6 @@
 <script setup>
 import BaseCard from '../../../components/base/BaseCard.vue';
+import BaseBadge from '../../../components/base/BaseBadge.vue';
 import { Icon } from '@iconify/vue';
 </script>
 
@@ -24,10 +25,7 @@ import { Icon } from '@iconify/vue';
             </div>
           </div>
         </div>
-        <span
-          class="bg-green-600 text-white text-xs font-medium inline-flex h-6 items-center justify-center px-2 rounded uppercase"
-          >Aktif</span
-        >
+        <BaseBadge color="success" class="uppercase">Aktif</BaseBadge>
       </div>
     </template>
 

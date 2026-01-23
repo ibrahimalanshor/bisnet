@@ -1,6 +1,7 @@
 <script setup>
 import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
+import BaseBadge from '../../../components/base/BaseBadge.vue';
 import data from '../data/transaction-histories.json';
 import { h } from 'vue';
 import { formatCurrency } from '../../../utils/common.js';
@@ -21,7 +22,25 @@ const columns = [
         h('p', { class: 'text-sm text-gray-500' }, item.reference),
       ]),
   },
-  { id: 'type', name: 'Tipe' },
+  {
+    id: 'type',
+    name: 'Tipe',
+    render: ({ item }) =>
+      h(
+        BaseBadge,
+        {
+          colorVariant: 'thin',
+          size: 'sm',
+          color:
+            item.type === 'Masuk'
+              ? 'success'
+              : item.type === 'Modal'
+                ? 'primary'
+                : 'error',
+        },
+        () => item.type,
+      ),
+  },
   {
     id: 'amount',
     name: 'Nominal',
