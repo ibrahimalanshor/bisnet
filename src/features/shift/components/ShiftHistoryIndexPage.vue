@@ -8,6 +8,7 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import BaseBadge from '../../../components/base/BaseBadge.vue';
 import { sleep, formatDate, formatCurrency } from '../../../utils/common';
+import { useRouter } from 'vue-router';
 
 const columns = [
   {
@@ -52,6 +53,9 @@ const columns = [
     value: (item) => formatCurrency(item.balance),
   },
 ];
+
+const router = useRouter();
+
 const loading = ref(true);
 const error = ref(false);
 const shifts = ref({ data: [] });
@@ -81,7 +85,9 @@ async function loadShifts({ refresh, reload } = {}) {
   loading.value = false;
 }
 
-function onOpenDetail(item) {}
+function onOpenDetail(item) {
+  router.push({ name: 'shift-history.detail', params: { id: item.id } });
+}
 
 loadShifts();
 </script>

@@ -19,10 +19,22 @@ export const router = createRouter({
     },
     {
       path: '/shift-history',
-      name: 'shift-history',
-      meta: { layout: 'LayoutAdmin' },
-      component: () =>
-        import('./features/shift/components/ShiftHistoryIndex.vue'),
+      children: [
+        {
+          path: '',
+          name: 'shift-history.index',
+          meta: { layout: 'LayoutAdmin' },
+          component: () =>
+            import('./features/shift/components/ShiftHistoryIndexPage.vue'),
+        },
+        {
+          path: ':id',
+          name: 'shift-history.detail',
+          meta: { layout: 'LayoutAdmin' },
+          component: () =>
+            import('./features/shift/components/ShiftHistoryDetailPage.vue'),
+        },
+      ],
     },
     {
       path: '/supplier',

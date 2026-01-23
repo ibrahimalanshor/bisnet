@@ -5,7 +5,7 @@ const menus = [
   { id: 'profile', name: 'Profil', icon: 'ri:user-3-line' },
   {
     id: 'shift',
-    to: { name: 'shift-history' },
+    to: { name: 'shift-history.index' },
     name: 'Riwayat Shift',
     icon: 'ri:calendar-2-line',
   },
