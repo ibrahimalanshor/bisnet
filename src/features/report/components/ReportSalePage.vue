@@ -12,15 +12,9 @@ import {
   formatCurrency,
   formatDate,
   getPaymentMethodName,
+  sleep,
 } from '../../../utils/common.js';
 import data from '../../sale/data/sale.json';
-
-const filter = reactive({
-  date: null,
-});
-const query = reactive({
-  page: 1,
-});
 
 const summaryColumns = [
   {
@@ -55,13 +49,31 @@ const summary = ref({
   total_sales: 2582900,
 });
 const reports = ref(data.slice(0, 10));
+
+const resultVisible = ref(false);
+const loadingResult = ref(false);
+const filter = reactive({
+  date: null,
+});
+const query = reactive({
+  page: 1,
+});
+
+async function loadResult() {
+  loadingResult.value = true;
+
+  await sleep();
+  resultVisible.value = true;
+
+  loadingResult.value = false;
+}
 </script>
 
 <template>
   <BaseHeading>Laporan Penjualan</BaseHeading>
 
   <BaseCard title="Form Laporan Penjualan">
-    <form class="space-y-4">
+    <form class="space-y-4" @submit.prevent="loadResult">
       <BaseFormItem id="report_sale_form.date" label="Tanggal" v-slot="{ id }">
         <BaseInput type="date" :id="id" required v-model="filter.date" />
       </BaseFormItem>
@@ -72,13 +84,19 @@ const reports = ref(data.slice(0, 10));
       >
         <BaseInput :id="id" placeholder="Pilih Kasir" />
       </BaseFormItem>
-      <BaseButton icon="ri:file-list-2-fill" :disabled="!filter.date"
+      <BaseButton
+        icon="ri:file-list-2-fill"
+        :disabled="!filter.date"
+        :loading="loadingResult"
         >Tampilkan</BaseButton
       >
     </form>
   </BaseCard>
 
-  <BaseCard title="Laporan Penjualan 22 Desember 2026">
+  <BaseCard
+    v-if="resultVisible"
+    :title="`Laporan Penjualan ${formatDate(filter.date, 'DD MMMM YYYY')}`"
+  >
     <template #action>
       <div class="flex gap-2">
         <BaseButton icon="ri:file-excel-fill" color="success"
