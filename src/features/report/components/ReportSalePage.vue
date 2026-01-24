@@ -72,13 +72,23 @@ const reports = ref(data.slice(0, 10));
       >
         <BaseInput :id="id" placeholder="Pilih Kasir" />
       </BaseFormItem>
-      <BaseButton icon="ri:file-list-2-line" :disabled="!filter.date"
+      <BaseButton icon="ri:file-list-2-fill" :disabled="!filter.date"
         >Tampilkan</BaseButton
       >
     </form>
   </BaseCard>
 
   <BaseCard title="Laporan Penjualan 22 Desember 2026">
+    <template #action>
+      <div class="flex gap-2">
+        <BaseButton icon="ri:file-excel-fill" color="success"
+          >Download Excel</BaseButton
+        >
+        <BaseButton icon="ri:file-pdf-2-fill" color="error"
+          >Download PDF</BaseButton
+        >
+      </div>
+    </template>
     <div class="space-y-4">
       <BaseDescriptionList
         :columns="summaryColumns"
