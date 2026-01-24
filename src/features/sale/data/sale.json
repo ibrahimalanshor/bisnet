@@ -1,108 +1,203 @@
 [
   {
     "id": 1,
-    "code": "SAL-20260101-001",
-    "createdAt": "2026-01-01T09:15:23",
+    "code": "INV-20260120-001",
+    "createdAt": "2026-01-20T08:05:00",
+    "cashierName": "Andi",
     "itemsCount": 3,
-    "totalPrice": 125000
+    "totalPrice": 85000,
+    "paymentMethod": "cash",
+    "paymentAmount": 100000
   },
   {
     "id": 2,
-    "code": "SAL-20260101-002",
-    "createdAt": "2026-01-01T10:02:11",
-    "itemsCount": 5,
-    "totalPrice": 248000
+    "code": "INV-20260120-002",
+    "createdAt": "2026-01-20T08:20:00",
+    "cashierName": "Andi",
+    "itemsCount": 1,
+    "totalPrice": 12000,
+    "paymentMethod": "qris",
+    "paymentAmount": 12000
   },
   {
     "id": 3,
-    "code": "SAL-20260102-001",
-    "createdAt": "2026-01-02T08:47:55",
-    "itemsCount": 2,
-    "totalPrice": 76000
+    "code": "INV-20260120-003",
+    "createdAt": "2026-01-20T08:45:00",
+    "cashierName": "Andi",
+    "itemsCount": 4,
+    "totalPrice": 67000,
+    "paymentMethod": "cash",
+    "paymentAmount": 70000
   },
   {
     "id": 4,
-    "code": "SAL-20260102-002",
-    "createdAt": "2026-01-02T11:30:42",
-    "itemsCount": 6,
-    "totalPrice": 315000
+    "code": "INV-20260120-004",
+    "createdAt": "2026-01-20T09:10:00",
+    "cashierName": "Andi",
+    "itemsCount": 2,
+    "totalPrice": 50000,
+    "paymentMethod": "debit",
+    "paymentAmount": 50000
   },
   {
     "id": 5,
-    "code": "SAL-20260103-001",
-    "createdAt": "2026-01-03T09:05:18",
-    "itemsCount": 1,
-    "totalPrice": 15000
+    "code": "INV-20260120-005",
+    "createdAt": "2026-01-20T09:40:00",
+    "cashierName": "Andi",
+    "itemsCount": 5,
+    "totalPrice": 175000,
+    "paymentMethod": "qris",
+    "paymentAmount": 175000
   },
   {
     "id": 6,
-    "code": "SAL-20260103-002",
-    "createdAt": "2026-01-03T12:20:09",
-    "itemsCount": 4,
-    "totalPrice": 184000
+    "code": "INV-20260120-006",
+    "createdAt": "2026-01-20T10:05:00",
+    "cashierName": "Budi",
+    "itemsCount": 2,
+    "totalPrice": 45000,
+    "paymentMethod": "cash",
+    "paymentAmount": 50000
   },
   {
     "id": 7,
-    "code": "SAL-20260104-001",
-    "createdAt": "2026-01-04T08:55:31",
-    "itemsCount": 7,
-    "totalPrice": 402000
+    "code": "INV-20260120-007",
+    "createdAt": "2026-01-20T10:30:00",
+    "cashierName": "Budi",
+    "itemsCount": 6,
+    "totalPrice": 210000,
+    "paymentMethod": "transfer",
+    "paymentAmount": 210000
   },
   {
     "id": 8,
-    "code": "SAL-20260104-002",
-    "createdAt": "2026-01-04T10:40:16",
-    "itemsCount": 2,
-    "totalPrice": 98000
+    "code": "INV-20260120-008",
+    "createdAt": "2026-01-20T11:00:00",
+    "cashierName": "Budi",
+    "itemsCount": 3,
+    "totalPrice": 76000,
+    "paymentMethod": "cash",
+    "paymentAmount": 80000
   },
   {
     "id": 9,
-    "code": "SAL-20260105-001",
-    "createdAt": "2026-01-05T09:12:44",
-    "itemsCount": 5,
-    "totalPrice": 260000
+    "code": "INV-20260120-009",
+    "createdAt": "2026-01-20T11:20:00",
+    "cashierName": "Budi",
+    "itemsCount": 4,
+    "totalPrice": 98000,
+    "paymentMethod": "qris",
+    "paymentAmount": 98000
   },
   {
     "id": 10,
-    "code": "SAL-20260105-002",
-    "createdAt": "2026-01-05T13:05:27",
-    "itemsCount": 3,
-    "totalPrice": 135000
+    "code": "INV-20260120-010",
+    "createdAt": "2026-01-20T11:50:00",
+    "cashierName": "Budi",
+    "itemsCount": 7,
+    "totalPrice": 325000,
+    "paymentMethod": "debit",
+    "paymentAmount": 325000
   },
   {
     "id": 11,
-    "code": "SAL-20260106-001",
-    "createdAt": "2026-01-06T08:33:50",
-    "itemsCount": 6,
-    "totalPrice": 289000
+    "code": "INV-20260120-011",
+    "createdAt": "2026-01-20T12:15:00",
+    "cashierName": "Siti",
+    "itemsCount": 2,
+    "totalPrice": 38000,
+    "paymentMethod": "cash",
+    "paymentAmount": 40000
   },
   {
     "id": 12,
-    "code": "SAL-20260106-002",
-    "createdAt": "2026-01-06T11:18:02",
-    "itemsCount": 2,
-    "totalPrice": 67000
+    "code": "INV-20260120-012",
+    "createdAt": "2026-01-20T12:40:00",
+    "cashierName": "Siti",
+    "itemsCount": 5,
+    "totalPrice": 190000,
+    "paymentMethod": "transfer",
+    "paymentAmount": 190000
   },
   {
     "id": 13,
-    "code": "SAL-20260107-001",
-    "createdAt": "2026-01-07T09:45:14",
-    "itemsCount": 8,
-    "totalPrice": 520000
+    "code": "INV-20260120-013",
+    "createdAt": "2026-01-20T13:05:00",
+    "cashierName": "Siti",
+    "itemsCount": 1,
+    "totalPrice": 15000,
+    "paymentMethod": "qris",
+    "paymentAmount": 15000
   },
   {
     "id": 14,
-    "code": "SAL-20260107-002",
-    "createdAt": "2026-01-07T12:59:36",
-    "itemsCount": 4,
-    "totalPrice": 198000
+    "code": "INV-20260120-014",
+    "createdAt": "2026-01-20T13:30:00",
+    "cashierName": "Siti",
+    "itemsCount": 8,
+    "totalPrice": 410000,
+    "paymentMethod": "debit",
+    "paymentAmount": 410000
   },
   {
     "id": 15,
-    "code": "SAL-20260108-001",
-    "createdAt": "2026-01-08T10:22:08",
+    "code": "INV-20260120-015",
+    "createdAt": "2026-01-20T13:55:00",
+    "cashierName": "Siti",
     "itemsCount": 3,
-    "totalPrice": 142000
+    "totalPrice": 69000,
+    "paymentMethod": "cash",
+    "paymentAmount": 70000
+  },
+  {
+    "id": 16,
+    "code": "INV-20260120-016",
+    "createdAt": "2026-01-20T14:20:00",
+    "cashierName": "Rina",
+    "itemsCount": 4,
+    "totalPrice": 112000,
+    "paymentMethod": "qris",
+    "paymentAmount": 112000
+  },
+  {
+    "id": 17,
+    "code": "INV-20260120-017",
+    "createdAt": "2026-01-20T14:45:00",
+    "cashierName": "Rina",
+    "itemsCount": 6,
+    "totalPrice": 265000,
+    "paymentMethod": "transfer",
+    "paymentAmount": 265000
+  },
+  {
+    "id": 18,
+    "code": "INV-20260120-018",
+    "createdAt": "2026-01-20T15:10:00",
+    "cashierName": "Rina",
+    "itemsCount": 2,
+    "totalPrice": 52000,
+    "paymentMethod": "cash",
+    "paymentAmount": 60000
+  },
+  {
+    "id": 19,
+    "code": "INV-20260120-019",
+    "createdAt": "2026-01-20T15:35:00",
+    "cashierName": "Rina",
+    "itemsCount": 5,
+    "totalPrice": 184000,
+    "paymentMethod": "debit",
+    "paymentAmount": 184000
+  },
+  {
+    "id": 20,
+    "code": "INV-20260120-020",
+    "createdAt": "2026-01-20T16:00:00",
+    "cashierName": "Rina",
+    "itemsCount": 3,
+    "totalPrice": 73000,
+    "paymentMethod": "qris",
+    "paymentAmount": 73000
   }
 ]
 

@@ -14,7 +14,7 @@ import { useShiftStore } from '../../shift/shift.store';
 const shiftStore = useShiftStore();
 
 const columns = [
-  { id: 'code', name: 'Kode', value: (item) => item.code },
+  { id: 'code', name: 'No. Penjualan', value: (item) => item.code },
   {
     id: 'createdAt',
     name: 'Tanggal',

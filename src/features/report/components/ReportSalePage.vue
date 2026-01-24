@@ -5,14 +5,24 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vue';
+import BaseTable from '../../../components/base/BaseTable.vue';
+import BasePagination from '../../../components/base/BasePagination.vue';
 import { reactive, ref } from 'vue';
-import { formatCurrency } from '../../../utils/common.js';
+import {
+  formatCurrency,
+  formatDate,
+  getPaymentMethodName,
+} from '../../../utils/common.js';
+import data from '../../sale/data/sale.json';
 
 const filter = reactive({
   date: null,
 });
+const query = reactive({
+  page: 1,
+});
 
-const columns = [
+const summaryColumns = [
   {
     id: 'total_transactions',
     name: 'Total Transaksi',
@@ -24,10 +34,27 @@ const columns = [
     value: (item) => formatCurrency(item.total_sales),
   },
 ];
+const tableColumns = [
+  { id: 'code', name: 'No. Penjualan' },
+  { id: 'date', name: 'Tanggal', value: (item) => formatDate(item.createdAt) },
+  { id: 'cashier', name: 'Kasir', value: (item) => item.cashierName },
+  {
+    id: 'payment',
+    name: 'Pembayaran',
+    value: (item) => getPaymentMethodName(item.paymentMethod),
+  },
+  {
+    id: 'total',
+    name: 'Total',
+    value: (item) => formatCurrency(item.totalPrice),
+  },
+];
+
 const summary = ref({
   total_transactions: 29,
   total_sales: 2582900,
 });
+const reports = ref(data.slice(0, 10));
 </script>
 
 <template>
@@ -52,10 +79,15 @@ const summary = ref({
   </BaseCard>
 
   <BaseCard title="Laporan Penjualan 22 Desember 2026">
-    <BaseDescriptionList
-      :columns="columns"
-      :data="summary"
-      class="sm:grid-cols-2"
-    ></BaseDescriptionList>
+    <div class="space-y-4">
+      <BaseDescriptionList
+        :columns="summaryColumns"
+        :data="summary"
+        class="sm:grid-cols-2"
+      ></BaseDescriptionList>
+
+      <BaseTable :columns="tableColumns" :data="reports"></BaseTable>
+      <BasePagination :total-pages="10" v-model="query.page" />
+    </div>
   </BaseCard>
 </template>

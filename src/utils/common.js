@@ -69,3 +69,12 @@ export function calculateDiscount(type, value, totalPrice) {
 
   return (discount / 100) * totalPrice;
 }
+
+export function getPaymentMethodName(name) {
+  return {
+    cash: 'Tunai',
+    qris: 'QRIS',
+    transfer: 'Transfer',
+    debit: 'Debit',
+  }[name];
+}

@@ -12,7 +12,7 @@ import RestockDetailModal from './RestockDetailModal.vue';
 import { sleep, formatDate, formatCurrency } from '../../../utils/common';
 
 const columns = [
-  { id: 'code', name: 'Kode', value: (item) => item.code },
+  { id: 'code', name: 'No. Restock', value: (item) => item.code },
   {
     id: 'createdAt',
     name: 'Tanggal',
