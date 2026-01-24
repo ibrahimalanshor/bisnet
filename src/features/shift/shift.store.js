@@ -10,5 +10,9 @@ export const useShiftStore = defineStore('shift', () => {
     active.value = true;
   }
 
-  return { active, balance, open };
+  function close() {
+    active.value = false;
+  }
+
+  return { active, balance, open, close };
 });

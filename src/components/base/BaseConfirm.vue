@@ -29,6 +29,7 @@ const icon = computed(() => {
     error: 'ri:alert-fill',
     info: 'ri:information-fill',
     success: 'ri:checkbox-circle-fill',
+    warning: 'ri:alert-fill',
   }[props.type];
 });
 const iconColorClass = computed(() => {
@@ -36,6 +37,7 @@ const iconColorClass = computed(() => {
     error: 'text-red-600',
     info: 'text-blue-600',
     success: 'text-green-600',
+    warning: 'text-yellow-600',
   }[props.type];
 });
 </script>

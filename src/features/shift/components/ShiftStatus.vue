@@ -1,6 +1,7 @@
 <script setup>
 import BaseButton from '../../../components/base/BaseButton.vue';
 import ShiftOpenConfirm from './ShiftOpenConfirm.vue';
+import ShiftCloseConfirm from './ShiftCloseConfirm.vue';
 import ShiftTransactionModal from './ShiftTransactionModal.vue';
 import { ref } from 'vue';
 import { formatCurrency, formatDate } from '../../../utils/common.js';
@@ -11,6 +12,7 @@ import { useShiftStore } from '../shift.store.js';
 const shiftStore = useShiftStore();
 const visibleOpen = ref(false);
 const visibleAddTrx = ref(false);
+const visibleClose = ref(false);
 const transactions = data.slice(0, 5);
 </script>
 
@@ -83,12 +85,17 @@ const transactions = data.slice(0, 5);
           </div>
         </template>
       </VDropdown>
-      <BaseButton size="sm" color="warning" icon="ri:stop-fill"
+      <BaseButton
+        size="sm"
+        color="warning"
+        icon="ri:stop-fill"
+        @click="visibleClose = true"
         >Tutup Shift</BaseButton
       >
     </div>
 
     <ShiftOpenConfirm v-model:visible="visibleOpen" />
+    <ShiftCloseConfirm v-model:visible="visibleClose" />
     <ShiftTransactionModal v-model:visible="visibleAddTrx" />
   </div>
 </template>

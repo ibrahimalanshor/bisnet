@@ -22,6 +22,8 @@ const props = defineProps({
     type: String,
     default: 'full',
   },
+  nativeValue: null,
+  readonly: Boolean,
 });
 const emit = defineEmits(['input', 'input-debounce']);
 
@@ -46,7 +48,7 @@ const sizeClass = computed(() => {
 const classList = computed(() => [
   sizeClass.value,
   props.width === 'full' ? 'w-full' : '',
-  'px-2.5 border-gray-300 rounded-md focus:ring-1 focus:ring-blue-600 focus:border-blue-600 disabled:bg-gray-100',
+  'px-2.5 border-gray-300 rounded-md focus:ring-1 focus:ring-blue-600 focus:border-blue-600 disabled:bg-gray-100 read-only:bg-gray-100',
 ]);
 
 function onInput() {
@@ -68,11 +70,21 @@ defineExpose({ input });
     @input="onInput"
   />
   <input
+    v-else-if="tag === 'input' && readonly"
+    ref="input"
+    :id="id"
+    :type="type"
+    readonly
+    :class="[classList]"
+    :value="nativeValue"
+  />
+  <input
     v-else-if="tag === 'input'"
     ref="input"
     :id="id"
     :type="type"
     :class="[classList]"
+    :value="nativeValue"
     v-model="value"
     @input="onInput"
   />

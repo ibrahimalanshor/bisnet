@@ -2,7 +2,11 @@
 import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseBadge from '../../../components/base/BaseBadge.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
+import ShiftCloseConfirm from './ShiftCloseConfirm.vue';
 import { Icon } from '@iconify/vue';
+import { ref } from 'vue';
+
+const visibleCloseConfirm = ref(false);
 </script>
 
 <template>
@@ -68,8 +72,15 @@ import { Icon } from '@iconify/vue';
       </template>
 
       <div class="p-4 bg-gray-50 rounded-b-lg flex justify-end">
-        <BaseButton icon="ri:stop-fill" color="warning">Tutup Shift</BaseButton>
+        <BaseButton
+          icon="ri:stop-fill"
+          color="warning"
+          @click="visibleCloseConfirm = true"
+          >Tutup Shift</BaseButton
+        >
       </div>
+
+      <ShiftCloseConfirm v-model:visible="visibleCloseConfirm" />
     </div>
   </BaseCard>
 </template>
