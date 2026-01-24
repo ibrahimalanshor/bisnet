@@ -45,10 +45,27 @@ import { Icon } from '@iconify/vue';
         <p class="text-gray-600">Pengeluaran</p>
         <p class="text-lg text-red-700 font-bold">-832,000</p>
       </div>
-      <div class="p-4 flex items-center justify-between border-solid">
+      <div
+        v-if="true"
+        class="p-4 flex items-center justify-between border-solid"
+      >
         <p class="text-gray-900 text-lg font-bold">Saldo Kas</p>
         <p class="text-2xl text-green-700 font-bold">2,410,000</p>
       </div>
+      <template v-else>
+        <div class="p-4 flex items-center justify-between">
+          <p class="text-gray-600">Saldo Sistem</p>
+          <p class="text-lg text-green-700 font-bold">2,410,000</p>
+        </div>
+        <div class="p-4 flex items-center justify-between">
+          <p class="text-gray-600">Saldo Aktual</p>
+          <p class="text-lg text-green-700 font-bold">2,510,000</p>
+        </div>
+        <div class="p-4 flex items-center justify-between">
+          <p class="text-gray-600">Selisih</p>
+          <p class="text-lg text-red-700 font-bold">-100,000</p>
+        </div>
+      </template>
 
       <div class="p-4 bg-gray-50 rounded-b-lg flex justify-end">
         <BaseButton icon="ri:stop-fill" color="warning">Tutup Shift</BaseButton>
