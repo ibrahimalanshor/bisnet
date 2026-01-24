@@ -51,6 +51,45 @@ const menus = [
     name: 'Penjualan',
     icon: 'ri:calculator-line',
   },
+  {
+    id: 'report',
+    name: 'Laporan',
+    icon: 'ri:file-list-line',
+    activeKey: [
+      'report.sale',
+      'report.stock',
+      'report.shift',
+      'report.cash',
+      'report.profit',
+    ],
+    children: [
+      {
+        id: 'report.sale',
+        to: { name: 'report.sale' },
+        name: 'Laporan Penjualan',
+      },
+      {
+        id: 'stock',
+        to: { name: 'product-category' },
+        name: 'Laporan Stok',
+      },
+      {
+        id: 'shift',
+        to: { name: 'product-category' },
+        name: 'Laporan Shift',
+      },
+      {
+        id: 'cash',
+        to: { name: 'product-category' },
+        name: 'Laporan Kas',
+      },
+      {
+        id: 'profit',
+        to: { name: 'product-category' },
+        name: 'Laporan Laba',
+      },
+    ],
+  },
 ];
 
 const sidebarVisible = defineModel();

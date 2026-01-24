@@ -84,7 +84,6 @@ defineExpose({ input });
     :id="id"
     :type="type"
     :class="[classList]"
-    :value="nativeValue"
     v-model="value"
     @input="onInput"
   />

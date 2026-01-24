@@ -103,5 +103,19 @@ export const router = createRouter({
         },
       ],
     },
+    {
+      path: '/report',
+      children: [
+        {
+          path: 'sale',
+          name: 'report.sale',
+          meta: {
+            layout: 'LayoutAdmin',
+          },
+          component: () =>
+            import('./features/report/components/ReportSalePage.vue'),
+        },
+      ],
+    },
   ],
 });
