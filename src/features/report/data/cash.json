@@ -1,0 +1,183 @@
+[
+  {
+    "id": 1,
+    "date": "2026-01-20",
+    "description": "Modal awal kas",
+    "type": "IN",
+    "amount": 500000,
+    "cashierName": "Ani",
+    "shiftCode": "SHIFT-101"
+  },
+  {
+    "id": 2,
+    "date": "2026-01-20",
+    "description": "Beli galon air",
+    "type": "OUT",
+    "amount": 45000,
+    "cashierName": "Ani",
+    "shiftCode": "SHIFT-101"
+  },
+  {
+    "id": 3,
+    "date": "2026-01-20",
+    "description": "Beli tisu & sabun",
+    "type": "OUT",
+    "amount": 30000,
+    "cashierName": "Ani",
+    "shiftCode": "SHIFT-101"
+  },
+  {
+    "id": 4,
+    "date": "2026-01-21",
+    "description": "Tambah uang kembalian",
+    "type": "IN",
+    "amount": 200000,
+    "cashierName": "Budi",
+    "shiftCode": "SHIFT-102"
+  },
+  {
+    "id": 5,
+    "date": "2026-01-21",
+    "description": "Bayar listrik",
+    "type": "OUT",
+    "amount": 250000,
+    "cashierName": "Budi",
+    "shiftCode": "SHIFT-102"
+  },
+  {
+    "id": 6,
+    "date": "2026-01-21",
+    "description": "Beli plastik kemasan",
+    "type": "OUT",
+    "amount": 60000,
+    "cashierName": "Budi",
+    "shiftCode": "SHIFT-102"
+  },
+  {
+    "id": 7,
+    "date": "2026-01-22",
+    "description": "Modal tambahan kas",
+    "type": "IN",
+    "amount": 300000,
+    "cashierName": "Sari",
+    "shiftCode": "SHIFT-103"
+  },
+  {
+    "id": 8,
+    "date": "2026-01-22",
+    "description": "Beli alat tulis",
+    "type": "OUT",
+    "amount": 25000,
+    "cashierName": "Sari",
+    "shiftCode": "SHIFT-103"
+  },
+  {
+    "id": 9,
+    "date": "2026-01-22",
+    "description": "Beli kabel charger",
+    "type": "OUT",
+    "amount": 85000,
+    "cashierName": "Sari",
+    "shiftCode": "SHIFT-103"
+  },
+  {
+    "id": 10,
+    "date": "2026-01-23",
+    "description": "Tambah kas operasional",
+    "type": "IN",
+    "amount": 150000,
+    "cashierName": "Ani",
+    "shiftCode": "SHIFT-104"
+  },
+  {
+    "id": 11,
+    "date": "2026-01-23",
+    "description": "Servis printer",
+    "type": "OUT",
+    "amount": 120000,
+    "cashierName": "Ani",
+    "shiftCode": "SHIFT-104"
+  },
+  {
+    "id": 12,
+    "date": "2026-01-23",
+    "description": "Beli tinta printer",
+    "type": "OUT",
+    "amount": 90000,
+    "cashierName": "Ani",
+    "shiftCode": "SHIFT-104"
+  },
+  {
+    "id": 13,
+    "date": "2026-01-24",
+    "description": "Modal kas pagi",
+    "type": "IN",
+    "amount": 400000,
+    "cashierName": "Budi",
+    "shiftCode": "SHIFT-105"
+  },
+  {
+    "id": 14,
+    "date": "2026-01-24",
+    "description": "Beli snack karyawan",
+    "type": "OUT",
+    "amount": 55000,
+    "cashierName": "Budi",
+    "shiftCode": "SHIFT-105"
+  },
+  {
+    "id": 15,
+    "date": "2026-01-24",
+    "description": "Beli sabun lantai",
+    "type": "OUT",
+    "amount": 40000,
+    "cashierName": "Budi",
+    "shiftCode": "SHIFT-105"
+  },
+  {
+    "id": 16,
+    "date": "2026-01-25",
+    "description": "Tambah uang kas",
+    "type": "IN",
+    "amount": 250000,
+    "cashierName": "Sari",
+    "shiftCode": "SHIFT-106"
+  },
+  {
+    "id": 17,
+    "date": "2026-01-25",
+    "description": "Bayar air PAM",
+    "type": "OUT",
+    "amount": 180000,
+    "cashierName": "Sari",
+    "shiftCode": "SHIFT-106"
+  },
+  {
+    "id": 18,
+    "date": "2026-01-25",
+    "description": "Beli lap & pel",
+    "type": "OUT",
+    "amount": 35000,
+    "cashierName": "Sari",
+    "shiftCode": "SHIFT-106"
+  },
+  {
+    "id": 19,
+    "date": "2026-01-26",
+    "description": "Modal kas tambahan",
+    "type": "IN",
+    "amount": 300000,
+    "cashierName": "Ani",
+    "shiftCode": "SHIFT-107"
+  },
+  {
+    "id": 20,
+    "date": "2026-01-26",
+    "description": "Perbaikan lampu",
+    "type": "OUT",
+    "amount": 75000,
+    "cashierName": "Ani",
+    "shiftCode": "SHIFT-107"
+  }
+]
+

@@ -4,45 +4,50 @@ import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
+import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import { reactive, ref } from 'vue';
 import { formatCurrency, formatDate, sleep } from '../../../utils/common.js';
-import data from '../data/shift.json';
+import data from '../data/cash.json';
 
-const tableColumns = [
-  { id: 'code', name: 'Kode', value: () => '001' },
-  { id: 'date', name: 'Tanggal' },
-  { id: 'hour', name: 'Jam', value: (item) => `${item.start} - ${item.end}` },
-  { id: 'cashier_name', name: 'Kasir' },
+const summaryColumns = [
   {
-    id: 'init_balance',
-    name: 'Modal',
-    value: (item) => formatCurrency(item.init_balance),
-  },
-  { id: 'income', name: 'Masuk', value: (item) => formatCurrency(item.income) },
-  {
-    id: 'outcome',
-    name: 'Keluar',
-    value: (item) => formatCurrency(item.outcome),
+    id: 'total_income',
+    name: 'Total Kas Masuk',
+    value: (item) => formatCurrency(item.total_income),
   },
   {
-    id: 'balance',
-    name: 'Saldo Akhir',
-    value: (item) => formatCurrency(item.balance),
-  },
-  {
-    id: 'actual_balance',
-    name: 'Saldo Aktual',
-    value: (item) => formatCurrency(item.actual_balance),
-  },
-  {
-    id: 'remainder',
-    name: 'Selisih',
-    value: (item) => formatCurrency(item.difference),
+    id: 'total_outcome',
+    name: 'Total Kas Keluar',
+    value: (item) => formatCurrency(item.total_outcome),
   },
 ];
+const tableColumns = [
+  {
+    id: 'date',
+    name: 'Tanggal',
+    value: (item) => formatDate(item.date, 'DD MMMM YYYY'),
+  },
+  { id: 'description', name: 'Keterangan' },
+  {
+    id: 'type',
+    name: 'Jenis',
+    value: (item) => (item.type === 'IN' ? 'Masuk' : 'Keluar'),
+  },
+  {
+    id: 'amount',
+    name: 'Nominal',
+    value: (item) => formatCurrency(item.amount),
+  },
+  { id: 'cashier', name: 'Kasir', value: (item) => item.cashierName },
+  { id: 'shiftCode', name: 'Shift', value: (item) => item.shiftCode },
+];
 
+const summary = ref({
+  total_income: 29,
+  total_outcome: 2582900,
+});
 const reports = ref(data.slice(0, 10));
 
 const resultVisible = ref(false);
@@ -65,12 +70,19 @@ async function loadResult() {
 </script>
 
 <template>
-  <BaseHeading>Laporan Shift</BaseHeading>
+  <BaseHeading>Laporan Kas</BaseHeading>
 
-  <BaseCard title="Form Laporan Shift">
+  <BaseCard title="Form Laporan Kas">
     <form class="space-y-4" @submit.prevent="loadResult">
-      <BaseFormItem id="report_shift_form.date" label="Tanggal" v-slot="{ id }">
+      <BaseFormItem id="report_cash_form.date" label="Tanggal" v-slot="{ id }">
         <BaseInput type="date" :id="id" required v-model="filter.date" />
+      </BaseFormItem>
+      <BaseFormItem
+        id="report_cash_form.cashier_id"
+        label="Kasir (Opsional)"
+        v-slot="{ id }"
+      >
+        <BaseInput :id="id" placeholder="Pilih Kasir" />
       </BaseFormItem>
       <BaseButton
         icon="ri:file-list-2-fill"
@@ -83,7 +95,7 @@ async function loadResult() {
 
   <BaseCard
     v-if="resultVisible"
-    :title="`Laporan Shift ${formatDate(filter.date, 'DD MMMM YYYY')}`"
+    :title="`Laporan Kas ${formatDate(filter.date, 'DD MMMM YYYY')}`"
   >
     <template #action>
       <div class="flex gap-2">
@@ -96,6 +108,12 @@ async function loadResult() {
       </div>
     </template>
     <div class="space-y-4">
+      <BaseDescriptionList
+        :columns="summaryColumns"
+        :data="summary"
+        class="sm:grid-cols-2"
+      ></BaseDescriptionList>
+
       <BaseTable :columns="tableColumns" :data="reports"></BaseTable>
       <BasePagination :total-pages="10" v-model="query.page" />
     </div>

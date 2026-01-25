@@ -79,8 +79,8 @@ const menus = [
         name: 'Laporan Shift',
       },
       {
-        id: 'cash',
-        to: { name: 'product-category' },
+        id: 'report.cash',
+        to: { name: 'report.cash' },
         name: 'Laporan Kas',
       },
       {
