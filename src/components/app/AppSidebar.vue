@@ -84,8 +84,8 @@ const menus = [
         name: 'Laporan Kas',
       },
       {
-        id: 'profit',
-        to: { name: 'product-category' },
+        id: 'report.profit',
+        to: { name: 'report.profit' },
         name: 'Laporan Laba',
       },
     ],

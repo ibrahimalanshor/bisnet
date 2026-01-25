@@ -142,6 +142,15 @@ export const router = createRouter({
           component: () =>
             import('./features/report/components/ReportCashPage.vue'),
         },
+        {
+          path: 'profit',
+          name: 'report.profit',
+          meta: {
+            layout: 'LayoutAdmin',
+          },
+          component: () =>
+            import('./features/report/components/ReportProfitPage.vue'),
+        },
       ],
     },
   ],
