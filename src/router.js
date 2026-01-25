@@ -124,6 +124,15 @@ export const router = createRouter({
           component: () =>
             import('./features/report/components/ReportStockPage.vue'),
         },
+        {
+          path: 'shift',
+          name: 'report.shift',
+          meta: {
+            layout: 'LayoutAdmin',
+          },
+          component: () =>
+            import('./features/report/components/ReportShiftPage.vue'),
+        },
       ],
     },
   ],
