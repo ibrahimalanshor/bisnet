@@ -8,7 +8,12 @@ import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import SaleDetailModal from './SaleDetailModal.vue';
-import { sleep, formatDate, formatCurrency } from '../../../utils/common';
+import {
+  sleep,
+  formatDate,
+  formatCurrency,
+  getPaymentMethodName,
+} from '../../../utils/common';
 import { useShiftStore } from '../../shift/shift.store';
 
 const shiftStore = useShiftStore();
@@ -19,6 +24,11 @@ const columns = [
     id: 'createdAt',
     name: 'Tanggal',
     value: (item) => formatDate(item.createdAt),
+  },
+  {
+    id: 'paymentMethod',
+    name: 'Pembayaran',
+    value: (item) => getPaymentMethodName(item.paymentMethod),
   },
   {
     id: 'itemsCount',

@@ -6,6 +6,7 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseConfirm from '../../../components/base/BaseConfirm.vue';
+import BaseSelect from '../../../components/base/BaseSelect.vue';
 import ProductSelectSearch from '../../product/components/ProductSelectSearch.vue';
 import SaleDiscountInput from './SaleDiscountInput.vue';
 import ShiftOpenCard from '../../shift/components/ShiftOpenCard.vue';
@@ -70,6 +71,7 @@ const itemsColumn = computed(() => {
 const form = ref({
   date: formatDate(new Date(), 'YYYY-MM-DD'),
   product: null,
+  paymentMethod: 'cash',
   paymentAmount: null,
   withDiscount: false,
   discountType: 'percent',
@@ -106,8 +108,10 @@ const tax = computed(() => extractPriceTax(grandTotal.value, 11 / 100));
 const valid = computed(
   () =>
     form.value.date &&
+    form.value.paymentMethod &&
     items.value.length > 0 &&
-    items.value.every((item) => currencyToNum(item.qty) > 0),
+    items.value.every((item) => currencyToNum(item.qty) > 0) &&
+    paymentChange.value >= 0,
 );
 
 function countItemTotalPrice(item) {
@@ -327,6 +331,22 @@ function onAddDiscount() {
           </p>
         </div>
         <BaseFormItem
+          id="sale_form.payment_method"
+          label="Metode Pembayaran"
+          v-slot="{ id }"
+        >
+          <BaseSelect
+            :id="id"
+            :options="[
+              { id: 'cash', name: 'Tunai' },
+              { id: 'qris', name: 'QRIS' },
+              { id: 'transfer', name: 'Transfer' },
+              { id: 'debit', name: 'Debit' },
+            ]"
+            v-model="form.paymentMethod"
+          />
+        </BaseFormItem>
+        <BaseFormItem
           id="sale_form.payment_amount"
           label="Jumlah Bayar"
           v-slot="{ id }"
@@ -377,7 +397,7 @@ function onAddDiscount() {
       confirm-color="primary"
       title="Penjualan berhasil disimpan"
       v-model:visible="successDetail.visible"
-      @close-outside="$router.push({ name: 'restock.index' })"
+      @close-outside="$router.push({ name: 'sale.index' })"
     >
       <template #message>
         <p class="text-gray-700">
@@ -400,7 +420,7 @@ function onAddDiscount() {
           >
           <BaseButton
             color="light"
-            @click="$router.push({ name: 'restock.index' })"
+            @click="$router.push({ name: 'sale.index' })"
             >Kembali</BaseButton
           >
         </div>
