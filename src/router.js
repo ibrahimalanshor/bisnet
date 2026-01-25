@@ -115,6 +115,15 @@ export const router = createRouter({
           component: () =>
             import('./features/report/components/ReportSalePage.vue'),
         },
+        {
+          path: 'stock',
+          name: 'report.stock',
+          meta: {
+            layout: 'LayoutAdmin',
+          },
+          component: () =>
+            import('./features/report/components/ReportStockPage.vue'),
+        },
       ],
     },
   ],

@@ -69,8 +69,8 @@ const menus = [
         name: 'Laporan Penjualan',
       },
       {
-        id: 'stock',
-        to: { name: 'product-category' },
+        id: 'report.stock',
+        to: { name: 'report.stock' },
         name: 'Laporan Stok',
       },
       {

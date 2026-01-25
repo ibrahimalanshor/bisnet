@@ -1,0 +1,163 @@
+[
+  {
+    "id": 1,
+    "product_code": "PRD-001",
+    "init_stock": 100,
+    "income": 50,
+    "outocme": 30,
+    "final_stock": 120
+  },
+  {
+    "id": 2,
+    "product_code": "PRD-002",
+    "init_stock": 80,
+    "income": 20,
+    "outocme": 10,
+    "final_stock": 90
+  },
+  {
+    "id": 3,
+    "product_code": "PRD-003",
+    "init_stock": 150,
+    "income": 40,
+    "outocme": 60,
+    "final_stock": 130
+  },
+  {
+    "id": 4,
+    "product_code": "PRD-004",
+    "init_stock": 60,
+    "income": 30,
+    "outocme": 15,
+    "final_stock": 75
+  },
+  {
+    "id": 5,
+    "product_code": "PRD-005",
+    "init_stock": 200,
+    "income": 0,
+    "outocme": 50,
+    "final_stock": 150
+  },
+  {
+    "id": 6,
+    "product_code": "PRD-006",
+    "init_stock": 90,
+    "income": 25,
+    "outocme": 20,
+    "final_stock": 95
+  },
+  {
+    "id": 7,
+    "product_code": "PRD-007",
+    "init_stock": 120,
+    "income": 60,
+    "outocme": 40,
+    "final_stock": 140
+  },
+  {
+    "id": 8,
+    "product_code": "PRD-008",
+    "init_stock": 70,
+    "income": 10,
+    "outocme": 5,
+    "final_stock": 75
+  },
+  {
+    "id": 9,
+    "product_code": "PRD-009",
+    "init_stock": 55,
+    "income": 45,
+    "outocme": 30,
+    "final_stock": 70
+  },
+  {
+    "id": 10,
+    "product_code": "PRD-010",
+    "init_stock": 300,
+    "income": 100,
+    "outocme": 120,
+    "final_stock": 280
+  },
+  {
+    "id": 11,
+    "product_code": "PRD-011",
+    "init_stock": 40,
+    "income": 20,
+    "outocme": 10,
+    "final_stock": 50
+  },
+  {
+    "id": 12,
+    "product_code": "PRD-012",
+    "init_stock": 110,
+    "income": 0,
+    "outocme": 35,
+    "final_stock": 75
+  },
+  {
+    "id": 13,
+    "product_code": "PRD-013",
+    "init_stock": 95,
+    "income": 15,
+    "outocme": 25,
+    "final_stock": 85
+  },
+  {
+    "id": 14,
+    "product_code": "PRD-014",
+    "init_stock": 180,
+    "income": 40,
+    "outocme": 20,
+    "final_stock": 200
+  },
+  {
+    "id": 15,
+    "product_code": "PRD-015",
+    "init_stock": 65,
+    "income": 35,
+    "outocme": 50,
+    "final_stock": 50
+  },
+  {
+    "id": 16,
+    "product_code": "PRD-016",
+    "init_stock": 220,
+    "income": 80,
+    "outocme": 60,
+    "final_stock": 240
+  },
+  {
+    "id": 17,
+    "product_code": "PRD-017",
+    "init_stock": 30,
+    "income": 10,
+    "outocme": 5,
+    "final_stock": 35
+  },
+  {
+    "id": 18,
+    "product_code": "PRD-018",
+    "init_stock": 140,
+    "income": 20,
+    "outocme": 70,
+    "final_stock": 90
+  },
+  {
+    "id": 19,
+    "product_code": "PRD-019",
+    "init_stock": 85,
+    "income": 15,
+    "outocme": 10,
+    "final_stock": 90
+  },
+  {
+    "id": 20,
+    "product_code": "PRD-020",
+    "init_stock": 500,
+    "income": 200,
+    "outocme": 150,
+    "final_stock": 550
+  }
+]
+
