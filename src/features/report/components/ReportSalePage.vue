@@ -96,6 +96,10 @@ async function loadResult() {
   <BaseCard
     v-if="resultVisible"
     :title="`Laporan Penjualan ${formatDate(filter.date, 'DD MMMM YYYY')}`"
+    :custom-class="{
+      header:
+        'flex-col items-start gap-2 md:flex-row md:items-center lg:flex-col lg:items-start xl:flex-row xl:items-center',
+    }"
   >
     <template #action>
       <div class="flex gap-2">

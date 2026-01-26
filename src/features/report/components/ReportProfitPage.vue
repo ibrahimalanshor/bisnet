@@ -4,22 +4,8 @@ import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
-import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vue';
 import { reactive, ref } from 'vue';
 import { formatCurrency, formatDate, sleep } from '../../../utils/common.js';
-
-const summaryColumns = [
-  {
-    id: 'total_income',
-    name: 'Total Kas Masuk',
-    value: (item) => formatCurrency(item.total_income),
-  },
-  {
-    id: 'total_outcome',
-    name: 'Total Kas Keluar',
-    value: (item) => formatCurrency(item.total_outcome),
-  },
-];
 
 const summary = ref({
   sales: 150_000_000,

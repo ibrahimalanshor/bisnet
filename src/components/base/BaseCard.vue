@@ -12,6 +12,10 @@ const props = defineProps({
     type: String,
     default: 'sm',
   },
+  customClass: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
 const responsiveClass = computed(() => {
@@ -38,6 +42,7 @@ const responsiveClass = computed(() => {
           responsive
             ? ['flex-col gap-2', responsiveClass]
             : 'items-center justify-between',
+          customClass.header,
         ]"
       >
         <h3 class="font-bold text-xl">{{ title }}</h3>
