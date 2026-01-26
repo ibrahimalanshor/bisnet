@@ -2,10 +2,13 @@
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
-import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
+import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
+import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
 import { reactive, ref } from 'vue';
-import { formatCurrency, formatDate, sleep } from '../../../utils/common.js';
+import { formatCurrency, getMonthNames, sleep } from '../../../utils/common.js';
+
+const months = getMonthNames();
 
 const summary = ref({
   sales: 150_000_000,
@@ -18,7 +21,8 @@ const summary = ref({
 const resultVisible = ref(false);
 const loadingResult = ref(false);
 const filter = reactive({
-  month: null,
+  month: 1,
+  year: new Date().getFullYear(),
 });
 
 async function loadResult() {
@@ -37,13 +41,22 @@ async function loadResult() {
   <div class="max-w-screen-md mx-auto grid grid-cols-1 gap-4">
     <BaseCard title="Form Laporan Laba">
       <form class="space-y-4" @submit.prevent="loadResult">
-        <BaseFormItem
-          id="report_profit_form.month"
-          label="Bulan"
-          v-slot="{ id }"
-        >
-          <BaseInput type="date" :id="id" required v-model="filter.month" />
-        </BaseFormItem>
+        <div class="grid grid-cols-2 gap-4">
+          <BaseFormItem
+            id="report_profit_form.month"
+            label="Bulan"
+            v-slot="{ id }"
+          >
+            <BaseMonthSelect :id="id" required v-model="filter.month" />
+          </BaseFormItem>
+          <BaseFormItem
+            id="report_profit_form.year"
+            label="Tahun"
+            v-slot="{ id }"
+          >
+            <BaseYearSelect :id="id" required v-model="filter.year" />
+          </BaseFormItem>
+        </div>
         <BaseButton
           icon="ri:file-list-2-fill"
           :disabled="!filter.month"
@@ -55,7 +68,7 @@ async function loadResult() {
 
     <BaseCard
       v-if="resultVisible"
-      :title="`Laporan Laba Bulan ${formatDate(filter.date, 'MMMM')}`"
+      :title="`Laporan Laba Bulan ${months[filter.month]} ${filter.year}`"
       responsive
       responsive-screen="md"
     >
