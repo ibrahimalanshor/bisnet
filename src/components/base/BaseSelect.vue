@@ -16,6 +16,8 @@ const props = defineProps({
   },
 });
 
+const selected = defineModel();
+
 const sizeClass = computed(() => {
   return {
     sm: 'h-8 px-2',
@@ -30,8 +32,8 @@ const classList = computed(() => [
 </script>
 
 <template>
-  <select :class="classList">
-    <option v-for="option in options" :key="option.id">
+  <select :class="classList" v-model="selected">
+    <option v-for="option in options" :key="option.id" :value="option.id">
       {{ option.name }}
     </option>
   </select>

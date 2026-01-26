@@ -7,6 +7,9 @@ import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
+import BaseSelect from '../../../components/base/BaseSelect.vue';
+import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
+import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
 import { reactive, ref } from 'vue';
 import {
   formatCurrency,
@@ -53,7 +56,10 @@ const reports = ref(data.slice(0, 10));
 const resultVisible = ref(false);
 const loadingResult = ref(false);
 const filter = reactive({
+  period: 'daily',
   date: null,
+  month: 1,
+  year: new Date().getFullYear(),
 });
 const query = reactive({
   page: 1,
@@ -67,6 +73,11 @@ async function loadResult() {
 
   loadingResult.value = false;
 }
+function onChangePeriod() {
+  filter.date = null;
+  filter.month = 1;
+  filter.year = new Date().getFullYear();
+}
 </script>
 
 <template>
@@ -74,8 +85,46 @@ async function loadResult() {
 
   <BaseCard title="Form Laporan Penjualan">
     <form class="space-y-4" @submit.prevent="loadResult">
-      <BaseFormItem id="report_sale_form.date" label="Tanggal" v-slot="{ id }">
+      <BaseFormItem
+        id="report_sale_form.period"
+        label="Periode"
+        v-slot="{ id }"
+      >
+        <BaseSelect
+          :id="id"
+          :options="[
+            { id: 'daily', name: 'Per Hari' },
+            { id: 'monthly', name: 'Per Bulan' },
+            { id: 'yearly', name: 'Per Tahun' },
+          ]"
+          required
+          v-model="filter.period"
+          @change="onChangePeriod"
+        />
+      </BaseFormItem>
+      <BaseFormItem
+        v-if="filter.period === 'daily'"
+        id="report_sale_form.date"
+        label="Tanggal"
+        v-slot="{ id }"
+      >
         <BaseInput type="date" :id="id" required v-model="filter.date" />
+      </BaseFormItem>
+      <BaseFormItem
+        v-else-if="filter.period === 'monthly'"
+        id="report_sale_form.month"
+        label="Bulan"
+        v-slot="{ id }"
+      >
+        <BaseMonthSelect :id="id" required v-model="filter.month" />
+      </BaseFormItem>
+      <BaseFormItem
+        v-else
+        id="report_sale_form.year"
+        label="Tahun"
+        v-slot="{ id }"
+      >
+        <BaseYearSelect :id="id" required v-model="filter.year" />
       </BaseFormItem>
       <BaseFormItem
         id="report_sale_form.cashier_id"
