@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import localeData from 'dayjs/plugin/localeData';
 
 dayjs.extend(localizedFormat);
+dayjs.extend(localeData);
 
 export function getChartColor(color, transparent = 1) {
   return {
@@ -77,4 +79,8 @@ export function getPaymentMethodName(name) {
     transfer: 'Transfer',
     debit: 'Debit',
   }[name];
+}
+
+export function getMonthNames() {
+  return dayjs().localeData().months();
 }
