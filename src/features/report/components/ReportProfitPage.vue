@@ -5,11 +5,8 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vue';
-import BaseTable from '../../../components/base/BaseTable.vue';
-import BasePagination from '../../../components/base/BasePagination.vue';
 import { reactive, ref } from 'vue';
 import { formatCurrency, formatDate, sleep } from '../../../utils/common.js';
-import data from '../data/cash.json';
 
 const summaryColumns = [
   {
@@ -23,40 +20,19 @@ const summaryColumns = [
     value: (item) => formatCurrency(item.total_outcome),
   },
 ];
-const tableColumns = [
-  {
-    id: 'date',
-    name: 'Tanggal',
-    value: (item) => formatDate(item.date, 'DD MMMM YYYY'),
-  },
-  { id: 'description', name: 'Keterangan' },
-  {
-    id: 'type',
-    name: 'Jenis',
-    value: (item) => (item.type === 'IN' ? 'Masuk' : 'Keluar'),
-  },
-  {
-    id: 'amount',
-    name: 'Nominal',
-    value: (item) => formatCurrency(item.amount),
-  },
-  { id: 'cashier', name: 'Kasir', value: (item) => item.cashierName },
-  { id: 'shiftCode', name: 'Shift', value: (item) => item.shiftCode },
-];
 
 const summary = ref({
-  total_income: 29,
-  total_outcome: 2582900,
+  sales: 150_000_000,
+  hpp: 90_000_000,
+  income: 60_000_000,
+  expense: 15_000_000,
+  profit: 45_000_000,
 });
-const reports = ref(data.slice(0, 10));
 
 const resultVisible = ref(false);
 const loadingResult = ref(false);
 const filter = reactive({
-  date: null,
-});
-const query = reactive({
-  page: 1,
+  month: null,
 });
 
 async function loadResult() {
@@ -70,52 +46,71 @@ async function loadResult() {
 </script>
 
 <template>
-  <BaseHeading>Laporan Kas</BaseHeading>
+  <BaseHeading>Laporan Laba</BaseHeading>
 
-  <BaseCard title="Form Laporan Kas">
-    <form class="space-y-4" @submit.prevent="loadResult">
-      <BaseFormItem id="report_cash_form.date" label="Tanggal" v-slot="{ id }">
-        <BaseInput type="date" :id="id" required v-model="filter.date" />
-      </BaseFormItem>
-      <BaseFormItem
-        id="report_cash_form.cashier_id"
-        label="Kasir (Opsional)"
-        v-slot="{ id }"
-      >
-        <BaseInput :id="id" placeholder="Pilih Kasir" />
-      </BaseFormItem>
-      <BaseButton
-        icon="ri:file-list-2-fill"
-        :disabled="!filter.date"
-        :loading="loadingResult"
-        >Tampilkan</BaseButton
-      >
-    </form>
-  </BaseCard>
+  <div class="max-w-screen-md mx-auto grid grid-cols-1 gap-4">
+    <BaseCard title="Form Laporan Laba">
+      <form class="space-y-4" @submit.prevent="loadResult">
+        <BaseFormItem
+          id="report_profit_form.month"
+          label="Bulan"
+          v-slot="{ id }"
+        >
+          <BaseInput type="date" :id="id" required v-model="filter.month" />
+        </BaseFormItem>
+        <BaseButton
+          icon="ri:file-list-2-fill"
+          :disabled="!filter.month"
+          :loading="loadingResult"
+          >Tampilkan</BaseButton
+        >
+      </form>
+    </BaseCard>
 
-  <BaseCard
-    v-if="resultVisible"
-    :title="`Laporan Kas ${formatDate(filter.date, 'DD MMMM YYYY')}`"
-  >
-    <template #action>
-      <div class="flex gap-2">
-        <BaseButton icon="ri:file-excel-fill" color="success"
-          >Download Excel</BaseButton
-        >
-        <BaseButton icon="ri:file-pdf-2-fill" color="error"
-          >Download PDF</BaseButton
-        >
+    <BaseCard
+      v-if="resultVisible"
+      :title="`Laporan Laba Bulan ${formatDate(filter.date, 'MMMM')}`"
+      responsive
+      responsive-screen="md"
+    >
+      <template #action>
+        <div class="flex gap-2">
+          <BaseButton icon="ri:file-excel-fill" color="success"
+            >Download Excel</BaseButton
+          >
+          <BaseButton icon="ri:file-pdf-2-fill" color="error"
+            >Download PDF</BaseButton
+          >
+        </div>
+      </template>
+      <div class="space-y-4 divide-y-2 divide-dashed divide-gray-200">
+        <div class="flex items-center justify-between pb-4">
+          <p>Pendapatan</p>
+          <p class="font-bold text-2xl">{{ formatCurrency(summary.sales) }}</p>
+        </div>
+        <div class="flex items-center justify-between pb-4">
+          <p>HPP</p>
+          <p class="font-bold text-2xl text-red-700">
+            -{{ formatCurrency(summary.hpp) }}
+          </p>
+        </div>
+        <div class="flex items-center justify-between pb-4">
+          <p>Laba Kotor</p>
+          <p class="font-bold text-2xl">{{ formatCurrency(summary.income) }}</p>
+        </div>
+        <div class="flex items-center justify-between pb-4">
+          <p>Biaya Operasional</p>
+          <p class="font-bold text-2xl text-red-700">
+            -{{ formatCurrency(summary.income) }}
+          </p>
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="font-bold text-xl">Laba</p>
+          <p class="font-bold text-3xl text-green-700">
+            {{ formatCurrency(summary.profit) }}
+          </p>
+        </div>
       </div>
-    </template>
-    <div class="space-y-4">
-      <BaseDescriptionList
-        :columns="summaryColumns"
-        :data="summary"
-        class="sm:grid-cols-2"
-      ></BaseDescriptionList>
-
-      <BaseTable :columns="tableColumns" :data="reports"></BaseTable>
-      <BasePagination :total-pages="10" v-model="query.page" />
-    </div>
-  </BaseCard>
+    </BaseCard>
+  </div>
 </template>

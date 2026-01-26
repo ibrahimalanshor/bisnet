@@ -1,11 +1,24 @@
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   title: String,
   bordered: {
     type: Boolean,
     default: true,
   },
   responsive: Boolean,
+  responsiveScreen: {
+    type: String,
+    default: 'sm',
+  },
+});
+
+const responsiveClass = computed(() => {
+  return {
+    sm: 'sm:flex-row sm:items-center sm:justify-between sm:gap-0',
+    md: 'md:flex-row md:items-center md:justify-between md:gap-0',
+  }[props.responsiveScreen];
 });
 </script>
 
@@ -23,7 +36,7 @@ defineProps({
         :class="[
           'border-b border-gray-300 px-4 py-3 flex',
           responsive
-            ? 'flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0'
+            ? ['flex-col gap-2', responsiveClass]
             : 'items-center justify-between',
         ]"
       >
