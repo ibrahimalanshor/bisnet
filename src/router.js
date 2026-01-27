@@ -141,13 +141,13 @@ export const router = createRouter({
             import('./features/report/components/ReportShiftPage.vue'),
         },
         {
-          path: 'cash',
-          name: 'report.cash',
+          path: 'expense',
+          name: 'report.expense',
           meta: {
             layout: 'LayoutAdmin',
           },
           component: () =>
-            import('./features/report/components/ReportCashPage.vue'),
+            import('./features/report/components/ReportExpensePage.vue'),
         },
         {
           path: 'profit',

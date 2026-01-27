@@ -17,20 +17,15 @@ import {
   sleep,
   getMonthNames,
 } from '../../../utils/common.js';
-import data from '../data/cash.json';
+import data from '../../expense/data/expense.json';
 
 const months = getMonthNames();
 
 const summaryColumns = [
   {
-    id: 'total_income',
-    name: 'Total Kas Masuk',
-    value: (item) => formatCurrency(item.total_income),
-  },
-  {
-    id: 'total_outcome',
-    name: 'Total Kas Keluar',
-    value: (item) => formatCurrency(item.total_outcome),
+    id: 'total',
+    name: 'Total Pengeluaran',
+    value: (item) => formatCurrency(item.total),
   },
 ];
 const tableColumns = [
@@ -39,24 +34,21 @@ const tableColumns = [
     name: 'Tanggal',
     value: (item) => formatDate(item.date, 'DD MMMM YYYY'),
   },
-  { id: 'description', name: 'Keterangan' },
-  {
-    id: 'type',
-    name: 'Jenis',
-    value: (item) => (item.type === 'IN' ? 'Masuk' : 'Keluar'),
-  },
+  { id: 'name', name: 'Keterangan' },
   {
     id: 'amount',
     name: 'Nominal',
     value: (item) => formatCurrency(item.amount),
   },
-  { id: 'cashier', name: 'Kasir', value: (item) => item.cashierName },
-  { id: 'shiftCode', name: 'Shift', value: (item) => item.shiftCode },
+  {
+    id: 'source',
+    name: 'Sumber',
+    value: (item) => (item.source === 'kas' ? 'Kas Kasir' : 'Manual'),
+  },
 ];
 
 const summary = ref({
-  total_income: 29,
-  total_outcome: 2582900,
+  total: 2582900,
 });
 const reports = ref(data.slice(0, 10));
 
@@ -89,14 +81,14 @@ const title = computed(() => {
   }
 
   if (filter.period === 'daily') {
-    return `Laporan Kas ${formatDate(filter.date, 'DD MMMM YYYY')}`;
+    return `Laporan Pengeluaran ${formatDate(filter.date, 'DD MMMM YYYY')}`;
   }
 
   if (filter.period === 'monthly') {
-    return `Laporan Kas Bulan ${months[filter.month]} ${filter.year}`;
+    return `Laporan Pengeluaran Bulan ${months[filter.month]} ${filter.year}`;
   }
 
-  return `Laporan Kas Tahun ${filter.year}`;
+  return `Laporan Pengeluaran Tahun ${filter.year}`;
 });
 
 async function loadResult() {
@@ -115,12 +107,12 @@ function onChangePeriod() {
 </script>
 
 <template>
-  <BaseHeading>Laporan Kas</BaseHeading>
+  <BaseHeading>Laporan Pengeluaran</BaseHeading>
 
-  <BaseCard title="Form Laporan Kas">
+  <BaseCard title="Form Laporan Pengeluaran">
     <form class="space-y-4" @submit.prevent="loadResult">
       <BaseFormItem
-        id="report_cash_form.period"
+        id="report_expense_form.period"
         label="Periode"
         v-slot="{ id }"
       >
@@ -138,7 +130,7 @@ function onChangePeriod() {
       </BaseFormItem>
       <BaseFormItem
         v-if="filter.period === 'daily'"
-        id="report_cash_form.date"
+        id="report_expense_form.date"
         label="Tanggal"
         v-slot="{ id }"
       >
@@ -150,14 +142,14 @@ function onChangePeriod() {
       >
         <BaseFormItem
           v-if="filter.period === 'monthly'"
-          id="report_cash_form.month"
+          id="report_expense_form.month"
           label="Bulan"
           v-slot="{ id }"
         >
           <BaseMonthSelect :id="id" required v-model="filter.month" />
         </BaseFormItem>
         <BaseFormItem
-          id="report_cash_form.year"
+          id="report_expense_form.year"
           label="Tahun"
           :class="filter.period === 'yearly' ? 'col-span-2' : ''"
           v-slot="{ id }"
@@ -165,13 +157,6 @@ function onChangePeriod() {
           <BaseYearSelect :id="id" required v-model="filter.year" />
         </BaseFormItem>
       </div>
-      <BaseFormItem
-        id="report_cash_form.cashier_id"
-        label="Kasir (Opsional)"
-        v-slot="{ id }"
-      >
-        <BaseInput :id="id" placeholder="Pilih Kasir" />
-      </BaseFormItem>
       <BaseButton
         icon="ri:file-list-2-fill"
         :disabled="!formValid"

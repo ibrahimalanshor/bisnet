@@ -65,7 +65,7 @@ const menus = [
       'report.sale',
       'report.stock',
       'report.shift',
-      'report.cash',
+      'report.expense',
       'report.profit',
     ],
     children: [
@@ -85,9 +85,9 @@ const menus = [
         name: 'Laporan Shift',
       },
       {
-        id: 'report.cash',
-        to: { name: 'report.cash' },
-        name: 'Laporan Kas',
+        id: 'report.expense',
+        to: { name: 'report.expense' },
+        name: 'Laporan Pengeluaran',
       },
       {
         id: 'report.profit',
