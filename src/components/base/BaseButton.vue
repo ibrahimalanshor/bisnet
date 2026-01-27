@@ -82,7 +82,7 @@ const iconSizeClass = computed(() => {
     :class="[
       buttonSizeClass,
       buttonColorClass,
-      'font-medium inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
+      'font-medium inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50',
     ]"
     :disabled="loading || disabled"
   >

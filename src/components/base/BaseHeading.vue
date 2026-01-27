@@ -18,7 +18,7 @@ const sizeClass = computed(() => {
 
 <template>
   <div
-    class="flex gap-4 flex-col sm:flex-row sm:items-center sm:justify-between"
+    class="flex flex-wrap gap-4 flex-col sm:flex-row sm:items-center sm:justify-between"
   >
     <component :is="`h${level}`" :class="['font-bold', sizeClass]">
       <slot />

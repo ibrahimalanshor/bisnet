@@ -32,6 +32,7 @@ const query = reactive({
 });
 const filter = reactive({
   search: null,
+  date: null,
 });
 const formModal = reactive({
   id: null,
@@ -71,6 +72,7 @@ loadExpenses();
 
     <template #action>
       <div class="flex flex-col gap-2 sm:flex-row">
+        <BaseInput type="date" v-model="filter.date" />
         <BaseInput
           type="search"
           placeholder="Cari pengeluaran"
