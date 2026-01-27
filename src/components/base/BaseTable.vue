@@ -41,15 +41,19 @@ function onClickRow(e, row) {
         class="size-8 animate-spin text-gray-500/50"
       />
     </div>
-    <table class="w-full border border-gray-300">
+    <table
+      class="w-full border border-gray-300 border-separate border-spacing-0 rounded-lg"
+    >
       <thead>
         <tr>
           <th
-            v-for="column in columns"
+            v-for="(column, i) in columns"
             :key="column.id"
             :class="[
               'whitespace-nowrap text-left border-b px-4 py-3 font-medium border-gray-300 bg-gray-100',
               column.theadClassList,
+              i === 0 ? 'rounded-tl-lg' : '',
+              i === columns.length - 1 ? 'rounded-tr-lg' : '',
             ]"
           >
             {{ column.name }}
@@ -60,7 +64,7 @@ function onClickRow(e, row) {
         <tr v-if="!data.length">
           <td
             :colspan="columns.length"
-            class="border-b border-gray-300 px-4 py-3 text-center text-gray-700 font-normal"
+            class="px-4 py-3 text-center text-gray-700 font-normal"
           >
             {{ emptyText }}
           </td>
@@ -76,8 +80,9 @@ function onClickRow(e, row) {
               v-for="column in columns"
               :key="column.id"
               :class="[
-                'border-b border-gray-300 px-4 py-3 whitespace-nowrap font-normal',
+                'px-4 py-3 whitespace-nowrap font-normal',
                 column.classList,
+                index !== data.length - 1 ? 'border-b border-gray-300' : '',
               ]"
             >
               <component
