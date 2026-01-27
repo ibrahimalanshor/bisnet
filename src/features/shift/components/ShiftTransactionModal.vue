@@ -4,6 +4,7 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseSelect from '../../../components/base/BaseSelect.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
+import BaseCheckbox from '../../../components/base/BaseCheckbox.vue';
 import { reactive, ref } from 'vue';
 import { currencyToNum, sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
@@ -17,6 +18,7 @@ const form = reactive({
   name: null,
   amount: null,
   originalAmount: null,
+  expense: false,
 });
 const loading = ref(false);
 
@@ -47,6 +49,7 @@ function onOpened() {
   form.name = null;
   form.amount = null;
   form.originalAmount = null;
+  form.expense = false;
 }
 </script>
 
@@ -88,6 +91,8 @@ function onOpened() {
           @change="onChangeAmount"
         />
       </BaseFormItem>
+
+      <BaseCheckbox label="Biaya Operasional" v-model="form.expense" />
 
       <div class="flex gap-2 justify-end">
         <BaseButton
