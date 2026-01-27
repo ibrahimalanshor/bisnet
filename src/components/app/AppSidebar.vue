@@ -52,9 +52,15 @@ const menus = [
     icon: 'ri:calculator-line',
   },
   {
+    id: 'expense',
+    to: { name: 'expense' },
+    name: 'Pengeluaran',
+    icon: 'ri:receipt-line',
+  },
+  {
     id: 'report',
     name: 'Laporan',
-    icon: 'ri:file-list-line',
+    icon: 'ri:file-chart-line',
     activeKey: [
       'report.sale',
       'report.stock',

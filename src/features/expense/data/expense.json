@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "date": "2026-01-01",
+    "name": "Listrik toko",
+    "amount": 350000,
+    "source": "transfer",
+    "note": "Tagihan listrik Januari",
+    "createdAt": "2026-01-01T09:10:00"
+  },
+  {
+    "id": 2,
+    "date": "2026-01-02",
+    "name": "Air PDAM",
+    "amount": 120000,
+    "source": "transfer",
+    "note": "Tagihan air",
+    "createdAt": "2026-01-02T10:05:00"
+  },
+  {
+    "id": 3,
+    "date": "2026-01-03",
+    "name": "Internet",
+    "amount": 280000,
+    "source": "transfer",
+    "note": "WiFi bulanan",
+    "createdAt": "2026-01-03T08:30:00"
+  },
+  {
+    "id": 4,
+    "date": "2026-01-04",
+    "name": "Beli galon air",
+    "amount": 20000,
+    "source": "kas",
+    "note": "Isi ulang galon",
+    "createdAt": "2026-01-04T11:15:00"
+  },
+  {
+    "id": 5,
+    "date": "2026-01-05",
+    "name": "ATK toko",
+    "amount": 45000,
+    "source": "kas",
+    "note": "Pulpen dan kertas",
+    "createdAt": "2026-01-05T14:20:00"
+  },
+  {
+    "id": 6,
+    "date": "2026-01-06",
+    "name": "Parkir kurir",
+    "amount": 5000,
+    "source": "kas",
+    "note": "Parkir saat kirim barang",
+    "createdAt": "2026-01-06T16:40:00"
+  },
+  {
+    "id": 7,
+    "date": "2026-01-07",
+    "name": "Konsumsi karyawan",
+    "amount": 75000,
+    "source": "kas",
+    "note": "Makan siang lembur",
+    "createdAt": "2026-01-07T13:00:00"
+  },
+  {
+    "id": 8,
+    "date": "2026-01-08",
+    "name": "Servis mesin kasir",
+    "amount": 150000,
+    "source": "transfer",
+    "note": "Perbaikan printer struk",
+    "createdAt": "2026-01-08T09:45:00"
+  },
+  {
+    "id": 9,
+    "date": "2026-01-09",
+    "name": "Kebersihan toko",
+    "amount": 60000,
+    "source": "kas",
+    "note": "Sapu, pel, cairan pembersih",
+    "createdAt": "2026-01-09T10:50:00"
+  },
+  {
+    "id": 10,
+    "date": "2026-01-10",
+    "name": "Gaji harian karyawan",
+    "amount": 300000,
+    "source": "transfer",
+    "note": "Gaji harian",
+    "createdAt": "2026-01-10T18:00:00"
+  }
+]
+

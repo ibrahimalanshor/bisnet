@@ -104,6 +104,13 @@ export const router = createRouter({
       ],
     },
     {
+      path: '/expense',
+      name: 'expense',
+      meta: { layout: 'LayoutAdmin' },
+      component: () =>
+        import('./features/expense/components/ExpenseIndexPage.vue'),
+    },
+    {
       path: '/report',
       children: [
         {
