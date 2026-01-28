@@ -43,6 +43,11 @@ const columns = [
     render: ({ data }) => h(ProductStock, { product: data }),
   },
   {
+    id: 'hpp',
+    name: 'HPP',
+    value: () => formatCurrency(14200),
+  },
+  {
     id: 'barcode',
     name: 'Barcode',
     render: ({ data }) => h(ProductBarcode, { product: data }),
