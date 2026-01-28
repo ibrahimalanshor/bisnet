@@ -1,0 +1,163 @@
+[
+  {
+    "id": 1,
+    "name": "Andi Saputra",
+    "email": "andi.saputra@posapp.com",
+    "phone": "081234567801",
+    "role": "owner",
+    "active": true
+  },
+  {
+    "id": 2,
+    "name": "Budi Hartono",
+    "email": "budi.hartono@posapp.com",
+    "phone": "081234567802",
+    "role": "admin",
+    "active": true
+  },
+  {
+    "id": 3,
+    "name": "Citra Lestari",
+    "email": "citra.lestari@posapp.com",
+    "phone": "081234567803",
+    "role": "manager",
+    "active": true
+  },
+  {
+    "id": 4,
+    "name": "Dedi Pratama",
+    "email": "dedi.pratama@posapp.com",
+    "phone": "081234567804",
+    "role": "cashier",
+    "active": true
+  },
+  {
+    "id": 5,
+    "name": "Eka Wulandari",
+    "email": "eka.wulandari@posapp.com",
+    "phone": "081234567805",
+    "role": "cashier",
+    "active": false
+  },
+  {
+    "id": 6,
+    "name": "Fajar Nugroho",
+    "email": "fajar.nugroho@posapp.com",
+    "phone": "081234567806",
+    "role": "warehouse",
+    "active": true
+  },
+  {
+    "id": 7,
+    "name": "Gita Anggraini",
+    "email": "gita.anggraini@posapp.com",
+    "phone": "081234567807",
+    "role": "cashier",
+    "active": true
+  },
+  {
+    "id": 8,
+    "name": "Hadi Santoso",
+    "email": "hadi.santoso@posapp.com",
+    "phone": "081234567808",
+    "role": "admin",
+    "active": true
+  },
+  {
+    "id": 9,
+    "name": "Indah Permata",
+    "email": "indah.permata@posapp.com",
+    "phone": "081234567809",
+    "role": "cashier",
+    "active": true
+  },
+  {
+    "id": 10,
+    "name": "Joko Susilo",
+    "email": "joko.susilo@posapp.com",
+    "phone": "081234567810",
+    "role": "warehouse",
+    "active": false
+  },
+  {
+    "id": 11,
+    "name": "Karin Maulida",
+    "email": "karin.maulida@posapp.com",
+    "phone": "081234567811",
+    "role": "manager",
+    "active": true
+  },
+  {
+    "id": 12,
+    "name": "Lukman Hakim",
+    "email": "lukman.hakim@posapp.com",
+    "phone": "081234567812",
+    "role": "cashier",
+    "active": true
+  },
+  {
+    "id": 13,
+    "name": "Maya Sari",
+    "email": "maya.sari@posapp.com",
+    "phone": "081234567813",
+    "role": "cashier",
+    "active": true
+  },
+  {
+    "id": 14,
+    "name": "Nanda Prakoso",
+    "email": "nanda.prakoso@posapp.com",
+    "phone": "081234567814",
+    "role": "admin",
+    "active": false
+  },
+  {
+    "id": 15,
+    "name": "Oki Ramadhan",
+    "email": "oki.ramadhan@posapp.com",
+    "phone": "081234567815",
+    "role": "warehouse",
+    "active": true
+  },
+  {
+    "id": 16,
+    "name": "Putri Aisyah",
+    "email": "putri.aisyah@posapp.com",
+    "phone": "081234567816",
+    "role": "cashier",
+    "active": true
+  },
+  {
+    "id": 17,
+    "name": "Rian Kurniawan",
+    "email": "rian.kurniawan@posapp.com",
+    "phone": "081234567817",
+    "role": "manager",
+    "active": true
+  },
+  {
+    "id": 18,
+    "name": "Sinta Maharani",
+    "email": "sinta.maharani@posapp.com",
+    "phone": "081234567818",
+    "role": "cashier",
+    "active": false
+  },
+  {
+    "id": 19,
+    "name": "Taufik Hidayat",
+    "email": "taufik.hidayat@posapp.com",
+    "phone": "081234567819",
+    "role": "admin",
+    "active": true
+  },
+  {
+    "id": 20,
+    "name": "Yuni Kartika",
+    "email": "yuni.kartika@posapp.com",
+    "phone": "081234567820",
+    "role": "cashier",
+    "active": true
+  }
+]
+
