@@ -34,7 +34,7 @@ function onClickRow(e, row) {
   <div :class="['relative bg-white', scrollX ? 'overflow-x-auto' : '']">
     <div
       v-if="loading"
-      class="absolute inset-0 flex items-center justify-center bg-gray-300/20"
+      class="absolute inset-0 flex items-center justify-center bg-gray-300/20 rounded-lg"
     >
       <Icon
         icon="ri:loader-4-line"

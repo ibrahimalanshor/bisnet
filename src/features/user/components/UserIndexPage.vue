@@ -1,52 +1,28 @@
 <script setup>
-import data from '../data/product.json';
-import { reactive, ref, h } from 'vue';
+import data from '../data/product-category.json';
+import { reactive, ref } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
-import BaseSelect from '../../../components/base/BaseSelect.vue';
-import ProductFormModal from './ProductFormModal.vue';
-import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
-import ProductDetailModal from './ProductDetailModal.vue';
-import ProductStock from './ProductStock.vue';
-import { sleep, formatCurrency } from '../../../utils/common';
+import ProductCategoryFormModal from './ProductCategoryFormModal.vue';
+import ProductCategoryDeleteConfirm from './ProductCategoryDeleteConfirm.vue';
+import { sleep } from '../../../utils/common';
 
 const columns = [
-  {
-    id: 'name',
-    name: 'Nama',
-    render: ({ item }) =>
-      h('div', {}, [
-        h('p', { class: 'text-sm text-gray-500' }, item.category_name),
-        h('p', { class: 'font-medium' }, item.name),
-      ]),
-  },
-  { id: 'price', name: 'Harga', value: (item) => formatCurrency(item.price) },
-  {
-    id: 'Stock',
-    name: 'Stok',
-    render: ({ item }) => h(ProductStock, { product: item }),
-  },
+  { id: 'name', name: 'Nama', value: (item) => item.name },
   { id: 'action', name: 'Aksi' },
-];
-const filterStockStatusOptions = [
-  { id: null, name: 'Semua Stok' },
-  { id: 'has_stock', name: 'Stok Ada' },
-  { id: 'low_stock', name: 'Stok Hampir Habis' },
-  { id: 'out_stock', name: 'Stok Habis' },
 ];
 const loading = ref(true);
 const error = ref(false);
-const products = ref({ data: [] });
+const productCategories = ref({ data: [] });
 const query = reactive({
   page: 1,
 });
 const filter = reactive({
   search: null,
-  stock_status: null,
 });
 const formModal = reactive({
   id: null,
@@ -56,12 +32,8 @@ const deleteConfirm = reactive({
   id: null,
   visible: false,
 });
-const detailModal = reactive({
-  id: null,
-  visible: false,
-});
 
-async function loadProducts({ refresh, reload } = {}) {
+async function loadProductCategories({ refresh, reload } = {}) {
   if (refresh) {
     query.page = 1;
     filter.search = null;
@@ -75,7 +47,7 @@ async function loadProducts({ refresh, reload } = {}) {
 
   await sleep();
 
-  products.value = { data: data.slice(0, 10) };
+  productCategories.value = { data: data.slice(0, 10) };
 
   loading.value = false;
 }
@@ -92,45 +64,33 @@ function onDelete(id) {
   deleteConfirm.id = id;
   deleteConfirm.visible = true;
 }
-function onOpenDetail(item, e) {
-  if (!e.target.closest('button')) {
-    detailModal.id = item.id;
-    detailModal.visible = true;
-  }
-}
 
-loadProducts();
+loadProductCategories();
 </script>
 
 <template>
   <BaseHeading>
-    Barang
+    Kategori Barang
 
     <template #action>
       <div class="flex flex-col gap-2 sm:flex-row">
         <BaseInput
           type="search"
-          placeholder="Cari barang"
+          placeholder="Cari kategori"
           v-model="filter.search"
-          @input-debounce="loadProducts({ reload: true })"
-        />
-        <BaseSelect
-          :options="filterStockStatusOptions"
-          v-model="filter.stock_status"
+          @input-debounce="loadProductCategories({ reload: true })"
         />
         <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
-          >Tambah Barang</BaseButton
+          >Tambah Kategori</BaseButton
         >
       </div>
     </template>
   </BaseHeading>
-  <BaseAlert v-if="error">Gagal memuat data barang.</BaseAlert>
+  <BaseAlert v-if="error">Gagal memuat data kategori.</BaseAlert>
   <BaseTable
     :columns="columns"
-    :data="products.data"
+    :data="productCategories.data"
     :loading="loading"
-    clickable
-    @click-row="onOpenDetail"
   >
     <template #column-action="{ item }">
       <div class="flex gap-2">
@@ -152,20 +112,16 @@ loadProducts();
   <BasePagination
     :total-pages="10"
     v-model="query.page"
-    @change="loadProducts"
+    @change="loadProductCategories"
   />
-  <ProductFormModal
+  <ProductCategoryFormModal
     :id="formModal.id"
     v-model:visible="formModal.visible"
-    @saved="loadProducts({ refresh: true })"
+    @saved="loadProductCategories({ refresh: true })"
   />
-  <ProductDeleteConfirm
+  <ProductCategoryDeleteConfirm
     :id="deleteConfirm.id"
     v-model:visible="deleteConfirm.visible"
-    @deleted="loadProducts({ refresh: true })"
-  />
-  <ProductDetailModal
-    :id="detailModal.id"
-    v-model:visible="detailModal.visible"
+    @deleted="loadProductCategories({ refresh: true })"
   />
 </template>

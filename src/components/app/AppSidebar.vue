@@ -96,6 +96,24 @@ const menus = [
       },
     ],
   },
+  {
+    id: 'user',
+    name: 'Pengguna',
+    icon: 'ri:user-settings-line',
+    activeKey: ['user', 'role'],
+    children: [
+      {
+        id: 'user',
+        to: { name: 'user' },
+        name: 'Kelola Pengguna',
+      },
+      {
+        id: 'role',
+        to: { name: 'user' },
+        name: 'Kelola Role',
+      },
+    ],
+  },
 ];
 
 const sidebarVisible = defineModel();

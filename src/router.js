@@ -160,5 +160,11 @@ export const router = createRouter({
         },
       ],
     },
+    {
+      path: '/user',
+      name: 'user',
+      meta: { layout: 'LayoutAdmin' },
+      component: () => import('./features/user/components/UserIndexPage.vue'),
+    },
   ],
 });
