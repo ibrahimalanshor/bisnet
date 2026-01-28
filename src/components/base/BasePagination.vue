@@ -47,7 +47,7 @@ const hasEllipsisRight = computed(
 const PaginationButton = ({ name = '', type = 'link', active = false }) => {
   const classList = computed(() => {
     return [
-      'block w-10 h-10 flex items-center justify-center',
+      'block px-2 min-w-10 h-10 flex items-center justify-center',
       active ? 'bg-blue-600 text-white' : 'bg-white hover:bg-gray-100',
     ];
   });

@@ -16,7 +16,7 @@ async function onConfirmed() {
   await sleep();
 
   toastStore.create({
-    message: 'Berhasil menghapus kategori',
+    message: 'Berhasil menghapus pengguna',
     type: 'success',
   });
   visible.value = false;
@@ -29,8 +29,8 @@ async function onConfirmed() {
 
 <template>
   <BaseConfirm
-    title="Hapus Kategori"
-    message="Kategori yang dihapus tidak akan bisa dikembalikan lagi, lanjutkan hapus?"
+    title="Hapus Pengguna"
+    message="Pengguna yang dihapus tidak akan bisa dikembalikan lagi, lanjutkan hapus?"
     confirm-text="Hapus"
     cancel-text="Batal"
     :loading="loading"
