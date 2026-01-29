@@ -95,15 +95,24 @@ loadRoles();
     <template #column-action="{ item }">
       <div class="flex gap-2">
         <BaseButton
+          icon="ri:lock-fill"
+          color="warning"
+          size="sm"
+          v-tooltip="'Edit Menu dan Hak Akses'"
+          @click="onEdit(item.id)"
+        />
+        <BaseButton
           icon="ri:edit-fill"
           color="success"
           size="sm"
+          v-tooltip="'Edit'"
           @click="onEdit(item.id)"
         />
         <BaseButton
           icon="ri:delete-bin-fill"
           color="error"
           size="sm"
+          v-tooltip="'Hapus'"
           @click="onDelete(item.id)"
         />
       </div>
