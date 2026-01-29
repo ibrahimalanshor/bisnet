@@ -21,10 +21,6 @@ const loadingSave = ref(false);
 const error = ref(false);
 const form = reactive({
   name: null,
-  email: null,
-  phone: null,
-  password: null,
-  role: null,
 });
 
 async function loadForm() {
@@ -52,8 +48,8 @@ async function onSubmit() {
 
   toastStore.create({
     message: props.id
-      ? 'Berhasil memperbarui pengguna'
-      : 'Berhasil menambahkan pengguna baru',
+      ? 'Berhasil memperbarui role'
+      : 'Berhasil menambahkan role baru',
     type: 'success',
   });
   visible.value = false;
@@ -66,40 +62,16 @@ async function onSubmit() {
 
 <template>
   <BaseModal
-    :title="props.id ? 'Edit Pengguna' : 'Tambah Pengguna'"
+    :title="props.id ? 'Edit Role' : 'Tambah Role'"
     size="sm"
     v-model:visible="visible"
     @open="onOpen"
   >
     <BaseSkeleton v-if="loadingForm" class="h-40" />
     <form v-else class="space-y-4" @submit.prevent="onSubmit">
-      <BaseAlert v-if="error"> Gagal menyimpan pengguna baru. </BaseAlert>
-      <BaseFormItem id="user_form.name" label="Nama" v-slot="{ id }">
-        <BaseInput :id="id" placeholder="Ahmad" required v-model="form.name" />
-      </BaseFormItem>
-      <BaseFormItem id="user_form.email" label="Email" v-slot="{ id }">
-        <BaseInput
-          :id="id"
-          placeholder="ahmad@gmail.com"
-          type="email"
-          required
-          v-model="form.email"
-        />
-      </BaseFormItem>
-      <BaseFormItem id="user_form.phone" label="No. Telp" v-slot="{ id }">
-        <BaseInput :id="id" placeholder="08xxx" required v-model="form.phone" />
-      </BaseFormItem>
-      <BaseFormItem id="user_form.role" label="Role" v-slot="{ id }">
-        <BaseInput :id="id" placeholder="Kasir" required v-model="form.role" />
-      </BaseFormItem>
-      <BaseFormItem id="user_form.password" label="Password" v-slot="{ id }">
-        <BaseInput
-          :id="id"
-          placeholder="Password"
-          type="password"
-          required
-          v-model="form.password"
-        />
+      <BaseAlert v-if="error"> Gagal menyimpan role baru. </BaseAlert>
+      <BaseFormItem id="role_form.name" label="Nama" v-slot="{ id }">
+        <BaseInput :id="id" placeholder="Admin" required v-model="form.name" />
       </BaseFormItem>
       <div class="flex gap-2 justify-end">
         <BaseButton
