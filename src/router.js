@@ -172,11 +172,5 @@ export const router = createRouter({
       meta: { layout: 'LayoutAdmin' },
       component: () => import('./features/user/components/UserIndexPage.vue'),
     },
-    {
-      path: '/role',
-      name: 'role',
-      meta: { layout: 'LayoutAdmin' },
-      component: () => import('./features/role/components/RoleIndexPage.vue'),
-    },
   ],
 });

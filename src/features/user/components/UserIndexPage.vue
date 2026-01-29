@@ -10,7 +10,7 @@ import BasePagination from '../../../components/base/BasePagination.vue';
 import BaseBadge from '../../../components/base/BaseBadge.vue';
 import UserFormModal from './UserFormModal.vue';
 import UserDeleteConfirm from './UserDeleteConfirm.vue';
-import RoleSelectSearch from '../../role/components/RoleSelectSearch.vue';
+import UserRoleSelect from './UserRoleSelect.vue';
 import { sleep } from '../../../utils/common';
 
 const columns = [
@@ -37,6 +37,7 @@ const query = reactive({
 });
 const filter = reactive({
   search: null,
+  role: null,
 });
 const formModal = reactive({
   id: null,
@@ -94,7 +95,7 @@ loadUsers();
           v-model="filter.search"
           @input-debounce="loadUsers({ reload: true })"
         />
-        <RoleSelectSearch class="shrink-0" placeholder="Pilh role" />
+        <UserRoleSelect placeholder="Semua Role" v-model="filter.role" />
         <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
           >Tambah Pengguna</BaseButton
         >

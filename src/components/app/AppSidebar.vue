@@ -98,21 +98,9 @@ const menus = [
   },
   {
     id: 'user',
+    to: { name: 'user' },
     name: 'Pengguna',
     icon: 'ri:user-settings-line',
-    activeKey: ['user', 'role'],
-    children: [
-      {
-        id: 'user',
-        to: { name: 'user' },
-        name: 'Kelola Pengguna',
-      },
-      {
-        id: 'role',
-        to: { name: 'role' },
-        name: 'Kelola Role',
-      },
-    ],
   },
 ];
 
