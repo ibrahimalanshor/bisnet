@@ -12,6 +12,7 @@ import ProductFormModal from './ProductFormModal.vue';
 import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
 import ProductDetailModal from './ProductDetailModal.vue';
 import ProductStock from './ProductStock.vue';
+import ProductCategorySelectSearch from '../../product-category/components/ProductCategorySelectSearch.vue';
 import { sleep, formatCurrency } from '../../../utils/common';
 
 const columns = [
@@ -114,11 +115,15 @@ loadProducts();
           v-model="filter.search"
           @input-debounce="loadProducts({ reload: true })"
         />
+        <ProductCategorySelectSearch
+          placeholder="Pilih kategori"
+          class="shrink-0"
+        />
         <BaseSelect
           :options="filterStockStatusOptions"
           v-model="filter.stock_status"
         />
-        <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
+        <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
           >Tambah Barang</BaseButton
         >
       </div>
