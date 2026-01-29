@@ -1,5 +1,5 @@
 <script setup>
-import data from '../data/user.json';
+import data from '../data/role.json';
 import { reactive, ref, h } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
@@ -7,9 +7,8 @@ import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
-import BaseBadge from '../../../components/base/BaseBadge.vue';
-import UserFormModal from './UserFormModal.vue';
-import UserDeleteConfirm from './UserDeleteConfirm.vue';
+import RoleFormModal from './RoleFormModal.vue';
+import RoleDeleteConfirm from './RoleDeleteConfirm.vue';
 import { sleep } from '../../../utils/common';
 
 const columns = [
@@ -18,19 +17,11 @@ const columns = [
     name: 'Nama',
     render: ({ item }) => h('p', { class: 'font-semibold' }, item.name),
   },
-  { id: 'email', name: 'Email' },
-  { id: 'phone', name: 'No. Telp' },
-  {
-    id: 'role',
-    name: 'Role',
-    render: ({ item }) =>
-      h(BaseBadge, { colorVariant: 'thin' }, () => item.role),
-  },
   { id: 'action', name: 'Aksi' },
 ];
 const loading = ref(true);
 const error = ref(false);
-const users = ref({ data: [] });
+const roles = ref({ data: [] });
 const query = reactive({
   page: 1,
 });
@@ -46,7 +37,7 @@ const deleteConfirm = reactive({
   visible: false,
 });
 
-async function loadUsers({ refresh, reload } = {}) {
+async function loadRoles({ refresh, reload } = {}) {
   if (refresh) {
     query.page = 1;
     filter.search = null;
@@ -60,7 +51,7 @@ async function loadUsers({ refresh, reload } = {}) {
 
   await sleep();
 
-  users.value = { data: data.slice(0, 10) };
+  roles.value = { data: data.slice(0, 10) };
 
   loading.value = false;
 }
@@ -78,29 +69,29 @@ function onDelete(id) {
   deleteConfirm.visible = true;
 }
 
-loadUsers();
+loadRoles();
 </script>
 
 <template>
   <BaseHeading>
-    Kelola Pengguna
+    Kelola Role
 
     <template #action>
       <div class="flex flex-col gap-2 sm:flex-row">
         <BaseInput
           type="search"
-          placeholder="Cari pengguna"
+          placeholder="Cari role"
           v-model="filter.search"
-          @input-debounce="loadUsers({ reload: true })"
+          @input-debounce="loadRoles({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
-          >Tambah Pengguna</BaseButton
+        <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
+          >Tambah Role</BaseButton
         >
       </div>
     </template>
   </BaseHeading>
-  <BaseAlert v-if="error">Gagal memuat data pengguna.</BaseAlert>
-  <BaseTable :columns="columns" :data="users.data" :loading="loading">
+  <BaseAlert v-if="error">Gagal memuat data role.</BaseAlert>
+  <BaseTable :columns="columns" :data="roles.data" :loading="loading">
     <template #column-action="{ item }">
       <div class="flex gap-2">
         <BaseButton
@@ -118,15 +109,15 @@ loadUsers();
       </div>
     </template>
   </BaseTable>
-  <BasePagination :total-pages="10" v-model="query.page" @change="loadUsers" />
-  <UserFormModal
+  <BasePagination :total-pages="10" v-model="query.page" @change="loadRoles" />
+  <RoleFormModal
     :id="formModal.id"
     v-model:visible="formModal.visible"
-    @saved="loadUsers({ refresh: true })"
+    @saved="loadRoles({ refresh: true })"
   />
-  <UserDeleteConfirm
+  <RoleDeleteConfirm
     :id="deleteConfirm.id"
     v-model:visible="deleteConfirm.visible"
-    @deleted="loadUsers({ refresh: true })"
+    @deleted="loadRoles({ refresh: true })"
   />
 </template>

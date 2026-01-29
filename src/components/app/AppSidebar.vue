@@ -109,7 +109,7 @@ const menus = [
       },
       {
         id: 'role',
-        to: { name: 'user' },
+        to: { name: 'role' },
         name: 'Kelola Role',
       },
     ],
