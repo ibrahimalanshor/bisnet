@@ -20,10 +20,12 @@ defineProps({
     >
       <dt class="text-sm text-gray-500">{{ column.name }}</dt>
       <dd class="font-medium">
-        <component v-if="column.render" :is="column.render" :data="data" />
-        <template v-else>{{
-          column.value ? column.value(data) : data[column.id]
-        }}</template>
+        <slot :name="column.id">
+          <component v-if="column.render" :is="column.render" :data="data" />
+          <template v-else>{{
+            column.value ? column.value(data) : data[column.id]
+          }}</template>
+        </slot>
       </dd>
     </div>
   </dl>

@@ -9,6 +9,7 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import RoleFormModal from './RoleFormModal.vue';
 import RoleDeleteConfirm from './RoleDeleteConfirm.vue';
+import RoleMenuPermissionModal from './RoleMenuPermissionModal.vue';
 import { sleep } from '../../../utils/common';
 
 const columns = [
@@ -29,6 +30,10 @@ const filter = reactive({
   search: null,
 });
 const formModal = reactive({
+  id: null,
+  visible: false,
+});
+const menuPermissionModal = reactive({
   id: null,
   visible: false,
 });
@@ -59,6 +64,10 @@ async function loadRoles({ refresh, reload } = {}) {
 function onAdd() {
   formModal.id = null;
   formModal.visible = true;
+}
+function onOpenMenuPermission(id) {
+  menuPermissionModal.id = id;
+  menuPermissionModal.visible = true;
 }
 function onEdit(id) {
   formModal.id = id;
@@ -99,7 +108,7 @@ loadRoles();
           color="warning"
           size="sm"
           v-tooltip="'Edit Menu dan Hak Akses'"
-          @click="onEdit(item.id)"
+          @click="onOpenMenuPermission(item.id)"
         />
         <BaseButton
           icon="ri:edit-fill"
@@ -128,5 +137,9 @@ loadRoles();
     :id="deleteConfirm.id"
     v-model:visible="deleteConfirm.visible"
     @deleted="loadRoles({ refresh: true })"
+  />
+  <RoleMenuPermissionModal
+    :id="menuPermissionModal.id"
+    v-model:visible="menuPermissionModal.visible"
   />
 </template>
