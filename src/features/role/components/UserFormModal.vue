@@ -5,7 +5,6 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseSkeleton from '../../../components/base/BaseSkeleton.vue';
-import RoleSelectSearch from '../../role/components/RoleSelectSearch.vue';
 import { ref, reactive } from 'vue';
 import { sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
@@ -91,7 +90,7 @@ async function onSubmit() {
         <BaseInput :id="id" placeholder="08xxx" required v-model="form.phone" />
       </BaseFormItem>
       <BaseFormItem id="user_form.role" label="Role" v-slot="{ id }">
-        <RoleSelectSearch :id="id" placeholder="Kasir" v-model="form.role" />
+        <BaseInput :id="id" placeholder="Kasir" required v-model="form.role" />
       </BaseFormItem>
       <BaseFormItem id="user_form.password" label="Password" v-slot="{ id }">
         <BaseInput

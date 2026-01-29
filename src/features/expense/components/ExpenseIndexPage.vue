@@ -79,7 +79,7 @@ loadExpenses();
           v-model="filter.search"
           @input-debounce="loadExpenses({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
+        <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
           >Tambah Pengeluaran</BaseButton
         >
       </div>

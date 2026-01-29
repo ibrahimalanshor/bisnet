@@ -1,23 +1,36 @@
 <script setup>
-import data from '../data/product-category.json';
-import { reactive, ref } from 'vue';
+import data from '../data/user.json';
+import { reactive, ref, h } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
-import ProductCategoryFormModal from './ProductCategoryFormModal.vue';
-import ProductCategoryDeleteConfirm from './ProductCategoryDeleteConfirm.vue';
+import BaseBadge from '../../../components/base/BaseBadge.vue';
+import UserFormModal from './UserFormModal.vue';
+import UserDeleteConfirm from './UserDeleteConfirm.vue';
 import { sleep } from '../../../utils/common';
 
 const columns = [
-  { id: 'name', name: 'Nama', value: (item) => item.name },
+  {
+    id: 'name',
+    name: 'Nama',
+    render: ({ item }) => h('p', { class: 'font-semibold' }, item.name),
+  },
+  { id: 'email', name: 'Email' },
+  { id: 'phone', name: 'No. Telp' },
+  {
+    id: 'role',
+    name: 'Role',
+    render: ({ item }) =>
+      h(BaseBadge, { colorVariant: 'thin' }, () => item.role),
+  },
   { id: 'action', name: 'Aksi' },
 ];
 const loading = ref(true);
 const error = ref(false);
-const productCategories = ref({ data: [] });
+const users = ref({ data: [] });
 const query = reactive({
   page: 1,
 });
@@ -33,7 +46,7 @@ const deleteConfirm = reactive({
   visible: false,
 });
 
-async function loadProductCategories({ refresh, reload } = {}) {
+async function loadUsers({ refresh, reload } = {}) {
   if (refresh) {
     query.page = 1;
     filter.search = null;
@@ -47,7 +60,7 @@ async function loadProductCategories({ refresh, reload } = {}) {
 
   await sleep();
 
-  productCategories.value = { data: data.slice(0, 10) };
+  users.value = { data: data.slice(0, 10) };
 
   loading.value = false;
 }
@@ -65,33 +78,29 @@ function onDelete(id) {
   deleteConfirm.visible = true;
 }
 
-loadProductCategories();
+loadUsers();
 </script>
 
 <template>
   <BaseHeading>
-    Kategori Barang
+    Kelola Pengguna
 
     <template #action>
       <div class="flex flex-col gap-2 sm:flex-row">
         <BaseInput
           type="search"
-          placeholder="Cari kategori"
+          placeholder="Cari pengguna"
           v-model="filter.search"
-          @input-debounce="loadProductCategories({ reload: true })"
+          @input-debounce="loadUsers({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
-          >Tambah Kategori</BaseButton
+        <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
+          >Tambah Pengguna</BaseButton
         >
       </div>
     </template>
   </BaseHeading>
-  <BaseAlert v-if="error">Gagal memuat data kategori.</BaseAlert>
-  <BaseTable
-    :columns="columns"
-    :data="productCategories.data"
-    :loading="loading"
-  >
+  <BaseAlert v-if="error">Gagal memuat data pengguna.</BaseAlert>
+  <BaseTable :columns="columns" :data="users.data" :loading="loading">
     <template #column-action="{ item }">
       <div class="flex gap-2">
         <BaseButton
@@ -109,19 +118,15 @@ loadProductCategories();
       </div>
     </template>
   </BaseTable>
-  <BasePagination
-    :total-pages="10"
-    v-model="query.page"
-    @change="loadProductCategories"
-  />
-  <ProductCategoryFormModal
+  <BasePagination :total-pages="10" v-model="query.page" @change="loadUsers" />
+  <UserFormModal
     :id="formModal.id"
     v-model:visible="formModal.visible"
-    @saved="loadProductCategories({ refresh: true })"
+    @saved="loadUsers({ refresh: true })"
   />
-  <ProductCategoryDeleteConfirm
+  <UserDeleteConfirm
     :id="deleteConfirm.id"
     v-model:visible="deleteConfirm.visible"
-    @deleted="loadProductCategories({ refresh: true })"
+    @deleted="loadUsers({ refresh: true })"
   />
 </template>

@@ -91,7 +91,7 @@ loadRestocks();
         />
         <BaseButton
           icon="ri:add-fill"
-          class="w-full"
+          class="w-full sm:w-auto"
           tag="router-link"
           :to="{ name: 'restock.new' }"
           >Tambah Restock</BaseButton

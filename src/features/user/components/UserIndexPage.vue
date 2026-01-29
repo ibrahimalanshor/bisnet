@@ -10,6 +10,7 @@ import BasePagination from '../../../components/base/BasePagination.vue';
 import BaseBadge from '../../../components/base/BaseBadge.vue';
 import UserFormModal from './UserFormModal.vue';
 import UserDeleteConfirm from './UserDeleteConfirm.vue';
+import RoleSelectSearch from '../../role/components/RoleSelectSearch.vue';
 import { sleep } from '../../../utils/common';
 
 const columns = [
@@ -93,7 +94,8 @@ loadUsers();
           v-model="filter.search"
           @input-debounce="loadUsers({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
+        <RoleSelectSearch class="shrink-0" placeholder="Pilh role" />
+        <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
           >Tambah Pengguna</BaseButton
         >
       </div>

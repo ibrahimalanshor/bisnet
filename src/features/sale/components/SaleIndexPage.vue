@@ -103,7 +103,7 @@ loadSales();
         <BaseButton
           v-if="!shiftStore.active"
           icon="ri:add-fill"
-          class="w-full"
+          class="w-full sm:w-auto"
           disabled
           v-tooltip="'Shift belum dibuka'"
           >Tambah Penjualan</BaseButton
