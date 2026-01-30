@@ -1,5 +1,6 @@
 <script setup>
 import { Icon } from '@iconify/vue';
+import UserPicture from '../../assets/user.png';
 
 const menus = [
   {
@@ -22,7 +23,7 @@ const menus = [
 <template>
   <VDropdown class="flex items-center" placement="bottom-end">
     <button class="cursor-pointer">
-      <Icon icon="ri:user-3-line" class="size-4" />
+      <img :src="UserPicture" class="w-8 h-8 object-cover rounded" />
     </button>
     <template #popper>
       <div class="min-w-48">
