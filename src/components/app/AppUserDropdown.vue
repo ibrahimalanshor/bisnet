@@ -2,7 +2,12 @@
 import { Icon } from '@iconify/vue';
 
 const menus = [
-  { id: 'profile', name: 'Profil', icon: 'ri:user-3-line' },
+  {
+    id: 'profile',
+    name: 'Profil',
+    icon: 'ri:user-3-line',
+    to: { name: 'profile' },
+  },
   {
     id: 'shift',
     to: { name: 'shift-history.index' },
