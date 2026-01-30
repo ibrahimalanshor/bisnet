@@ -2,6 +2,8 @@
 import { Icon } from '@iconify/vue';
 import UserPicture from '../../assets/user.png';
 
+const emit = defineEmits(['logout']);
+
 const menus = [
   {
     id: 'profile',
@@ -18,6 +20,12 @@ const menus = [
   { id: 'setting', name: 'Pengaturan', icon: 'ri:settings-4-line' },
   { id: 'logout', name: 'Logout', icon: 'ri:logout-box-r-line' },
 ];
+
+function onClickMenu(menu) {
+  if (menu.id === 'logout') {
+    emit('logout');
+  }
+}
 </script>
 
 <template>
@@ -38,6 +46,7 @@ const menus = [
             :is="menu.to ? 'router-link' : 'div'"
             :to="menu.to"
             class="flex items-center gap-2 px-4 py-2 hover:bg-gray-50"
+            @click="onClickMenu(menu)"
           >
             <Icon :icon="menu.icon" class="text-gray-900" />
             {{ menu.name }}

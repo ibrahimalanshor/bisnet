@@ -42,7 +42,7 @@ const sizeClass = computed(() => {
 <template>
   <span
     :class="[
-      'text-xs font-medium inline-flex items-center justify-center px-2 rounded',
+      'text-sm font-medium inline-flex items-center justify-center px-2 rounded',
       colorClass,
       sizeClass,
     ]"

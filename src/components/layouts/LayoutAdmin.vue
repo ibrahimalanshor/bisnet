@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import BaseAlert from '../base/BaseAlert.vue';
 import AppSidebar from '../app/AppSidebar.vue';
 import AppUserDropdown from '../app/AppUserDropdown.vue';
+import AppLogoutConfirm from '../app/AppLogoutConfirm.vue';
 import ShiftStatus from '../../features/shift/components/ShiftStatus.vue';
 import { useToastStore } from '../../cores/toast/toast.store';
 
@@ -13,6 +14,7 @@ defineProps({
 const toastStore = useToastStore();
 
 const sidebarVisible = ref(false);
+const logoutVisible = ref(false);
 </script>
 
 <template>
@@ -46,7 +48,7 @@ const sidebarVisible = ref(false);
         </button>
         <div class="flex gap-4">
           <ShiftStatus />
-          <AppUserDropdown />
+          <AppUserDropdown @logout="logoutVisible = true" />
         </div>
       </nav>
       <main
@@ -59,4 +61,6 @@ const sidebarVisible = ref(false);
       </main>
     </div>
   </div>
+
+  <AppLogoutConfirm v-model:visible="logoutVisible" />
 </template>
