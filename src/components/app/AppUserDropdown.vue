@@ -1,8 +1,11 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import UserPicture from '../../assets/user.png';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const emit = defineEmits(['logout']);
+const router = useRouter();
 
 const menus = [
   {
@@ -17,20 +20,28 @@ const menus = [
     name: 'Riwayat Shift',
     icon: 'ri:calendar-2-line',
   },
-  { id: 'setting', name: 'Pengaturan', icon: 'ri:settings-4-line' },
   { id: 'logout', name: 'Logout', icon: 'ri:logout-box-r-line' },
 ];
+
+const opened = ref(false);
 
 function onClickMenu(menu) {
   if (menu.id === 'logout') {
     emit('logout');
   }
 }
+
+router.afterEach(() => (opened.value = false));
 </script>
 
 <template>
-  <VDropdown class="flex items-center" placement="bottom-end">
-    <button class="cursor-pointer">
+  <VDropdown
+    :triggers="[]"
+    v-model:shown="opened"
+    class="flex items-center"
+    placement="bottom-end"
+  >
+    <button class="cursor-pointer" @click="opened = true">
       <img :src="UserPicture" class="w-8 h-8 object-cover rounded" />
     </button>
     <template #popper>
