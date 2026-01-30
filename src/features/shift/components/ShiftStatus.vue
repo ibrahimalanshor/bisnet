@@ -8,12 +8,18 @@ import { formatCurrency, formatDate } from '../../../utils/common.js';
 import { Icon } from '@iconify/vue';
 import data from '../data/transactions.json';
 import { useShiftStore } from '../shift.store.js';
+import { useRouter } from 'vue-router';
 
 const shiftStore = useShiftStore();
+const router = useRouter();
+
 const visibleOpen = ref(false);
 const visibleAddTrx = ref(false);
 const visibleClose = ref(false);
 const transactions = data.slice(0, 5);
+const opened = ref(false);
+
+router.afterEach(() => (opened.value = false));
 </script>
 
 <template>
@@ -27,8 +33,8 @@ const transactions = data.slice(0, 5);
       >Mulai Shift</BaseButton
     >
     <div v-else class="flex items-center gap-4 divide-x divide-gray-200">
-      <VDropdown>
-        <div class="flex flex-col items-end pr-4">
+      <VDropdown :triggers="[]" v-model:shown="opened">
+        <div class="flex flex-col items-end pr-4" @click="opened = true">
           <span
             class="text-xs text-gray-500 font-medium flex items-center gap-1.5"
           >
