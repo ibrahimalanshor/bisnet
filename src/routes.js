@@ -88,6 +88,7 @@ export const routes = [
         name: 'restock.new',
         meta: {
           layout: 'LayoutAdmin',
+          roles: ['manager', 'warehouse'],
         },
         component: () =>
           import('./features/restock/components/RestockNewPage.vue'),
