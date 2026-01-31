@@ -1,12 +1,14 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { useRoute, useRouter } from 'vue-router';
-import { h, ref } from 'vue';
+import { h, ref, computed } from 'vue';
+import { useAuthStore } from '../../features/auth/auth.store';
 
 const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
 
-const menus = [
+const allMenus = [
   {
     id: 'dashboard',
     to: { name: 'dashboard' },
@@ -18,6 +20,7 @@ const menus = [
     to: { name: 'supplier' },
     name: 'Supplier',
     icon: 'ri:truck-line',
+    roles: ['admin', 'manager'],
   },
   {
     id: 'product',
@@ -43,6 +46,7 @@ const menus = [
     activeKey: ['restock.index', 'restock.new'],
     name: 'Restock',
     icon: 'ri:box-3-line',
+    roles: ['admin', 'manager'],
   },
   {
     id: 'sale',
@@ -56,11 +60,13 @@ const menus = [
     to: { name: 'expense' },
     name: 'Pengeluaran',
     icon: 'ri:receipt-line',
+    roles: ['admin', 'manager'],
   },
   {
     id: 'report',
     name: 'Laporan',
     icon: 'ri:file-chart-line',
+    roles: ['admin', 'manager'],
     activeKey: [
       'report.sale',
       'report.stock',
@@ -101,12 +107,23 @@ const menus = [
     to: { name: 'user' },
     name: 'Pengguna',
     icon: 'ri:user-settings-line',
+    roles: ['admin', 'manager'],
   },
 ];
+const menus = computed(() => {
+  const role = authStore.role;
+
+  return allMenus.filter((menu) => {
+    if (!Array.isArray(menu.roles)) {
+      return true;
+    }
+    return menu.roles.includes(role);
+  });
+});
 
 const sidebarVisible = defineModel();
 const menusOpened = ref(
-  menus
+  allMenus
     .filter(
       (menu) =>
         menu.children && menu.children.length && checkMenuIsActive(menu),
