@@ -82,7 +82,7 @@ loadSuppliers();
           v-model="filter.search"
           @input-debounce="loadSuppliers({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill" class="w-full" @click="onAdd"
+        <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
           >Tambah Supplier</BaseButton
         >
       </div>

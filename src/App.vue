@@ -1,5 +1,8 @@
 <template>
-  <component :is="$route.meta.layout" v-bind="$route.meta.layoutProps || {}">
+  <component
+    :is="$route.meta.layout || 'div'"
+    v-bind="$route.meta.layoutProps || {}"
+  >
     <router-view />
   </component>
 </template>
