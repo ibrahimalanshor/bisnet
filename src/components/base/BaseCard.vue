@@ -16,6 +16,7 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  paddless: Boolean,
 });
 
 const responsiveClass = computed(() => {
@@ -30,7 +31,7 @@ const responsiveClass = computed(() => {
   <div
     :class="[
       'bg-white rounded-lg',
-      !!title || $slots.header ? '' : 'p-4',
+      !!title || $slots.header ? '' : paddless ? '' : 'p-4',
       bordered ? 'border border-gray-300' : '',
     ]"
   >
@@ -49,7 +50,7 @@ const responsiveClass = computed(() => {
         <slot name="action" />
       </div>
     </slot>
-    <div :class="title ? 'p-4' : ''">
+    <div :class="title && !paddless ? 'p-4' : ''">
       <slot />
     </div>
   </div>

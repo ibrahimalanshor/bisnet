@@ -12,6 +12,11 @@ export const routes = [
     component: () => import('./components/app/AppNotFoundPage.vue'),
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('./features/auth/components/LoginPage.vue'),
+  },
+  {
     path: '/profile',
     name: 'profile',
     meta: { layout: 'LayoutAdmin' },
