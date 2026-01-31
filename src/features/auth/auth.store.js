@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', () => {
-  const role = 'cashier';
+  const role = 'admin';
 
   return { role };
 });

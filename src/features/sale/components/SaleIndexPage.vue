@@ -1,6 +1,6 @@
 <script setup>
 import data from '../data/sale.json';
-import { reactive, ref } from 'vue';
+import { reactive, ref, computed } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
@@ -15,16 +15,21 @@ import {
   getPaymentMethodName,
 } from '../../../utils/common';
 import { useShiftStore } from '../../shift/shift.store';
+import { useAuthStore } from '../../auth/auth.store';
 
 const shiftStore = useShiftStore();
+const authStore = useAuthStore();
 
-const columns = [
+const columns = computed(() => [
   { id: 'code', name: 'No. Penjualan', value: (item) => item.code },
   {
     id: 'createdAt',
     name: 'Tanggal',
     value: (item) => formatDate(item.createdAt),
   },
+  ...(authStore.role === 'cashier'
+    ? []
+    : [{ id: 'cashier', name: 'Kasir', value: () => 'Ahmad' }]),
   {
     id: 'paymentMethod',
     name: 'Pembayaran',
@@ -40,7 +45,7 @@ const columns = [
     name: 'Harga',
     value: (item) => formatCurrency(item.totalPrice),
   },
-];
+]);
 const loading = ref(true);
 const error = ref(false);
 const sales = ref({ data: [] });
@@ -96,26 +101,35 @@ loadSales();
           @input-debounce="loadSales({ reload: true })"
         />
         <BaseInput
+          v-if="authStore.role !== 'cashier'"
+          type="search"
+          placeholder="Pilih kasir"
+          v-model="filter.search"
+          @input-debounce="loadSales({ reload: true })"
+        />
+        <BaseInput
           type="date"
           v-model="filter.createdAt"
           @change="loadSales({ reload: true })"
         />
-        <BaseButton
-          v-if="!shiftStore.active"
-          icon="ri:add-fill"
-          class="w-full sm:w-auto"
-          disabled
-          v-tooltip="'Shift belum dibuka'"
-          >Tambah Penjualan</BaseButton
-        >
-        <BaseButton
-          v-else
-          icon="ri:add-fill"
-          class="w-full"
-          tag="router-link"
-          :to="{ name: 'sale.new' }"
-          >Tambah Penjualan</BaseButton
-        >
+        <template v-if="authStore.role === 'cashier'">
+          <BaseButton
+            v-if="!shiftStore.active"
+            icon="ri:add-fill"
+            class="w-full sm:w-auto"
+            disabled
+            v-tooltip="'Shift belum dibuka'"
+            >Tambah Penjualan</BaseButton
+          >
+          <BaseButton
+            v-else
+            icon="ri:add-fill"
+            class="w-full"
+            tag="router-link"
+            :to="{ name: 'sale.new' }"
+            >Tambah Penjualan</BaseButton
+          >
+        </template>
       </div>
     </template>
   </BaseHeading>
