@@ -20,7 +20,7 @@ const allMenus = [
     to: { name: 'supplier' },
     name: 'Supplier',
     icon: 'ri:truck-line',
-    roles: ['admin', 'manager'],
+    roles: ['admin', 'manager', 'warehouse'],
   },
   {
     id: 'product',
@@ -46,7 +46,7 @@ const allMenus = [
     activeKey: ['restock.index', 'restock.new'],
     name: 'Restock',
     icon: 'ri:box-3-line',
-    roles: ['admin', 'manager'],
+    roles: ['admin', 'manager', 'warehouse'],
   },
   {
     id: 'sale',
@@ -54,6 +54,7 @@ const allMenus = [
     activeKey: ['sale.index', 'sale.new'],
     name: 'Penjualan',
     icon: 'ri:calculator-line',
+    roles: ['admin', 'manager', 'cashier'],
   },
   {
     id: 'expense',
@@ -66,7 +67,7 @@ const allMenus = [
     id: 'report',
     name: 'Laporan',
     icon: 'ri:file-chart-line',
-    roles: ['admin', 'manager'],
+    roles: ['admin', 'manager', 'warehouse'],
     activeKey: [
       'report.sale',
       'report.stock',
@@ -79,6 +80,7 @@ const allMenus = [
         id: 'report.sale',
         to: { name: 'report.sale' },
         name: 'Laporan Penjualan',
+        roles: ['admin', 'manager'],
       },
       {
         id: 'report.stock',
@@ -89,16 +91,19 @@ const allMenus = [
         id: 'report.shift',
         to: { name: 'report.shift' },
         name: 'Laporan Shift',
+        roles: ['admin', 'manager'],
       },
       {
         id: 'report.expense',
         to: { name: 'report.expense' },
         name: 'Laporan Pengeluaran',
+        roles: ['admin', 'manager'],
       },
       {
         id: 'report.profit',
         to: { name: 'report.profit' },
         name: 'Laporan Laba',
+        roles: ['admin', 'manager'],
       },
     ],
   },
@@ -113,12 +118,31 @@ const allMenus = [
 const menus = computed(() => {
   const role = authStore.role;
 
-  return allMenus.filter((menu) => {
-    if (!Array.isArray(menu.roles)) {
-      return true;
-    }
-    return menu.roles.includes(role);
-  });
+  return allMenus
+    .filter((menu) => {
+      if (!Array.isArray(menu.roles)) {
+        return true;
+      }
+      return menu.roles.includes(role);
+    })
+    .map((menu) => {
+      if (!menu.children) {
+        return menu;
+      }
+
+      const children = menu.children.filter((child) => {
+        if (!Array.isArray(child.roles)) {
+          return true;
+        }
+
+        return child.roles.includes(role);
+      });
+
+      return {
+        ...menu,
+        children,
+      };
+    });
 });
 
 const sidebarVisible = defineModel();

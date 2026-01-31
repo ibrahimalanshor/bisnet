@@ -20,11 +20,16 @@ export const routes = [
   {
     path: '/shift-active',
     name: 'shift-active',
-    meta: { layout: 'LayoutAdmin', layoutProps: { verticalAlign: 'center' } },
+    meta: {
+      layout: 'LayoutAdmin',
+      layoutProps: { verticalAlign: 'center' },
+      roles: ['cashier'],
+    },
     component: () => import('./features/shift/components/ShiftActivePage.vue'),
   },
   {
     path: '/shift-history',
+    meta: { roles: ['cashier'] },
     children: [
       {
         path: '',
@@ -45,7 +50,7 @@ export const routes = [
   {
     path: '/supplier',
     name: 'supplier',
-    meta: { layout: 'LayoutAdmin', roles: ['admin', 'manager'] },
+    meta: { layout: 'LayoutAdmin', roles: ['admin', 'manager', 'warehouse'] },
     component: () =>
       import('./features/supplier/components/SupplierIndexPage.vue'),
   },
@@ -66,7 +71,7 @@ export const routes = [
   {
     path: '/restock',
     meta: {
-      roles: ['admin', 'manager'],
+      roles: ['admin', 'manager', 'warehouse'],
     },
     children: [
       {
@@ -124,13 +129,14 @@ export const routes = [
   },
   {
     path: '/report',
-    meta: { roles: ['admin', 'manager'] },
+    meta: { roles: ['admin', 'manager', 'warehouse'] },
     children: [
       {
         path: 'sale',
         name: 'report.sale',
         meta: {
           layout: 'LayoutAdmin',
+          roles: ['admin', 'manager'],
         },
         component: () =>
           import('./features/report/components/ReportSalePage.vue'),
@@ -149,6 +155,7 @@ export const routes = [
         name: 'report.shift',
         meta: {
           layout: 'LayoutAdmin',
+          roles: ['admin', 'manager'],
         },
         component: () =>
           import('./features/report/components/ReportShiftPage.vue'),
@@ -158,6 +165,7 @@ export const routes = [
         name: 'report.expense',
         meta: {
           layout: 'LayoutAdmin',
+          roles: ['admin', 'manager'],
         },
         component: () =>
           import('./features/report/components/ReportExpensePage.vue'),
@@ -167,6 +175,7 @@ export const routes = [
         name: 'report.profit',
         meta: {
           layout: 'LayoutAdmin',
+          roles: ['admin', 'manager'],
         },
         component: () =>
           import('./features/report/components/ReportProfitPage.vue'),
