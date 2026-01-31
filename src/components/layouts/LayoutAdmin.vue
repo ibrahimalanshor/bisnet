@@ -7,11 +7,14 @@ import AppUserDropdown from '../app/AppUserDropdown.vue';
 import AppLogoutConfirm from '../app/AppLogoutConfirm.vue';
 import ShiftStatus from '../../features/shift/components/ShiftStatus.vue';
 import { useToastStore } from '../../cores/toast/toast.store';
+import { useAuthStore } from '../../features/auth/auth.store';
 
 defineProps({
   verticalAlign: String,
 });
+
 const toastStore = useToastStore();
+const authStore = useAuthStore();
 
 const sidebarVisible = ref(false);
 const logoutVisible = ref(false);
@@ -47,7 +50,7 @@ const logoutVisible = ref(false);
           <Icon icon="ri:menu-fill" class="size-4" />
         </button>
         <div class="flex gap-4">
-          <ShiftStatus />
+          <ShiftStatus v-if="authStore.role === 'cashier'" />
           <AppUserDropdown @logout="logoutVisible = true" />
         </div>
       </nav>

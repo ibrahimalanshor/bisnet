@@ -1,27 +1,34 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import UserPicture from '../../assets/user.png';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../../features/auth/auth.store';
 
 const emit = defineEmits(['logout']);
-const router = useRouter();
 
-const menus = [
+const router = useRouter();
+const authStore = useAuthStore();
+
+const menus = computed(() => [
   {
     id: 'profile',
     name: 'Profil',
     icon: 'ri:user-3-line',
     to: { name: 'profile' },
   },
-  {
-    id: 'shift',
-    to: { name: 'shift-history.index' },
-    name: 'Riwayat Shift',
-    icon: 'ri:calendar-2-line',
-  },
+  ...(authStore.role !== 'cashier'
+    ? []
+    : [
+        {
+          id: 'shift',
+          to: { name: 'shift-history.index' },
+          name: 'Riwayat Shift',
+          icon: 'ri:calendar-2-line',
+        },
+      ]),
   { id: 'logout', name: 'Logout', icon: 'ri:logout-box-r-line' },
-];
+]);
 
 const opened = ref(false);
 
@@ -48,7 +55,7 @@ router.afterEach(() => (opened.value = false));
       <div class="min-w-48">
         <div class="border-b border-gray-200 px-4 py-3">
           <p class="font-medium">Abdul Ghani</p>
-          <p class="text-sm text-gray-500">Kasir</p>
+          <p class="text-sm text-gray-500">{{ authStore.role }}</p>
         </div>
         <div class="py-1">
           <component
