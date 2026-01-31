@@ -175,7 +175,7 @@ export const routes = [
         name: 'report.profit',
         meta: {
           layout: 'LayoutAdmin',
-          roles: ['admin', 'manager'],
+          roles: ['admin'],
         },
         component: () =>
           import('./features/report/components/ReportProfitPage.vue'),

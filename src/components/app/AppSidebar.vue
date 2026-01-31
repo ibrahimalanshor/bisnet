@@ -103,7 +103,7 @@ const allMenus = [
         id: 'report.profit',
         to: { name: 'report.profit' },
         name: 'Laporan Laba',
-        roles: ['admin', 'manager'],
+        roles: ['admin'],
       },
     ],
   },
@@ -112,7 +112,7 @@ const allMenus = [
     to: { name: 'user' },
     name: 'Pengguna',
     icon: 'ri:user-settings-line',
-    roles: ['admin', 'manager'],
+    roles: ['admin'],
   },
 ];
 const menus = computed(() => {
