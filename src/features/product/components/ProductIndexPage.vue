@@ -1,6 +1,6 @@
 <script setup>
 import data from '../data/product.json';
-import { reactive, ref, h } from 'vue';
+import { reactive, ref, h, computed } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
@@ -14,8 +14,13 @@ import ProductDetailModal from './ProductDetailModal.vue';
 import ProductStock from './ProductStock.vue';
 import ProductCategorySelectSearch from '../../product-category/components/ProductCategorySelectSearch.vue';
 import { sleep, formatCurrency } from '../../../utils/common';
+import { useAuthStore } from '../../auth/auth.store.js';
 
-const columns = [
+const authStore = useAuthStore();
+
+const canManage = computed(() => authStore.role !== 'cashier');
+
+const columns = computed(() => [
   {
     id: 'name',
     name: 'Nama',
@@ -31,14 +36,15 @@ const columns = [
     name: 'Stok',
     render: ({ item }) => h(ProductStock, { product: item }),
   },
-  { id: 'action', name: 'Aksi' },
-];
+  ...(!canManage.value ? [] : [{ id: 'action', name: 'Aksi' }]),
+]);
 const filterStockStatusOptions = [
   { id: null, name: 'Semua Stok' },
   { id: 'has_stock', name: 'Stok Ada' },
   { id: 'low_stock', name: 'Stok Hampir Habis' },
   { id: 'out_stock', name: 'Stok Habis' },
 ];
+
 const loading = ref(true);
 const error = ref(false);
 const products = ref({ data: [] });
@@ -123,7 +129,11 @@ loadProducts();
           :options="filterStockStatusOptions"
           v-model="filter.stock_status"
         />
-        <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
+        <BaseButton
+          v-if="canManage"
+          icon="ri:add-fill"
+          class="w-full sm:w-auto"
+          @click="onAdd"
           >Tambah Barang</BaseButton
         >
       </div>
@@ -160,16 +170,19 @@ loadProducts();
     @change="loadProducts"
   />
   <ProductFormModal
+    v-if="canManage"
     :id="formModal.id"
     v-model:visible="formModal.visible"
     @saved="loadProducts({ refresh: true })"
   />
   <ProductDeleteConfirm
+    v-if="canManage"
     :id="deleteConfirm.id"
     v-model:visible="deleteConfirm.visible"
     @deleted="loadProducts({ refresh: true })"
   />
   <ProductDetailModal
+    v-if="canManage"
     :id="detailModal.id"
     v-model:visible="detailModal.visible"
   />

@@ -1,6 +1,6 @@
 <script setup>
 import data from '../data/product-category.json';
-import { reactive, ref } from 'vue';
+import { reactive, ref, computed } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
@@ -10,11 +10,16 @@ import BasePagination from '../../../components/base/BasePagination.vue';
 import ProductCategoryFormModal from './ProductCategoryFormModal.vue';
 import ProductCategoryDeleteConfirm from './ProductCategoryDeleteConfirm.vue';
 import { sleep } from '../../../utils/common';
+import { useAuthStore } from '../../auth/auth.store.js';
 
-const columns = [
+const authStore = useAuthStore();
+
+const canManage = computed(() => authStore.role !== 'cashier');
+
+const columns = computed(() => [
   { id: 'name', name: 'Nama', value: (item) => item.name },
-  { id: 'action', name: 'Aksi' },
-];
+  ...(!canManage.value ? [] : [{ id: 'action', name: 'Aksi' }]),
+]);
 const loading = ref(true);
 const error = ref(false);
 const productCategories = ref({ data: [] });
@@ -80,7 +85,11 @@ loadProductCategories();
           v-model="filter.search"
           @input-debounce="loadProductCategories({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
+        <BaseButton
+          v-if="canManage"
+          icon="ri:add-fill"
+          class="w-full sm:w-auto"
+          @click="onAdd"
           >Tambah Kategori</BaseButton
         >
       </div>
@@ -115,11 +124,13 @@ loadProductCategories();
     @change="loadProductCategories"
   />
   <ProductCategoryFormModal
+    v-if="canManage"
     :id="formModal.id"
     v-model:visible="formModal.visible"
     @saved="loadProductCategories({ refresh: true })"
   />
   <ProductCategoryDeleteConfirm
+    v-if="canManage"
     :id="deleteConfirm.id"
     v-model:visible="deleteConfirm.visible"
     @deleted="loadProductCategories({ refresh: true })"

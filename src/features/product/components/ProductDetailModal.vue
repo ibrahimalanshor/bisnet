@@ -7,18 +7,21 @@ import ProductStockHistoryTable from './ProductStockHistoryTable.vue';
 import ProductBarcode from './ProductBarcode.vue';
 import ProductStock from './ProductStock.vue';
 import { sleep, formatCurrency } from '../../../utils/common.js';
-import { ref, h } from 'vue';
+import { ref, h, computed } from 'vue';
 import mocks from '../data/product.json';
+import { useAuthStore } from '../../auth/auth.store.js';
 
 const props = defineProps({
   id: null,
 });
 
+const authStore = useAuthStore();
+
 const loading = ref(true);
 const error = ref(false);
 const data = ref({});
 
-const columns = [
+const columns = computed(() => [
   {
     id: 'name',
     name: 'Nama',
@@ -42,23 +45,31 @@ const columns = [
     name: 'Stok',
     render: ({ data }) => h(ProductStock, { product: data }),
   },
-  {
-    id: 'hpp',
-    name: 'HPP',
-    value: () => formatCurrency(14200),
-  },
+  ...(authStore.role === 'cashier'
+    ? []
+    : [
+        {
+          id: 'hpp',
+          name: 'HPP',
+          value: () => formatCurrency(14200),
+        },
+      ]),
   {
     id: 'barcode',
     name: 'Barcode',
     render: ({ data }) => h(ProductBarcode, { product: data }),
   },
-  {
-    id: 'stock_histories',
-    name: 'Riwayat Stock',
-    classList: 'col-span-full',
-    render: () => h(ProductStockHistoryTable),
-  },
-];
+  ...(authStore.role === 'cashier'
+    ? []
+    : [
+        {
+          id: 'stock_histories',
+          name: 'Riwayat Stock',
+          classList: 'col-span-full',
+          render: () => h(ProductStockHistoryTable),
+        },
+      ]),
+]);
 
 async function onOpened() {
   loading.value = true;
