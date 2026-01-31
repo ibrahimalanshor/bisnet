@@ -2,7 +2,7 @@ export const routes = [
   {
     path: '/',
     name: 'dashboard',
-    meta: { layout: 'LayoutAdmin' },
+    meta: { layout: 'LayoutAdmin', layoutProps: { verticalAlign: 'center' } },
     component: () =>
       import('./features/dashboard/components/DashboardPage.vue'),
   },
