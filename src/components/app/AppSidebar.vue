@@ -114,6 +114,13 @@ const allMenus = [
     icon: 'ri:user-settings-line',
     roles: ['admin'],
   },
+  {
+    id: 'setting',
+    to: { name: 'setting' },
+    name: 'Pengaturan',
+    icon: 'ri:settings-3-line',
+    roles: ['admin'],
+  },
 ];
 const menus = computed(() => {
   const role = authStore.role;

@@ -24,6 +24,18 @@ export const routes = [
     component: () => import('./features/auth/components/LoginPage.vue'),
   },
   {
+    path: '/setting',
+    name: 'setting',
+    meta: {
+      layout: 'LayoutAdmin',
+      auth: true,
+      title: 'Pengaturan',
+      roles: ['admin'],
+    },
+    component: () =>
+      import('./features/setting/components/SettingIndexPage.vue'),
+  },
+  {
     path: '/profile',
     name: 'profile',
     meta: { layout: 'LayoutAdmin', auth: true, title: 'Profil' },

@@ -5,14 +5,14 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const settingStore = useSettingStore();
 
-document.title = settingStore.title;
+document.title = settingStore.name;
 
 const icon = document.querySelector('link[rel=icon]');
 
 icon.href = settingStore.logo;
 
 router.afterEach((to) => {
-  document.title = `${to.meta.title} - ${settingStore.title}`;
+  document.title = `${to.meta.title} - ${settingStore.name}`;
 });
 </script>
 
