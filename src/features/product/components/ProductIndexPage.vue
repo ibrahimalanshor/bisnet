@@ -13,6 +13,7 @@ import ProductDeleteConfirm from './ProductDeleteConfirm.vue';
 import ProductDetailModal from './ProductDetailModal.vue';
 import ProductStock from './ProductStock.vue';
 import ProductCategorySelectSearch from '../../product-category/components/ProductCategorySelectSearch.vue';
+import ProductImportModal from './ProductImportModal.vue';
 import { sleep, formatCurrency } from '../../../utils/common';
 import { useAuthStore } from '../../auth/auth.store.js';
 
@@ -67,6 +68,7 @@ const detailModal = reactive({
   id: null,
   visible: false,
 });
+const importModalVisible = ref(false);
 
 async function loadProducts({ refresh, reload } = {}) {
   if (refresh) {
@@ -110,36 +112,50 @@ loadProducts();
 </script>
 
 <template>
-  <BaseHeading>
-    Barang
-
-    <template #action>
-      <div class="flex flex-col gap-2 sm:flex-row">
-        <BaseInput
-          type="search"
-          placeholder="Cari barang"
-          v-model="filter.search"
-          @input-debounce="loadProducts({ reload: true })"
-        />
-        <ProductCategorySelectSearch
-          placeholder="Pilih kategori"
-          class="shrink-0"
-        />
-        <BaseSelect
-          :options="filterStockStatusOptions"
-          v-model="filter.stock_status"
-        />
-        <BaseButton
-          v-if="canManage"
-          icon="ri:add-fill"
-          class="w-full sm:w-auto"
-          @click="onAdd"
-          >Tambah Barang</BaseButton
-        >
-      </div>
-    </template>
-  </BaseHeading>
+  <BaseHeading> Barang </BaseHeading>
   <BaseAlert v-if="error">Gagal memuat data barang.</BaseAlert>
+  <div
+    class="flex flex-col gap-2 2xl:flex-row justify-start 2xl:justify-between"
+  >
+    <div
+      class="flex flex-col gap-2 sm:grid sm:grid-cols-3 2xl:flex 2xl:flex-row"
+    >
+      <BaseInput
+        type="search"
+        placeholder="Cari barang"
+        width="auto"
+        v-model="filter.search"
+        @input-debounce="loadProducts({ reload: true })"
+      />
+      <ProductCategorySelectSearch
+        placeholder="Pilih kategori"
+        class="shrink-0"
+      />
+      <BaseSelect
+        :options="filterStockStatusOptions"
+        width="auto"
+        v-model="filter.stock_status"
+      />
+    </div>
+    <div
+      v-if="canManage"
+      class="flex flex-col gap-2 sm:grid sm:grid-cols-3 2xl:flex 2xl:flex-row order-first 2xl:order-last"
+    >
+      <BaseButton
+        icon="ri:import-fill"
+        class="w-full sm:w-auto"
+        color="light"
+        @click="importModalVisible = true"
+        >Import Barang</BaseButton
+      >
+      <BaseButton icon="ri:export-fill" class="w-full sm:w-auto" color="light"
+        >Export Barang</BaseButton
+      >
+      <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
+        >Tambah Barang</BaseButton
+      >
+    </div>
+  </div>
   <BaseTable
     :columns="columns"
     :data="products.data"
@@ -186,4 +202,5 @@ loadProducts();
     :id="detailModal.id"
     v-model:visible="detailModal.visible"
   />
+  <ProductImportModal v-model:visible="importModalVisible" />
 </template>

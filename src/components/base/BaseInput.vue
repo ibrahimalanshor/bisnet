@@ -48,7 +48,10 @@ const sizeClass = computed(() => {
 const classList = computed(() => [
   sizeClass.value,
   props.width === 'full' ? 'w-full' : '',
-  'px-2.5 border-gray-300 rounded-md focus:ring-1 focus:ring-blue-600 focus:border-blue-600 disabled:bg-gray-100 read-only:bg-gray-100',
+  'bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-600 focus:border-blue-600 disabled:bg-gray-100',
+  props.type === 'file'
+    ? 'pr-2.5 pl-0 file:border-r file:h-full file:mr-2.5 file:px-2.5 file:border-gray-300 file:bg-gray-100'
+    : 'px-2.5 read-only:bg-gray-100',
 ]);
 
 function onInput() {

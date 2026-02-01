@@ -5,6 +5,7 @@ defineProps({
     required: true,
   },
   label: String,
+  message: String,
 });
 </script>
 
@@ -16,5 +17,6 @@ defineProps({
       <slot name="action" />
     </label>
     <slot :id="id" />
+    <p v-if="message" class="text-sm text-gray-500">{{ message }}</p>
   </div>
 </template>
