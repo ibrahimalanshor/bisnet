@@ -2,7 +2,11 @@ export const routes = [
   {
     path: '/',
     name: 'dashboard',
-    meta: { layout: 'LayoutAdmin', layoutProps: { verticalAlign: 'center' } },
+    meta: {
+      layout: 'LayoutAdmin',
+      layoutProps: { verticalAlign: 'center' },
+      auth: true,
+    },
     component: () =>
       import('./features/dashboard/components/DashboardPage.vue'),
   },
@@ -14,12 +18,13 @@ export const routes = [
   {
     path: '/login',
     name: 'login',
+    meta: { guest: true },
     component: () => import('./features/auth/components/LoginPage.vue'),
   },
   {
     path: '/profile',
     name: 'profile',
-    meta: { layout: 'LayoutAdmin' },
+    meta: { layout: 'LayoutAdmin', auth: true },
     component: () => import('./features/me/components/MeProfilePage.vue'),
   },
   {
@@ -29,12 +34,13 @@ export const routes = [
       layout: 'LayoutAdmin',
       layoutProps: { verticalAlign: 'center' },
       roles: ['cashier'],
+      auth: true,
     },
     component: () => import('./features/shift/components/ShiftActivePage.vue'),
   },
   {
     path: '/shift-history',
-    meta: { roles: ['cashier'] },
+    meta: { roles: ['cashier'], auth: true },
     children: [
       {
         path: '',
@@ -55,21 +61,25 @@ export const routes = [
   {
     path: '/supplier',
     name: 'supplier',
-    meta: { layout: 'LayoutAdmin', roles: ['admin', 'manager', 'warehouse'] },
+    meta: {
+      layout: 'LayoutAdmin',
+      roles: ['admin', 'manager', 'warehouse'],
+      auth: true,
+    },
     component: () =>
       import('./features/supplier/components/SupplierIndexPage.vue'),
   },
   {
     path: '/product-category',
     name: 'product-category',
-    meta: { layout: 'LayoutAdmin' },
+    meta: { layout: 'LayoutAdmin', auth: true },
     component: () =>
       import('./features/product-category/components/ProductCategoryIndexPage.vue'),
   },
   {
     path: '/product',
     name: 'product',
-    meta: { layout: 'LayoutAdmin' },
+    meta: { layout: 'LayoutAdmin', auth: true },
     component: () =>
       import('./features/product/components/ProductIndexPage.vue'),
   },
@@ -77,6 +87,7 @@ export const routes = [
     path: '/restock',
     meta: {
       roles: ['admin', 'manager', 'warehouse'],
+      auth: true,
     },
     children: [
       {
@@ -104,6 +115,7 @@ export const routes = [
     path: '/sale',
     meta: {
       roles: ['admin', 'manager', 'cashier'],
+      auth: true,
     },
     children: [
       {
@@ -129,13 +141,13 @@ export const routes = [
   {
     path: '/expense',
     name: 'expense',
-    meta: { layout: 'LayoutAdmin', roles: ['admin', 'manager'] },
+    meta: { layout: 'LayoutAdmin', roles: ['admin', 'manager'], auth: true },
     component: () =>
       import('./features/expense/components/ExpenseIndexPage.vue'),
   },
   {
     path: '/report',
-    meta: { roles: ['admin', 'manager', 'warehouse'] },
+    meta: { roles: ['admin', 'manager', 'warehouse'], auth: true },
     children: [
       {
         path: 'sale',
@@ -191,7 +203,7 @@ export const routes = [
   {
     path: '/user',
     name: 'user',
-    meta: { layout: 'LayoutAdmin', roles: ['admin'] },
+    meta: { layout: 'LayoutAdmin', roles: ['admin'], auth: true },
     component: () => import('./features/user/components/UserIndexPage.vue'),
   },
 ];
