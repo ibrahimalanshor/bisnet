@@ -94,7 +94,7 @@ export const routes = [
   {
     path: '/product',
     name: 'product',
-    meta: { layout: 'LayoutAdmin', auth: true, title: 'barang' },
+    meta: { layout: 'LayoutAdmin', auth: true, title: 'Barang' },
     component: () =>
       import('./features/product/components/ProductIndexPage.vue'),
   },
