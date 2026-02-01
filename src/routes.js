@@ -6,6 +6,7 @@ export const routes = [
       layout: 'LayoutAdmin',
       layoutProps: { verticalAlign: 'center' },
       auth: true,
+      title: 'Dashboard',
     },
     component: () =>
       import('./features/dashboard/components/DashboardPage.vue'),
@@ -13,18 +14,19 @@ export const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: '404',
+    meta: { title: 'Halaman Tidak Ditemukan ' },
     component: () => import('./components/app/AppNotFoundPage.vue'),
   },
   {
     path: '/login',
     name: 'login',
-    meta: { guest: true },
+    meta: { guest: true, title: 'Login' },
     component: () => import('./features/auth/components/LoginPage.vue'),
   },
   {
     path: '/profile',
     name: 'profile',
-    meta: { layout: 'LayoutAdmin', auth: true },
+    meta: { layout: 'LayoutAdmin', auth: true, title: 'Profil' },
     component: () => import('./features/me/components/MeProfilePage.vue'),
   },
   {
@@ -32,7 +34,7 @@ export const routes = [
     name: 'shift-active',
     meta: {
       layout: 'LayoutAdmin',
-      layoutProps: { verticalAlign: 'center' },
+      layoutProps: { verticalAlign: 'center', title: 'Shift Aktif' },
       roles: ['cashier'],
       auth: true,
     },
@@ -45,14 +47,14 @@ export const routes = [
       {
         path: '',
         name: 'shift-history.index',
-        meta: { layout: 'LayoutAdmin' },
+        meta: { layout: 'LayoutAdmin', title: 'Riwayat Shift' },
         component: () =>
           import('./features/shift/components/ShiftHistoryIndexPage.vue'),
       },
       {
         path: ':id',
         name: 'shift-history.detail',
-        meta: { layout: 'LayoutAdmin' },
+        meta: { layout: 'LayoutAdmin', title: 'Detail Shfit' },
         component: () =>
           import('./features/shift/components/ShiftHistoryDetailPage.vue'),
       },
@@ -65,6 +67,7 @@ export const routes = [
       layout: 'LayoutAdmin',
       roles: ['admin', 'manager', 'warehouse'],
       auth: true,
+      title: 'Supplier',
     },
     component: () =>
       import('./features/supplier/components/SupplierIndexPage.vue'),
@@ -72,14 +75,14 @@ export const routes = [
   {
     path: '/product-category',
     name: 'product-category',
-    meta: { layout: 'LayoutAdmin', auth: true },
+    meta: { layout: 'LayoutAdmin', auth: true, title: 'Kategori Barang' },
     component: () =>
       import('./features/product-category/components/ProductCategoryIndexPage.vue'),
   },
   {
     path: '/product',
     name: 'product',
-    meta: { layout: 'LayoutAdmin', auth: true },
+    meta: { layout: 'LayoutAdmin', auth: true, title: 'barang' },
     component: () =>
       import('./features/product/components/ProductIndexPage.vue'),
   },
@@ -95,6 +98,7 @@ export const routes = [
         name: 'restock.index',
         meta: {
           layout: 'LayoutAdmin',
+          title: 'Restock',
         },
         component: () =>
           import('./features/restock/components/RestockIndexPage.vue'),
@@ -105,6 +109,7 @@ export const routes = [
         meta: {
           layout: 'LayoutAdmin',
           roles: ['manager', 'warehouse'],
+          title: 'Tambah Restock',
         },
         component: () =>
           import('./features/restock/components/RestockNewPage.vue'),
@@ -123,6 +128,7 @@ export const routes = [
         name: 'sale.index',
         meta: {
           layout: 'LayoutAdmin',
+          title: 'Penjualan',
         },
         component: () => import('./features/sale/components/SaleIndexPage.vue'),
       },
@@ -133,6 +139,7 @@ export const routes = [
           layout: 'LayoutAdmin',
           layoutProps: { verticalAlign: 'center' },
           roles: ['cashier'],
+          title: 'Tambah Penjualan',
         },
         component: () => import('./features/sale/components/SaleNewPage.vue'),
       },
@@ -141,7 +148,12 @@ export const routes = [
   {
     path: '/expense',
     name: 'expense',
-    meta: { layout: 'LayoutAdmin', roles: ['admin', 'manager'], auth: true },
+    meta: {
+      layout: 'LayoutAdmin',
+      roles: ['admin', 'manager'],
+      auth: true,
+      title: 'Pengeluaraj',
+    },
     component: () =>
       import('./features/expense/components/ExpenseIndexPage.vue'),
   },
@@ -155,6 +167,7 @@ export const routes = [
         meta: {
           layout: 'LayoutAdmin',
           roles: ['admin', 'manager'],
+          title: 'Laporan Penjualan',
         },
         component: () =>
           import('./features/report/components/ReportSalePage.vue'),
@@ -164,6 +177,7 @@ export const routes = [
         name: 'report.stock',
         meta: {
           layout: 'LayoutAdmin',
+          title: 'Laporan Stok',
         },
         component: () =>
           import('./features/report/components/ReportStockPage.vue'),
@@ -174,6 +188,7 @@ export const routes = [
         meta: {
           layout: 'LayoutAdmin',
           roles: ['admin', 'manager'],
+          title: 'Laporan Shift',
         },
         component: () =>
           import('./features/report/components/ReportShiftPage.vue'),
@@ -184,6 +199,7 @@ export const routes = [
         meta: {
           layout: 'LayoutAdmin',
           roles: ['admin', 'manager'],
+          title: 'Laporan Pengeluaran',
         },
         component: () =>
           import('./features/report/components/ReportExpensePage.vue'),
@@ -194,6 +210,7 @@ export const routes = [
         meta: {
           layout: 'LayoutAdmin',
           roles: ['admin'],
+          title: 'Laporan Laba',
         },
         component: () =>
           import('./features/report/components/ReportProfitPage.vue'),
@@ -203,7 +220,12 @@ export const routes = [
   {
     path: '/user',
     name: 'user',
-    meta: { layout: 'LayoutAdmin', roles: ['admin'], auth: true },
+    meta: {
+      layout: 'LayoutAdmin',
+      roles: ['admin'],
+      auth: true,
+      title: 'Pengguna',
+    },
     component: () => import('./features/user/components/UserIndexPage.vue'),
   },
 ];
