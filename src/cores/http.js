@@ -3,6 +3,14 @@ import { useAuthStore } from '../features/auth/auth.store';
 
 const http = axios.create();
 
+function isJsonApiError(err) {
+  if ((!err) instanceof AxiosError) {
+    return false;
+  }
+
+  return !!err.response.data.jsonapi;
+}
+
 export async function request(
   url,
   { method, query, body, headers } = {
@@ -20,6 +28,7 @@ export async function request(
       data: body,
       headers: {
         Accept: 'application/vnd.api+json',
+        'Content-Type': 'application/vnd.api+json',
         ...headers,
       },
     });
@@ -30,6 +39,8 @@ export async function request(
 
     const error = {
       status,
+      jsonapi: isJsonApiError(err),
+      response: err.response,
     };
 
     return [null, error];

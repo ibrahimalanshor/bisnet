@@ -8,6 +8,7 @@ import BaseSkeleton from '../../../components/base/BaseSkeleton.vue';
 import { ref, reactive } from 'vue';
 import { sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
+import { useRequest } from '../../../cores/http.js';
 
 const props = defineProps({
   id: null,
@@ -16,9 +17,11 @@ const visible = defineModel('visible');
 const emit = defineEmits(['saved']);
 
 const toastStore = useToastStore();
+const { request } = useRequest();
+
 const loadingForm = ref(false);
 const loadingSave = ref(false);
-const error = ref(false);
+const error = ref(null);
 const form = reactive({
   name: null,
 });
@@ -42,21 +45,39 @@ function onOpen() {
   }
 }
 async function onSubmit() {
+  error.value = null;
   loadingSave.value = true;
 
-  await sleep();
-
-  toastStore.create({
-    message: props.id
-      ? 'Berhasil memperbarui kategori'
-      : 'Berhasil menambahkan kategori baru',
-    type: 'success',
+  const [res, err] = await request(`/api/v1/product-categories`, {
+    method: 'post',
+    body: {
+      data: {
+        type: 'product-categories',
+        attributes: {
+          name: form.name,
+        },
+      },
+    },
   });
-  visible.value = false;
+
+  if (err) {
+    if (!err.jsonapi) {
+      error.value = 'Gagal menyimpan kategori';
+    } else if (err.status === 422) {
+      error.value = err.response.data.errors[0].detail;
+    }
+  } else {
+    toastStore.create({
+      message: props.id
+        ? 'Berhasil memperbarui kategori'
+        : 'Berhasil menambahkan kategori baru',
+      type: 'success',
+    });
+    visible.value = false;
+    emit('saved');
+  }
 
   loadingSave.value = false;
-
-  emit('saved');
 }
 </script>
 
@@ -69,7 +90,7 @@ async function onSubmit() {
   >
     <BaseSkeleton v-if="loadingForm" class="h-40" />
     <form v-else class="space-y-4" @submit.prevent="onSubmit">
-      <BaseAlert v-if="error"> Gagal menyimpan kategori baru. </BaseAlert>
+      <BaseAlert v-if="error"> {{ error }} </BaseAlert>
       <BaseFormItem
         id="product_category_form.name"
         label="Nama"

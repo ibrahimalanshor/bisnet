@@ -17,7 +17,7 @@ const { request } = useRequest();
 const canManage = computed(() => authStore.role !== 'cashier');
 
 const columns = computed(() => [
-  { id: 'name', name: 'Nama', value: (item) => item.name },
+  { id: 'name', name: 'Nama', value: (item) => item.attributes.name },
   ...(!canManage.value ? [] : [{ id: 'action', name: 'Aksi' }]),
 ]);
 const loading = ref(true);
