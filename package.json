@@ -13,6 +13,7 @@
     "@chenfengyuan/vue-barcode": "^2.0.2",
     "@tailwindcss/vite": "^4.1.18",
     "@vueuse/motion": "^3.0.3",
+    "axios": "^1.13.4",
     "chart.js": "^4.5.1",
     "click-outside-vue3": "^4.0.1",
     "dayjs": "^1.11.19",
