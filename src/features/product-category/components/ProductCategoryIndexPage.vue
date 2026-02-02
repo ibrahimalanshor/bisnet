@@ -1,5 +1,4 @@
 <script setup>
-import data from '../data/product-category.json';
 import { reactive, ref, computed } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
@@ -9,10 +8,11 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import ProductCategoryFormModal from './ProductCategoryFormModal.vue';
 import ProductCategoryDeleteConfirm from './ProductCategoryDeleteConfirm.vue';
-import { sleep } from '../../../utils/common';
 import { useAuthStore } from '../../auth/auth.store.js';
+import { useRequest } from '../../../cores/http.js';
 
 const authStore = useAuthStore();
+const { request } = useRequest();
 
 const canManage = computed(() => authStore.role !== 'cashier');
 
@@ -22,7 +22,7 @@ const columns = computed(() => [
 ]);
 const loading = ref(true);
 const error = ref(false);
-const productCategories = ref({ data: [] });
+const productCategories = ref({ data: [], meta: { page: { lastPage: 1 } } });
 const query = reactive({
   page: 1,
 });
@@ -39,6 +39,8 @@ const deleteConfirm = reactive({
 });
 
 async function loadProductCategories({ refresh, reload } = {}) {
+  error.value = false;
+
   if (refresh) {
     query.page = 1;
     filter.search = null;
@@ -50,9 +52,26 @@ async function loadProductCategories({ refresh, reload } = {}) {
 
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/product-categories`, {
+    query: {
+      page: {
+        size: 10,
+        number: query.page,
+      },
+      fields: {
+        'product-categories': 'name',
+      },
+      filter: {
+        search: filter.search,
+      },
+    },
+  });
 
-  productCategories.value = { data: data.slice(0, 10) };
+  if (err) {
+    error.value = true;
+  } else {
+    productCategories.value = res;
+  }
 
   loading.value = false;
 }
@@ -119,7 +138,8 @@ loadProductCategories();
     </template>
   </BaseTable>
   <BasePagination
-    :total-pages="10"
+    v-if="productCategories.meta.page.lastPage > 1"
+    :total-pages="productCategories.meta.page.lastPage"
     v-model="query.page"
     @change="loadProductCategories"
   />

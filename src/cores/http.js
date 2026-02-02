@@ -5,12 +5,18 @@ const http = axios.create();
 
 export async function request(
   url,
-  { method, body, headers } = { method: 'get', body: {}, headers: {} },
+  { method, query, body, headers } = {
+    method: 'get',
+    query: {},
+    body: {},
+    headers: {},
+  },
 ) {
   try {
     const res = await http({
       url,
       method,
+      params: query,
       data: body,
       headers: {
         Accept: 'application/vnd.api+json',
@@ -33,10 +39,14 @@ export async function request(
 export function useRequest() {
   const authStore = useAuthStore();
 
-  function httpRequest(url, { method, body } = { method: 'get', body: {} }) {
+  function httpRequest(
+    url,
+    { method, body, query } = { method: 'get', body: {}, query: {} },
+  ) {
     return request(url, {
       method,
       body,
+      query,
       headers: {
         ...(!authStore.loggedIn
           ? {}
