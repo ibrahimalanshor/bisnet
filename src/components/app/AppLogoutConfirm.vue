@@ -1,14 +1,16 @@
 <script setup>
 import BaseConfirm from '../base/BaseConfirm.vue';
-import { sleep } from '../../utils/common.js';
 import { ref } from 'vue';
+import { useAuthStore } from '../../features/auth/auth.store.js';
+
+const authStore = useAuthStore();
 
 const loading = ref(false);
 
 async function onConfirmLogout() {
   loading.value = true;
 
-  await sleep();
+  await authStore.logout();
 
   loading.value = false;
 }

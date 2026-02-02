@@ -13,7 +13,7 @@ export const useAuthStore = defineStore(
     const router = useRouter();
     const { request } = useRequest();
 
-    const role = computed(() => user.value.role);
+    const role = computed(() => (!loggedIn.value ? null : user.value.role));
 
     function login(data) {
       user.value = data.me;
@@ -35,7 +35,14 @@ export const useAuthStore = defineStore(
       }
     }
 
-    return { loggedIn, user, role, accessToken, login, loadMe };
+    async function logout() {
+      await request(`/api/v1/logout`, { method: 'post' });
+
+      loggedIn.value = false;
+      router.push({ name: 'login' });
+    }
+
+    return { loggedIn, user, role, accessToken, login, loadMe, logout };
   },
   { persist: true },
 );
