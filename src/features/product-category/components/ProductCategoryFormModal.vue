@@ -29,7 +29,17 @@ const form = reactive({
 async function loadForm() {
   loadingForm.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/product-categories/${props.id}`, {
+    query: {
+      fields: {
+        'product-categories': 'name',
+      },
+    },
+  });
+
+  if (!err) {
+    form.name = res.data.attributes.name;
+  }
 
   loadingForm.value = false;
 }
@@ -48,17 +58,23 @@ async function onSubmit() {
   error.value = null;
   loadingSave.value = true;
 
-  const [res, err] = await request(`/api/v1/product-categories`, {
-    method: 'post',
-    body: {
-      data: {
-        type: 'product-categories',
-        attributes: {
-          name: form.name,
+  const [, err] = await request(
+    props.id
+      ? `/api/v1/product-categories/${props.id}`
+      : `/api/v1/product-categories`,
+    {
+      method: props.id ? 'patch' : 'post',
+      body: {
+        data: {
+          type: 'product-categories',
+          ...(props.id ? { id: props.id } : {}),
+          attributes: {
+            name: form.name,
+          },
         },
       },
     },
-  });
+  );
 
   if (err) {
     if (!err.jsonapi) {
