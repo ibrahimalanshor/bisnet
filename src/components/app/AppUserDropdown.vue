@@ -54,7 +54,7 @@ router.afterEach(() => (opened.value = false));
     <template #popper>
       <div class="min-w-48">
         <div class="border-b border-gray-200 px-4 py-3">
-          <p class="font-medium">Abdul Ghani</p>
+          <p class="font-medium">{{ authStore.user.name }}</p>
           <p class="text-sm text-gray-500">{{ authStore.role }}</p>
         </div>
         <div class="py-1">

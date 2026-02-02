@@ -39,7 +39,7 @@ async function onSubmit() {
       error.value = 'Username dan password tidak ditemukan';
     }
   } else {
-    authStore.login();
+    authStore.login(res);
 
     router.push({ name: 'dashboard' });
   }

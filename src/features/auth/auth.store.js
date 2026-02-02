@@ -1,13 +1,16 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
   const loggedIn = ref(false);
-  const role = 'admin';
+  const user = ref(null);
 
-  function login() {
+  const role = computed(() => user.value.role);
+
+  function login(data) {
+    user.value = data.me;
     loggedIn.value = true;
   }
 
-  return { loggedIn, role, login };
+  return { loggedIn, user, role, login };
 });
