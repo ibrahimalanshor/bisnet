@@ -236,7 +236,6 @@ loadProducts();
     @deleted="loadProducts({ refresh: true })"
   />
   <ProductDetailModal
-    v-if="canManage"
     :id="detailModal.id"
     v-model:visible="detailModal.visible"
   />

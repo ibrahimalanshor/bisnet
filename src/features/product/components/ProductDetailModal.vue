@@ -52,13 +52,13 @@ const columns = computed(() => [
     name: 'Stok',
     render: ({ data }) => h(ProductStock, { product: data.data }),
   },
-  ...(authStore.role === 'cashier'
+  ...(authStore.role !== 'admin' && authStore.role !== 'manager'
     ? []
     : [
         {
           id: 'hpp',
           name: 'HPP',
-          value: () => formatCurrency(14200),
+          value: (data) => formatCurrency(data.data.attributes.hpp),
         },
       ]),
   {
@@ -85,7 +85,7 @@ async function onOpened() {
   const [res, err] = await request(`/api/v1/products/${props.id}`, {
     query: {
       fields: {
-        products: 'barcode,name,category_name,price,min_stock,stock',
+        products: 'barcode,name,category_name,price,min_stock,stock,hpp',
       },
     },
   });
