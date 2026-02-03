@@ -1,5 +1,4 @@
 <script setup>
-import data from '../data/product.json';
 import { reactive, ref, h, computed } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
@@ -14,10 +13,12 @@ import ProductDetailModal from './ProductDetailModal.vue';
 import ProductStock from './ProductStock.vue';
 import ProductCategorySelectSearch from '../../product-category/components/ProductCategorySelectSearch.vue';
 import ProductImportModal from './ProductImportModal.vue';
-import { sleep, formatCurrency } from '../../../utils/common';
+import { formatCurrency } from '../../../utils/common';
 import { useAuthStore } from '../../auth/auth.store.js';
+import { useRequest } from '../../../cores/http.js';
 
 const authStore = useAuthStore();
+const { request } = useRequest();
 
 const canManage = computed(() => authStore.role !== 'cashier');
 
@@ -27,11 +28,19 @@ const columns = computed(() => [
     name: 'Nama',
     render: ({ item }) =>
       h('div', {}, [
-        h('p', { class: 'text-sm text-gray-500' }, item.category_name),
-        h('p', { class: 'font-medium' }, item.name),
+        h(
+          'p',
+          { class: 'text-sm text-gray-500' },
+          item.attributes.category_name,
+        ),
+        h('p', { class: 'font-medium' }, item.attributes.name),
       ]),
   },
-  { id: 'price', name: 'Harga', value: (item) => formatCurrency(item.price) },
+  {
+    id: 'price',
+    name: 'Harga',
+    value: (item) => formatCurrency(item.attributes.price),
+  },
   {
     id: 'Stock',
     name: 'Stok',
@@ -48,7 +57,7 @@ const filterStockStatusOptions = [
 
 const loading = ref(true);
 const error = ref(false);
-const products = ref({ data: [] });
+const products = ref({ data: [], meta: { page: { lastPage: 1 } } });
 const query = reactive({
   page: 1,
 });
@@ -82,9 +91,26 @@ async function loadProducts({ refresh, reload } = {}) {
 
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/products`, {
+    query: {
+      page: {
+        size: 10,
+        number: query.page,
+      },
+      fields: {
+        products: 'name,category_name,price,stock,min_stock',
+      },
+      filter: {
+        search: filter.search,
+      },
+    },
+  });
 
-  products.value = { data: data.slice(0, 10) };
+  if (err) {
+    error.value = true;
+  } else {
+    products.value = res;
+  }
 
   loading.value = false;
 }
@@ -181,7 +207,8 @@ loadProducts();
     </template>
   </BaseTable>
   <BasePagination
-    :total-pages="10"
+    v-if="products.meta.page.lastPage > 1"
+    :total-pages="products.meta.page.lastPage"
     v-model="query.page"
     @change="loadProducts"
   />
