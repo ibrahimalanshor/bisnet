@@ -7,9 +7,10 @@ import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseSkeleton from '../../../components/base/BaseSkeleton.vue';
 import ProductCategorySelectSearch from '../../product-category/components/ProductCategorySelectSearch.vue';
 import { ref, reactive } from 'vue';
-import { sleep } from '../../../utils/common.js';
+import { sleep, currencyToNum } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
 import categories from '../../product-category/data/product-category.json';
+import { useRequest } from '../../../cores/http.js';
 
 const props = defineProps({
   id: null,
@@ -18,6 +19,8 @@ const visible = defineModel('visible');
 const emit = defineEmits(['saved']);
 
 const toastStore = useToastStore();
+const { request } = useRequest();
+
 const loadingForm = ref(false);
 const loadingSave = ref(false);
 const error = ref(false);
@@ -39,7 +42,7 @@ async function loadForm() {
 
 function onOpen() {
   loadingSave.value = false;
-  error.value = false;
+  error.value = null;
 
   form.barcode = null;
   form.name = null;
@@ -60,21 +63,49 @@ function onOpen() {
   }
 }
 async function onSubmit() {
+  error.value = null;
   loadingSave.value = true;
 
-  await sleep();
-
-  toastStore.create({
-    message: props.id
-      ? 'Berhasil memperbarui barang'
-      : 'Berhasil menambahkan barang baru',
-    type: 'success',
+  const [, err] = await request(`/api/v1/products`, {
+    method: 'post',
+    body: {
+      data: {
+        type: 'products',
+        attributes: {
+          barcode: form.barcode,
+          name: form.name,
+          min_stock: currencyToNum(form.minStock),
+          price: currencyToNum(form.price),
+        },
+        relationships: {
+          category: {
+            data: !form.category
+              ? null
+              : { type: 'product-categories', id: `${form.category.id}` },
+          },
+        },
+      },
+    },
   });
-  visible.value = false;
+
+  if (err) {
+    if (!err.jsonapi) {
+      error.value = 'Gagal menyimpan barang';
+    } else if (err.status === 422) {
+      error.value = err.response.data.errors[0].detail;
+    }
+  } else {
+    toastStore.create({
+      message: props.id
+        ? 'Berhasil memperbarui barang'
+        : 'Berhasil menambahkan barang baru',
+      type: 'success',
+    });
+    emit('saved');
+    visible.value = false;
+  }
 
   loadingSave.value = false;
-
-  emit('saved');
 }
 </script>
 
@@ -87,7 +118,7 @@ async function onSubmit() {
   >
     <BaseSkeleton v-if="loadingForm" class="h-40" />
     <form v-else class="space-y-4" @submit.prevent="onSubmit">
-      <BaseAlert v-if="error"> Gagal menyimpan barang baru. </BaseAlert>
+      <BaseAlert v-if="error"> {{ error }} </BaseAlert>
       <BaseFormItem id="product_form.barcode" label="Barcode" v-slot="{ id }">
         <BaseInput
           :id="id"
