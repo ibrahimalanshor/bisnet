@@ -6,44 +6,51 @@ import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vu
 import ProductStockHistoryTable from './ProductStockHistoryTable.vue';
 import ProductBarcode from './ProductBarcode.vue';
 import ProductStock from './ProductStock.vue';
-import { sleep, formatCurrency } from '../../../utils/common.js';
+import { formatCurrency } from '../../../utils/common.js';
 import { ref, h, computed } from 'vue';
-import mocks from '../data/product.json';
 import { useAuthStore } from '../../auth/auth.store.js';
+import { useRequest } from '../../../cores/http.js';
 
 const props = defineProps({
   id: null,
 });
 
+const { request } = useRequest();
 const authStore = useAuthStore();
 
 const loading = ref(true);
 const error = ref(false);
-const data = ref({});
+const data = ref({
+  data: {
+    attributes: {},
+  },
+});
 
 const columns = computed(() => [
   {
     id: 'name',
     name: 'Nama',
+    value: (data) => data.data.attributes.name,
   },
   {
     id: 'category_name',
     name: 'Kategori',
+    value: (data) => data.data.attributes.category_name,
   },
   {
     id: 'price',
     name: 'Harga',
-    value: (data) => formatCurrency(data.price),
+    value: (data) => formatCurrency(data.data.attributes.price),
   },
   {
     id: 'min_stock',
     name: 'Min Stok',
-    value: (data) => formatCurrency(data.min_stock),
+    value: (data) => formatCurrency(data.data.attributes.min_stock),
   },
   {
     id: 'stock',
     name: 'Stok',
-    render: ({ data }) => h(ProductStock, { product: data }),
+    render: ({ data }) => h(ProductStock, { product: data.data }),
   },
   ...(authStore.role === 'cashier'
     ? []
@@ -57,7 +64,7 @@ const columns = computed(() => [
   {
     id: 'barcode',
     name: 'Barcode',
-    render: ({ data }) => h(ProductBarcode, { product: data }),
+    render: ({ data }) => h(ProductBarcode, { product: data.data }),
   },
   ...(authStore.role === 'cashier'
     ? []
@@ -72,11 +79,22 @@ const columns = computed(() => [
 ]);
 
 async function onOpened() {
+  error.value = false;
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/products/${props.id}`, {
+    query: {
+      fields: {
+        products: 'barcode,name,category_name,price,min_stock,stock',
+      },
+    },
+  });
 
-  data.value = mocks.find((item) => item.id === props.id);
+  if (err) {
+    error.value = true;
+  } else {
+    data.value = res;
+  }
 
   loading.value = false;
 }

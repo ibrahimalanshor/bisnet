@@ -8,7 +8,7 @@ defineProps({
 
 <template>
   <VueBarcode
-    :value="product.barcode"
+    :value="product.attributes.barcode"
     :options="{
       height: 60,
       width: 1.4,
