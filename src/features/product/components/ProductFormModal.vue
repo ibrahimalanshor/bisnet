@@ -7,10 +7,10 @@ import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseSkeleton from '../../../components/base/BaseSkeleton.vue';
 import ProductCategorySelectSearch from '../../product-category/components/ProductCategorySelectSearch.vue';
 import { ref, reactive } from 'vue';
-import { sleep, currencyToNum } from '../../../utils/common.js';
+import { currencyToNum } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
-import categories from '../../product-category/data/product-category.json';
 import { useRequest } from '../../../cores/http.js';
+import { getSingleIncluded } from '../../../cores/jsonapi.js';
 
 const props = defineProps({
   id: null,
@@ -35,7 +35,35 @@ const form = reactive({
 async function loadForm() {
   loadingForm.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/products/${props.id}`, {
+    query: {
+      include: 'category',
+      fields: {
+        products: 'barcode,name,price,min_stock,category',
+        'product-categories': 'name',
+      },
+    },
+  });
+
+  if (!err) {
+    form.barcode = res.data.attributes.barcode;
+    form.name = res.data.attributes.name;
+    form.price = res.data.attributes.price;
+    form.minStock = res.data.attributes.min_stock;
+
+    const categoryRel = res.data.relationships.category.data;
+
+    if (!categoryRel) {
+      form.category = null;
+    } else {
+      const category = getSingleIncluded(res, categoryRel);
+
+      form.category = {
+        id: category.id,
+        name: category.attributes.name,
+      };
+    }
+  }
 
   loadingForm.value = false;
 }
@@ -48,15 +76,7 @@ function onOpen() {
   form.name = null;
   form.price = null;
   form.minStock = null;
-
-  if (props.id) {
-    form.category = {
-      id: categories[0].id,
-      name: categories[0].name,
-    };
-  } else {
-    form.category = null;
-  }
+  form.category = null;
 
   if (props.id) {
     loadForm();
@@ -66,27 +86,31 @@ async function onSubmit() {
   error.value = null;
   loadingSave.value = true;
 
-  const [, err] = await request(`/api/v1/products`, {
-    method: 'post',
-    body: {
-      data: {
-        type: 'products',
-        attributes: {
-          barcode: form.barcode,
-          name: form.name,
-          min_stock: currencyToNum(form.minStock),
-          price: currencyToNum(form.price),
-        },
-        relationships: {
-          category: {
-            data: !form.category
-              ? null
-              : { type: 'product-categories', id: `${form.category.id}` },
+  const [, err] = await request(
+    !props.id ? `/api/v1/products` : `/api/v1/products/${props.id}`,
+    {
+      method: !props.id ? 'post' : 'patch',
+      body: {
+        data: {
+          type: 'products',
+          ...(!props.id ? {} : { id: props.id }),
+          attributes: {
+            barcode: form.barcode,
+            name: form.name,
+            min_stock: currencyToNum(form.minStock),
+            price: currencyToNum(form.price),
+          },
+          relationships: {
+            category: {
+              data: !form.category
+                ? null
+                : { type: 'product-categories', id: `${form.category.id}` },
+            },
           },
         },
       },
     },
-  });
+  );
 
   if (err) {
     if (!err.jsonapi) {
