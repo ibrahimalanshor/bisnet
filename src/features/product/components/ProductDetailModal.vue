@@ -73,7 +73,8 @@ const columns = computed(() => [
           id: 'stock_histories',
           name: 'Riwayat Stock',
           classList: 'col-span-full',
-          render: () => h(ProductStockHistoryTable),
+          render: ({ data }) =>
+            h(ProductStockHistoryTable, { id: data.data.id }),
         },
       ]),
 ]);
