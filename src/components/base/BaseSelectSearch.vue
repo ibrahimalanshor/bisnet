@@ -37,6 +37,8 @@ function onClear() {
   selected.value = null;
 
   visible.value = false;
+
+  emit('change');
 }
 function onOpen() {
   input.value.input.focus();

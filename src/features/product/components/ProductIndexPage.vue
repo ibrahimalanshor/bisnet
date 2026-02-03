@@ -63,6 +63,7 @@ const query = reactive({
 });
 const filter = reactive({
   search: null,
+  category: null,
   stock_status: null,
 });
 const formModal = reactive({
@@ -80,9 +81,12 @@ const detailModal = reactive({
 const importModalVisible = ref(false);
 
 async function loadProducts({ refresh, reload } = {}) {
+  error.value = false;
+
   if (refresh) {
     query.page = 1;
     filter.search = null;
+    filter.category = null;
   }
 
   if (reload) {
@@ -102,6 +106,8 @@ async function loadProducts({ refresh, reload } = {}) {
       },
       filter: {
         search: filter.search,
+        category_id: filter.category ? filter.category.id : null,
+        stock_status: filter.stock_status,
       },
     },
   });
@@ -139,7 +145,7 @@ loadProducts();
 
 <template>
   <BaseHeading> Barang </BaseHeading>
-  <BaseAlert v-if="error">Gagal memuat data barang.</BaseAlert>
+
   <div
     class="flex flex-col gap-2 2xl:flex-row justify-start 2xl:justify-between"
   >
@@ -156,11 +162,15 @@ loadProducts();
       <ProductCategorySelectSearch
         placeholder="Pilih kategori"
         class="shrink-0"
+        v-model="filter.category"
+        @change="loadProducts({ reload: true })"
       />
       <BaseSelect
         :options="filterStockStatusOptions"
         width="auto"
+        class="min-w-46"
         v-model="filter.stock_status"
+        @change="loadProducts({ reload: true })"
       />
     </div>
     <div
@@ -182,6 +192,7 @@ loadProducts();
       >
     </div>
   </div>
+  <BaseAlert v-if="error">Gagal memuat data barang.</BaseAlert>
   <BaseTable
     :columns="columns"
     :data="products.data"
