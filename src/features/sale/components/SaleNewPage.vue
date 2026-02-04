@@ -20,7 +20,9 @@ import {
   calculateDiscount,
 } from '../../../utils/common';
 import { useShiftStore } from '../../shift/shift.store';
+import { useRequest } from '../../../cores/http';
 
+const { request } = useRequest();
 const shiftStore = useShiftStore();
 
 const itemsColumn = computed(() => {
@@ -84,7 +86,7 @@ const submitConfirm = reactive({
 });
 const successDetail = reactive({
   visible: false,
-  code: 'RS-89231',
+  code: null,
 });
 const items = ref([]);
 
@@ -137,10 +139,28 @@ function countItemSubTotal(item) {
 async function onConfirm() {
   submitConfirm.loading = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/sales/-actions/create`, {
+    method: 'post',
+    body: {
+      date: form.value.date,
+      payment_method: form.value.paymentMethod,
+      payment_amount: currencyToNum(form.value.paymentAmount),
+      discount_type: form.value.discountType,
+      discount_amount: currencyToNum(form.value.discount),
+      items: items.value.map((item) => ({
+        product_id: item.id,
+        qty: currencyToNum(item.qty),
+        discount_type: item.discountType,
+        discount_amount: currencyToNum(item.discount),
+      })),
+    },
+  });
 
-  submitConfirm.visible = false;
-  successDetail.visible = true;
+  if (!err) {
+    submitConfirm.visible = false;
+    successDetail.visible = true;
+    successDetail.code = res.data.attributes.code;
+  }
 
   submitConfirm.loading = false;
 }
