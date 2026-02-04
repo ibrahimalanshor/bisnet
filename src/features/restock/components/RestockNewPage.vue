@@ -42,6 +42,7 @@ const form = reactive({
   supplier: null,
   date: formatDate(new Date(), 'YYYY-MM-DD'),
   product: null,
+  productSearch: null,
   paymentAmount: null,
 });
 const successDetail = reactive({
@@ -91,6 +92,7 @@ function onChangeProduct() {
   }
 
   form.product = null;
+  form.productSearch = null;
 }
 async function onConfirm() {
   loadingConfirm.value = true;
@@ -110,6 +112,7 @@ function onReset() {
   form.supplier = null;
   form.date = formatDate(new Date(), 'YYYY-MM-DD');
   form.product = null;
+  form.productSearch = null;
   form.paymentAmount = null;
 }
 function onChangeQty(index) {
@@ -169,6 +172,7 @@ function onChangeQty(index) {
         placeholder="Cari Barang atau Scan Barcode"
         icon-start="ri:qr-scan-2-line"
         v-model="form.product"
+        v-model:search="form.productSearch"
         @change="onChangeProduct"
       />
     </BaseFormItem>

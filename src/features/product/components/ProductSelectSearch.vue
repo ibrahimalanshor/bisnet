@@ -1,38 +1,62 @@
 <script setup>
 import BaseSelectSearch from '../../../components/base/BaseSelectSearch.vue';
 import { ref } from 'vue';
-import data from '../data/product.json';
-import { sleep } from '../../../utils/common';
+import { useRequest } from '../../../cores/http';
 
-const emit = defineEmits(['focus']);
+const { request } = useRequest();
 
+const search = defineModel('search');
 const options = ref([]);
 const loading = ref(false);
-const search = ref('');
+const page = ref(1);
+const meta = ref({ page: { lastPage: 1 } });
 
-async function loadOptions() {
+async function loadOptions({ append }) {
+  if (!append) {
+    page.value = 1;
+  }
+
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/products`, {
+    query: {
+      page: {
+        size: 10,
+        number: page.value,
+      },
+      sort: '-id',
+      fields: {
+        products: 'barcode,name',
+      },
+      filter: {
+        search: search.value,
+      },
+    },
+  });
 
-  options.value = data
-    .filter((item) =>
-      !search.value
-        ? true
-        : item.name.toLowerCase().includes(search.value.toLowerCase()) ||
-          item.barcode.toLowerCase().includes(search.value.toLowerCase()),
-    )
-    .slice(0, 10)
-    .map((item) => ({
-      ...item,
-      originalName: item.name,
-      name: `${item.barcode} - ${item.name}`,
+  if (!err) {
+    meta.value = res.meta;
+    const data = res.data.map((item) => ({
+      id: item.id,
+      name: `${item.attributes.barcode} - ${item.attributes.name}`,
     }));
+
+    if (append) {
+      options.value = [...options.value, ...data];
+    } else {
+      options.value = data;
+    }
+  }
 
   loading.value = false;
 }
-function onSearch() {
-  loadOptions();
+
+function onScrollBottom() {
+  if (page.value < meta.value.page.lastPage) {
+    page.value++;
+
+    loadOptions({ append: true });
+  }
 }
 </script>
 
@@ -41,7 +65,8 @@ function onSearch() {
     :options="options"
     :loading="loading"
     v-model:search="search"
-    @focus="loadOptions"
-    @search="onSearch"
+    @focus="loadOptions({ append: false })"
+    @search="loadOptions({ append: false })"
+    @scroll-bottom="onScrollBottom"
   />
 </template>
