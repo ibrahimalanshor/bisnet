@@ -31,7 +31,19 @@ const form = reactive({
 async function loadForm() {
   loadingForm.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/suppliers/${props.id}`, {
+    query: {
+      fields: {
+        suppliers: 'name,phone,address',
+      },
+    },
+  });
+
+  if (!err) {
+    form.name = res.data.attributes.name;
+    form.phone = res.data.attributes.phone;
+    form.address = res.data.attributes.address;
+  }
 
   loadingForm.value = false;
 }
@@ -52,19 +64,24 @@ async function onSubmit() {
   error.value = null;
   loadingSave.value = true;
 
-  const [, err] = await request(`/api/v1/suppliers`, {
-    method: 'post',
-    body: {
-      data: {
-        type: 'suppliers',
-        attributes: {
-          name: form.name,
-          phone: form.phone,
-          address: form.address,
+  const [, err] = await request(
+    props.id ? `/api/v1/suppliers/${props.id}` : `/api/v1/suppliers`,
+    {
+      method: props.id ? 'patch' : 'post',
+
+      body: {
+        data: {
+          type: 'suppliers',
+          ...(props.id ? { id: props.id } : {}),
+          attributes: {
+            name: form.name,
+            phone: form.phone,
+            address: form.address,
+          },
         },
       },
     },
-  });
+  );
 
   if (err) {
     if (!err.jsonapi) {
