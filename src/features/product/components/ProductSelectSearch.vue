@@ -39,6 +39,8 @@ async function loadOptions({ append }) {
     const data = res.data.map((item) => ({
       id: item.id,
       name: `${item.attributes.barcode} - ${item.attributes.name}`,
+      barcode: item.attributes.barcode,
+      originalName: item.attributes.name,
     }));
 
     if (append) {

@@ -13,9 +13,11 @@ import {
   formatCurrency,
   currencyToNum,
   formatDate,
-  sleep,
   extractPriceTax,
 } from '../../../utils/common';
+import { useRequest } from '../../../cores/http';
+
+const { request } = useRequest();
 
 const itemsColumn = [
   {
@@ -97,10 +99,23 @@ function onChangeProduct() {
 async function onConfirm() {
   loadingConfirm.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/restocks/-actions/create`, {
+    method: 'post',
+    body: {
+      supplier_id: form.supplier.id,
+      date: form.date,
+      items: items.value.map((item) => ({
+        product_id: item.id,
+        qty: currencyToNum(item.qty),
+        price: currencyToNum(item.price),
+      })),
+    },
+  });
 
-  visibleConfirm.value = false;
-  successDetail.visible = true;
+  if (!err) {
+    visibleConfirm.value = false;
+    successDetail.visible = true;
+  }
 
   loadingConfirm.value = false;
 }
