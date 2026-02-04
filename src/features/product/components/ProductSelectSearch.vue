@@ -3,6 +3,10 @@ import BaseSelectSearch from '../../../components/base/BaseSelectSearch.vue';
 import { ref } from 'vue';
 import { useRequest } from '../../../cores/http';
 
+const props = defineProps({
+  filter: Object,
+});
+
 const { request } = useRequest();
 
 const search = defineModel('search');
@@ -26,10 +30,11 @@ async function loadOptions({ append }) {
       },
       sort: '-id',
       fields: {
-        products: 'barcode,name',
+        products: 'barcode,name,price,stock',
       },
       filter: {
         search: search.value,
+        ...props.filter,
       },
     },
   });
@@ -41,6 +46,8 @@ async function loadOptions({ append }) {
       name: `${item.attributes.barcode} - ${item.attributes.name}`,
       barcode: item.attributes.barcode,
       originalName: item.attributes.name,
+      price: item.attributes.price,
+      stock: item.attributes.stock,
     }));
 
     if (append) {

@@ -167,7 +167,7 @@ function onChangeProduct() {
       product_name: form.value.product.originalName,
       product_barcode: form.value.product.barcode,
       product_price: form.value.product.price,
-      stock: 10,
+      stock: form.value.product.stock,
       qty: null,
       originalQty: null,
       withDiscount: null,
@@ -237,6 +237,7 @@ function onAddDiscount() {
         <ProductSelectSearch
           placeholder="Cari Barang atau Scan Barcode"
           icon-start="ri:qr-scan-2-line"
+          :filter="{ stock_status: 'has_stock' }"
           v-model="form.product"
           @change="onChangeProduct"
         />
