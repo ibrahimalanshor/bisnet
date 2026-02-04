@@ -5,6 +5,10 @@ import BaseButton from '../../../components/base/BaseButton.vue';
 import ShiftCloseConfirm from './ShiftCloseConfirm.vue';
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
+import { useShiftStore } from '../shift.store';
+import { formatCurrency, formatDate } from '../../../utils/common';
+
+const shiftStore = useShiftStore();
 
 const visibleCloseConfirm = ref(false);
 </script>
@@ -16,17 +20,19 @@ const visibleCloseConfirm = ref(false);
         class="flex justify-between bg-gray-900 p-4 rounded-t-lg text-white items-start"
       >
         <div class="space-y-2">
-          <p class="font-bold text-xl">Kamis, 23 Januari 2026</p>
+          <p class="font-bold text-xl">
+            {{ formatDate(shiftStore.detail.date, 'dddd, DD MMMM YYYY') }}
+          </p>
           <div class="text-gray-300">
             <div class="flex gap-2 items-center">
               <Icon icon="ri:time-line" />
               <span>Buka:</span>
-              <span>08:32</span>
+              <span>{{ formatDate(shiftStore.detail.date, 'HH:mm') }}</span>
             </div>
             <div class="flex gap-2 items-center">
               <Icon icon="ri:user-3-line" />
               <span>Kasir:</span>
-              <span>Abdul Ghani</span>
+              <span>{{ shiftStore.detail.userName }}</span>
             </div>
           </div>
         </div>
@@ -39,22 +45,30 @@ const visibleCloseConfirm = ref(false);
     >
       <div class="p-4 flex items-center justify-between">
         <p class="text-gray-600">Saldo Kas Awal</p>
-        <p class="text-lg text-gray-900 font-bold">200,000</p>
+        <p class="text-lg text-gray-900 font-bold">
+          {{ formatCurrency(shiftStore.initBalance) }}
+        </p>
       </div>
       <div class="p-4 flex items-center justify-between">
         <p class="text-gray-600">Pemasukkan</p>
-        <p class="text-lg text-green-700 font-bold">+3,430,000</p>
+        <p class="text-lg text-green-700 font-bold">
+          +{{ formatCurrency(shiftStore.income) }}
+        </p>
       </div>
       <div class="p-4 flex items-center justify-between border-gray-400">
         <p class="text-gray-600">Pengeluaran</p>
-        <p class="text-lg text-red-700 font-bold">-832,000</p>
+        <p class="text-lg text-red-700 font-bold">
+          -{{ formatCurrency(shiftStore.outcome) }}
+        </p>
       </div>
       <div
         v-if="true"
         class="p-4 flex items-center justify-between border-solid"
       >
         <p class="text-gray-900 text-lg font-bold">Saldo Kas</p>
-        <p class="text-2xl text-green-700 font-bold">2,410,000</p>
+        <p class="text-2xl text-green-700 font-bold">
+          {{ formatCurrency(shiftStore.balance) }}
+        </p>
       </div>
       <template v-else>
         <div class="p-4 flex items-center justify-between">

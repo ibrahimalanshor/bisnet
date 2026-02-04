@@ -5,10 +5,12 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import { Icon } from '@iconify/vue';
 import { reactive, ref } from 'vue';
-import { currencyToNum, sleep } from '../../../utils/common';
+import { currencyToNum } from '../../../utils/common';
 import { useShiftStore } from '../shift.store';
+import { useRequest } from '../../../cores/http';
 
 const shiftStore = useShiftStore();
+const { request } = useRequest();
 
 const form = reactive({
   amount: null,
@@ -28,9 +30,16 @@ function onChangeAmount() {
 async function onSubmit() {
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/me/shift`, {
+    method: 'post',
+    body: {
+      init_balance: currencyToNum(form.amount),
+    },
+  });
 
-  shiftStore.open(currencyToNum(form.amount));
+  if (!err) {
+    shiftStore.open(res);
+  }
 
   loading.value = false;
 }

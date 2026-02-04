@@ -3,11 +3,13 @@ import BaseConfirm from '../../../components/base/BaseConfirm.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import { ref, computed } from 'vue';
-import { currencyToNum, sleep } from '../../../utils/common';
+import { currencyToNum } from '../../../utils/common';
 import { useShiftStore } from '../shift.store';
+import { useRequest } from '../../../cores/http';
 
 const visible = defineModel('visible');
 
+const { request } = useRequest();
 const shiftStore = useShiftStore();
 
 const initCash = ref(null);
@@ -20,11 +22,18 @@ const valid = computed(
 async function onConfirm() {
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/me/shift`, {
+    method: 'post',
+    body: {
+      init_balance: currencyToNum(initCash.value),
+    },
+  });
 
-  shiftStore.open(currencyToNum(initCash.value));
+  if (!err) {
+    shiftStore.open(res);
 
-  visible.value = false;
+    visible.value = false;
+  }
 
   loading.value = false;
 }

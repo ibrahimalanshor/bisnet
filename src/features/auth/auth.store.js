@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { useRequest } from '../../cores/http';
 import { useRouter } from 'vue-router';
+import { useShiftStore } from '../shift/shift.store';
 
 export const useAuthStore = defineStore(
   'auth',
@@ -12,6 +13,7 @@ export const useAuthStore = defineStore(
 
     const router = useRouter();
     const { request } = useRequest();
+    const shiftStore = useShiftStore();
 
     const role = computed(() => (!loggedIn.value ? null : user.value.role));
 
@@ -32,11 +34,15 @@ export const useAuthStore = defineStore(
         router.push({ name: 'login' });
       } else {
         user.value = res;
+
+        if (role.value === 'cashier') {
+          shiftStore.loadShift();
+        }
       }
     }
 
     async function logout() {
-      await request(`/api/v1/logout`, { method: 'post' });
+      await request(`/api/v1/me/logout`, { method: 'post' });
 
       loggedIn.value = false;
       router.push({ name: 'login' });
