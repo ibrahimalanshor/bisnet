@@ -46,8 +46,9 @@ export const routes = [
     name: 'shift-active',
     meta: {
       layout: 'LayoutAdmin',
-      layoutProps: { verticalAlign: 'center', title: 'Shift Aktif' },
+      layoutProps: { verticalAlign: 'center' },
       roles: ['cashier'],
+      title: 'Shift Aktif',
       auth: true,
     },
     component: () => import('./features/shift/components/ShiftActivePage.vue'),
