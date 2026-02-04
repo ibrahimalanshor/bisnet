@@ -21,6 +21,10 @@ export const useAuthStore = defineStore(
       user.value = data.me;
       accessToken.value = data.token;
       loggedIn.value = true;
+
+      if (role.value === 'cashier') {
+        shiftStore.loadShift();
+      }
     }
 
     async function loadMe() {
