@@ -146,12 +146,12 @@ async function onConfirm() {
       payment_method: form.value.paymentMethod,
       payment_amount: currencyToNum(form.value.paymentAmount),
       discount_type: form.value.discountType,
-      discount_amount: currencyToNum(form.value.discount),
+      discount_value: currencyToNum(form.value.discount),
       items: items.value.map((item) => ({
         product_id: item.id,
         qty: currencyToNum(item.qty),
         discount_type: item.discountType,
-        discount_amount: currencyToNum(item.discount),
+        discount_value: currencyToNum(item.discount),
       })),
     },
   });
