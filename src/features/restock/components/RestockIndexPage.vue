@@ -10,6 +10,9 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import RestockDetailModal from './RestockDetailModal.vue';
 import { sleep, formatDate, formatCurrency } from '../../../utils/common';
+import { useAuthStore } from '../../auth/auth.store';
+
+const authStore = useAuthStore();
 
 const columns = [
   { id: 'code', name: 'No. Restock', value: (item) => item.code },
@@ -90,6 +93,7 @@ loadRestocks();
           @change="loadRestocks({ reload: true })"
         />
         <BaseButton
+          v-if="authStore.role === 'warehouse'"
           icon="ri:add-fill"
           class="w-full sm:w-auto"
           tag="router-link"

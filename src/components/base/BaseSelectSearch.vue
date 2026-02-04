@@ -13,7 +13,14 @@ defineProps({
   },
   iconStart: String,
 });
-const emit = defineEmits(['focus', 'search', 'open', 'close', 'change']);
+const emit = defineEmits([
+  'focus',
+  'search',
+  'open',
+  'close',
+  'change',
+  'scroll-bottom',
+]);
 
 const visible = ref(false);
 const loading = defineModel('loading');
@@ -47,6 +54,14 @@ function onFocus() {
   visible.value = true;
 
   emit('focus');
+}
+function onContentScroll(e) {
+  const bottomScrolled =
+    e.target.clientHeight + e.target.scrollTop >= e.target.scrollHeight;
+
+  if (bottomScrolled) {
+    emit('scroll-bottom');
+  }
 }
 
 watch(visible, (newValue) => {
@@ -105,6 +120,7 @@ watch(selected, () => {
       v-if="visible"
       class="bg-white py-1 absolute w-full border mt-2 border-gray-300 rounded-md max-h-32 overflow-y-auto z-10"
       v-motion-slide-top
+      @scroll="onContentScroll"
     >
       <div v-if="!options.length" class="flex justify-center py-2 px-3">
         <p class="text-gray-500">No Items</p>
