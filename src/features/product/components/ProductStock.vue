@@ -14,7 +14,9 @@ const message = computed(() => {
     return '';
   }
 
-  return props.product.stock < 1 ? 'Stok habis' : 'Stok hampir hampir';
+  return props.product.attributes.stock < 1
+    ? 'Stok habis'
+    : 'Stok hampir hampir';
 });
 const iconColor = computed(() => {
   if (hasMoreStock.value) {
