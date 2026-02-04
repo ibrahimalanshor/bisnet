@@ -1,5 +1,4 @@
 <script setup>
-import data from '../data/supplier.json';
 import { reactive, ref } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
@@ -9,17 +8,19 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import SupplierFormModal from './SupplierFormModal.vue';
 import SupplierDeleteConfirm from './SupplierDeleteConfirm.vue';
-import { sleep } from '../../../utils/common';
+import { useRequest } from '../../../cores/http';
+
+const { request } = useRequest();
 
 const columns = [
-  { id: 'name', name: 'Nama', value: (item) => item.name },
-  { id: 'phone', name: 'No. Telp', value: (item) => item.phone },
-  { id: 'address', name: 'Alamat', value: (item) => item.address },
+  { id: 'name', name: 'Nama', value: (item) => item.attributes.name },
+  { id: 'phone', name: 'No. Telp', value: (item) => item.attributes.phone },
+  { id: 'address', name: 'Alamat', value: (item) => item.attributes.address },
   { id: 'action', name: 'Aksi' },
 ];
 const loading = ref(true);
 const error = ref(false);
-const suppliers = ref({ data: [] });
+const suppliers = ref({ data: [], meta: { page: { lastPage: 1 } } });
 const query = reactive({
   page: 1,
 });
@@ -36,6 +37,8 @@ const deleteConfirm = reactive({
 });
 
 async function loadSuppliers({ refresh, reload } = {}) {
+  error.value = false;
+
   if (refresh) {
     query.page = 1;
     filter.search = null;
@@ -47,9 +50,26 @@ async function loadSuppliers({ refresh, reload } = {}) {
 
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/suppliers`, {
+    query: {
+      page: {
+        size: 10,
+        number: query.page,
+      },
+      fields: {
+        suppliers: 'name,address,phone',
+      },
+      filter: {
+        search: filter.search,
+      },
+    },
+  });
 
-  suppliers.value = { data: data.slice(0, 10) };
+  if (err) {
+    error.value = true;
+  } else {
+    suppliers.value = res;
+  }
 
   loading.value = false;
 }
@@ -108,7 +128,8 @@ loadSuppliers();
     </template>
   </BaseTable>
   <BasePagination
-    :total-pages="10"
+    v-if="suppliers.meta.page.lastPage > 1"
+    :total-pages="suppliers.meta.page.lastPage"
     v-model="query.page"
     @change="loadSuppliers"
   />
