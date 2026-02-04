@@ -6,7 +6,6 @@ import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseSkeleton from '../../../components/base/BaseSkeleton.vue';
 import { ref, reactive } from 'vue';
-import { sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
 import { useRequest } from '../../../cores/http.js';
 

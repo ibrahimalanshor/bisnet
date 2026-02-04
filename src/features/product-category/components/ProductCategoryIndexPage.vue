@@ -58,6 +58,7 @@ async function loadProductCategories({ refresh, reload } = {}) {
         size: 10,
         number: query.page,
       },
+      sort: '-id',
       fields: {
         'product-categories': 'name',
       },

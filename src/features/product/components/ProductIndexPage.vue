@@ -101,6 +101,7 @@ async function loadProducts({ refresh, reload } = {}) {
         size: 10,
         number: query.page,
       },
+      sort: '-id',
       fields: {
         products: 'name,category_name,price,stock,min_stock',
       },

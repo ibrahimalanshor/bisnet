@@ -1,10 +1,15 @@
 <script setup>
 import BaseConfirm from '../../../components/base/BaseConfirm.vue';
 import { ref } from 'vue';
-import { sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
+import { useRequest } from '../../../cores/http.js';
 
+const props = defineProps({
+  id: null,
+});
 const emit = defineEmits(['deleted']);
+
+const { request } = useRequest();
 const toastStore = useToastStore();
 
 const visible = defineModel('visible');
@@ -13,17 +18,20 @@ const loading = ref(false);
 async function onConfirmed() {
   loading.value = true;
 
-  await sleep();
-
-  toastStore.create({
-    message: 'Berhasil menghapus supplier',
-    type: 'success',
+  const [, err] = await request(`/api/v1/suppliers/${props.id}`, {
+    method: 'delete',
   });
-  visible.value = false;
+
+  if (!err) {
+    toastStore.create({
+      message: 'Berhasil menghapus supplier',
+      type: 'success',
+    });
+    emit('deleted');
+    visible.value = false;
+  }
 
   loading.value = false;
-
-  emit('deleted');
 }
 </script>
 

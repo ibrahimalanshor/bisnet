@@ -56,6 +56,7 @@ async function loadSuppliers({ refresh, reload } = {}) {
         size: 10,
         number: query.page,
       },
+      sort: '-id',
       fields: {
         suppliers: 'name,address,phone',
       },
