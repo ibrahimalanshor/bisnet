@@ -49,7 +49,7 @@ const form = reactive({
 });
 const successDetail = reactive({
   visible: false,
-  code: 'RS-89231',
+  code: null,
 });
 const visibleConfirm = ref(false);
 const loadingConfirm = ref(false);
@@ -115,6 +115,7 @@ async function onConfirm() {
   if (!err) {
     visibleConfirm.value = false;
     successDetail.visible = true;
+    successDetail.code = res.data.attributes.code;
   }
 
   loadingConfirm.value = false;
