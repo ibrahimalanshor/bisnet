@@ -1,5 +1,4 @@
 <script setup>
-import data from '../data/sale.json';
 import { reactive, ref, computed } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
@@ -9,23 +8,24 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import SaleDetailModal from './SaleDetailModal.vue';
 import {
-  sleep,
   formatDate,
   formatCurrency,
   getPaymentMethodName,
 } from '../../../utils/common';
 import { useShiftStore } from '../../shift/shift.store';
 import { useAuthStore } from '../../auth/auth.store';
+import { useRequest } from '../../../cores/http';
 
 const shiftStore = useShiftStore();
 const authStore = useAuthStore();
+const { request } = useRequest();
 
 const columns = computed(() => [
-  { id: 'code', name: 'No. Penjualan', value: (item) => item.code },
+  { id: 'code', name: 'No. Penjualan', value: (item) => item.attributes.code },
   {
     id: 'createdAt',
     name: 'Tanggal',
-    value: (item) => formatDate(item.createdAt),
+    value: (item) => formatDate(item.attributes.date),
   },
   ...(authStore.role === 'cashier'
     ? []
@@ -33,28 +33,28 @@ const columns = computed(() => [
   {
     id: 'paymentMethod',
     name: 'Pembayaran',
-    value: (item) => getPaymentMethodName(item.paymentMethod),
+    value: (item) => getPaymentMethodName(item.attributes.payment_method),
   },
   {
     id: 'itemsCount',
     name: 'Jumlah',
-    value: (item) => formatCurrency(item.itemsCount),
+    value: (item) => formatCurrency(item.attributes.items_count),
   },
   {
     id: 'totalPrice',
     name: 'Harga',
-    value: (item) => formatCurrency(item.totalPrice),
+    value: (item) => formatCurrency(item.attributes.final_price),
   },
 ]);
 const loading = ref(true);
 const error = ref(false);
-const sales = ref({ data: [] });
+const sales = ref({ data: [], meta: { page: { lastPage: 1 } } });
 const query = reactive({
   page: 1,
 });
 const filter = reactive({
   search: null,
-  createdAt: formatDate(new Date(), 'YYYY-MM-DD'),
+  date: formatDate(new Date(), 'YYYY-MM-DD'),
 });
 const detailModal = reactive({
   id: null,
@@ -62,6 +62,8 @@ const detailModal = reactive({
 });
 
 async function loadSales({ refresh, reload } = {}) {
+  error.value = false;
+
   if (refresh) {
     query.page = 1;
     filter.search = null;
@@ -73,9 +75,27 @@ async function loadSales({ refresh, reload } = {}) {
 
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/sales`, {
+    query: {
+      page: {
+        size: 10,
+        number: query.page,
+      },
+      fields: {
+        sales: 'code,date,payment_method,items_count,final_price',
+      },
+      filter: {
+        search: filter.search,
+        date: filter.date,
+      },
+    },
+  });
 
-  sales.value = { data: data.slice(0, 10) };
+  if (err) {
+    error.value = true;
+  } else {
+    sales.value = res;
+  }
 
   loading.value = false;
 }
@@ -109,7 +129,7 @@ loadSales();
         />
         <BaseInput
           type="date"
-          v-model="filter.createdAt"
+          v-model="filter.date"
           @change="loadSales({ reload: true })"
         />
         <template v-if="authStore.role === 'cashier'">
@@ -141,6 +161,11 @@ loadSales();
     clickable
     @click-row="onOpenDetail"
   />
-  <BasePagination :total-pages="10" v-model="query.page" @change="loadSales" />
+  <BasePagination
+    v-if="sales.meta.page.lastPage > 1"
+    :total-pages="sales.meta.page.lastPage"
+    v-model="query.page"
+    @change="loadSales"
+  />
   <SaleDetailModal :id="detailModal.id" v-model:visible="detailModal.visible" />
 </template>
