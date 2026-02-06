@@ -7,10 +7,13 @@ import SaleItemsTable from './SaleItemsTable.vue';
 import { sleep, formatDate, formatCurrency } from '../../../utils/common.js';
 import { ref, h } from 'vue';
 import mocks from '../data/sale.json';
+import { useRequest } from '../../../cores/http.js';
 
 const props = defineProps({
   id: null,
 });
+
+const { request } = useRequest();
 
 const loading = ref(true);
 const error = ref(false);
@@ -20,21 +23,22 @@ const columns = [
   {
     id: 'code',
     name: 'Kode',
+    value: (item) => item.data.attributes.code,
   },
   {
     id: 'createdAt',
     name: 'Tanggal',
-    value: (data) => formatDate(data.createdAt),
+    value: (data) => formatDate(data.data.attributes.date),
   },
   {
     id: 'itemsCount',
     name: 'Total Barang',
-    value: (data) => formatCurrency(data.itemsCount),
+    value: (data) => formatCurrency(data.data.attributes.items_count),
   },
   {
     id: 'totalPrice',
     name: 'Total Harga',
-    value: (data) => formatCurrency(data.totalPrice),
+    value: (data) => formatCurrency(data.data.attributes.final_price),
   },
   {
     id: 'items',
@@ -45,11 +49,22 @@ const columns = [
 ];
 
 async function onOpened() {
+  error.value = false;
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/sales/${props.id}`, {
+    query: {
+      fields: {
+        sales: 'code,date,items_count,final_price',
+      },
+    },
+  });
 
-  data.value = mocks.find((item) => item.id === props.id);
+  if (err) {
+    error.value = true;
+  } else {
+    data.value = res;
+  }
 
   loading.value = false;
 }
