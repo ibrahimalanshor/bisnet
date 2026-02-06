@@ -29,7 +29,13 @@ const columns = computed(() => [
   },
   ...(authStore.role === 'cashier'
     ? []
-    : [{ id: 'cashier', name: 'Kasir', value: () => 'Ahmad' }]),
+    : [
+        {
+          id: 'cashier',
+          name: 'Kasir',
+          value: (item) => item.attributes.user_name,
+        },
+      ]),
   {
     id: 'paymentMethod',
     name: 'Pembayaran',
@@ -82,7 +88,7 @@ async function loadSales({ refresh, reload } = {}) {
         number: query.page,
       },
       fields: {
-        sales: 'code,date,payment_method,items_count,final_price',
+        sales: 'code,date,payment_method,items_count,final_price,user_name',
       },
       filter: {
         search: filter.search,

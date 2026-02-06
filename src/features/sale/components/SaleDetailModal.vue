@@ -5,25 +5,36 @@ import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vue';
 import SaleItemsTable from './SaleItemsTable.vue';
 import { formatDate, formatCurrency } from '../../../utils/common.js';
-import { ref, h } from 'vue';
+import { ref, h, computed } from 'vue';
 import { useRequest } from '../../../cores/http.js';
+import { useAuthStore } from '../../auth/auth.store';
 
 const props = defineProps({
   id: null,
 });
 
 const { request } = useRequest();
+const authStore = useAuthStore();
 
 const loading = ref(true);
 const error = ref(false);
 const data = ref({});
 
-const columns = [
+const columns = computed(() => [
   {
     id: 'code',
     name: 'Kode',
     value: (item) => item.data.attributes.code,
   },
+  ...(authStore.role === 'cashier'
+    ? []
+    : [
+        {
+          id: 'cashier',
+          name: 'Kasir',
+          value: (item) => item.data.attributes.user_name,
+        },
+      ]),
   {
     id: 'createdAt',
     name: 'Tanggal',
@@ -40,7 +51,7 @@ const columns = [
     classList: 'col-span-full',
     render: ({ data: item }) => h(SaleItemsTable, { sale: item }),
   },
-];
+]);
 
 async function onOpened() {
   error.value = false;
@@ -50,7 +61,7 @@ async function onOpened() {
     query: {
       fields: {
         sales:
-          'code,date,items_count,discount_type,discount_percent,discount_value,total_price,final_price',
+          'code,date,items_count,discount_type,discount_percent,discount_value,total_price,final_price,user_name',
       },
     },
   });
