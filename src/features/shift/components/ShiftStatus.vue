@@ -6,7 +6,6 @@ import ShiftTransactionModal from './ShiftTransactionModal.vue';
 import { ref } from 'vue';
 import { formatCurrency, formatDate } from '../../../utils/common.js';
 import { Icon } from '@iconify/vue';
-import data from '../data/transactions.json';
 import { useShiftStore } from '../shift.store.js';
 import { useRouter } from 'vue-router';
 
@@ -16,7 +15,6 @@ const router = useRouter();
 const visibleOpen = ref(false);
 const visibleAddTrx = ref(false);
 const visibleClose = ref(false);
-const transactions = data.slice(0, 5);
 const opened = ref(false);
 
 router.afterEach(() => (opened.value = false));

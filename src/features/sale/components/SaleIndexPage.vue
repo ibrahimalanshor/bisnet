@@ -60,6 +60,7 @@ const query = reactive({
 });
 const filter = reactive({
   search: null,
+  userSearch: null,
   date: formatDate(new Date(), 'YYYY-MM-DD'),
 });
 const detailModal = reactive({
@@ -73,6 +74,7 @@ async function loadSales({ refresh, reload } = {}) {
   if (refresh) {
     query.page = 1;
     filter.search = null;
+    filter.userSearch = null;
   }
 
   if (reload) {
@@ -92,6 +94,7 @@ async function loadSales({ refresh, reload } = {}) {
       },
       filter: {
         search: filter.search,
+        user_search: filter.userSearch,
         date: filter.date,
       },
     },
@@ -130,7 +133,7 @@ loadSales();
           v-if="authStore.role !== 'cashier'"
           type="search"
           placeholder="Pilih kasir"
-          v-model="filter.search"
+          v-model="filter.userSearch"
           @input-debounce="loadSales({ reload: true })"
         />
         <BaseInput
