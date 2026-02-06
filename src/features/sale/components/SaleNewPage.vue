@@ -160,6 +160,8 @@ async function onConfirm() {
     submitConfirm.visible = false;
     successDetail.visible = true;
     successDetail.code = res.data.attributes.code;
+
+    shiftStore.loadShift();
   }
 
   submitConfirm.loading = false;

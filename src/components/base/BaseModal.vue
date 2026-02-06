@@ -1,7 +1,7 @@
 <script setup>
 import BaseCard from './BaseCard.vue';
 import BaseButton from './BaseButton.vue';
-import { watch, computed } from 'vue';
+import { watch, computed, onUnmounted } from 'vue';
 
 const props = defineProps({
   title: String,
@@ -42,6 +42,8 @@ watch(visible, (val) => {
     document.body.classList.remove('overflow-hidden');
   }
 });
+
+onUnmounted(() => document.body.classList.remove('overflow-hidden'));
 </script>
 
 <template>

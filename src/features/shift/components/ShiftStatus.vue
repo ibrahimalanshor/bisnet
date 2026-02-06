@@ -59,24 +59,24 @@ router.afterEach(() => (opened.value = false));
               >
             </div>
             <div
-              v-for="trx in transactions"
+              v-for="trx in shiftStore.lastTransactions"
               :key="trx.id"
               class="px-4 py-3 flex items-center justify-between gap-8"
             >
               <div>
-                <p class="font-medium">{{ trx.name }}</p>
+                <p class="font-medium">{{ trx.description }}</p>
                 <p class="text-sm text-gray-500">
-                  {{ formatDate(trx.date, 'HH:mm:ss') }}
+                  {{ formatDate(trx.created_at, 'HH:mm:ss') }}
                 </p>
               </div>
               <p
                 :class="[
-                  trx.amount > 0 ? 'text-green-700' : 'text-red-700',
+                  trx.type !== 'outcome' ? 'text-green-700' : 'text-red-700',
                   'font-bold',
                 ]"
               >
-                <span v-if="trx.amount > 0">+</span
-                >{{ formatCurrency(trx.amount) }}
+                <span v-if="trx.type !== 'outcome'">+</span>
+                <span v-else>-</span>{{ formatCurrency(trx.amount) }}
               </p>
             </div>
             <div class="px-3 py-2 text-center bg-gray-50">

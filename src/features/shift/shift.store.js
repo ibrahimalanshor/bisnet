@@ -14,6 +14,7 @@ export const useShiftStore = defineStore('shift', () => {
     userName: null,
     date: null,
   });
+  const lastTransactions = ref([]);
 
   function open(res) {
     active.value = true;
@@ -25,6 +26,8 @@ export const useShiftStore = defineStore('shift', () => {
 
     detail.userName = res.user_name;
     detail.date = res.created_at;
+
+    lastTransactions.value = res.cash_transactions;
   }
 
   function close() {
@@ -48,6 +51,7 @@ export const useShiftStore = defineStore('shift', () => {
     income,
     outcome,
     detail,
+    lastTransactions,
     open,
     close,
     loadShift,
