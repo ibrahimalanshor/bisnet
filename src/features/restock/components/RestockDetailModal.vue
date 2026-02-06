@@ -40,15 +40,10 @@ const columns = [
     value: (item) => formatCurrency(item.data.attributes.items_count),
   },
   {
-    id: 'totalPrice',
-    name: 'Total Harga',
-    value: (item) => formatCurrency(item.data.attributes.total_price),
-  },
-  {
     id: 'items',
     name: 'Barang',
     classList: 'col-span-full',
-    render: ({ data: item }) => h(RestockItemsTable, { id: item.data.id }),
+    render: ({ data: item }) => h(RestockItemsTable, { restock: item }),
   },
 ];
 

@@ -82,7 +82,9 @@ function onClickRow(e, row) {
               :class="[
                 'px-4 py-3 whitespace-nowrap font-normal',
                 column.classList,
-                index !== data.length - 1 ? 'border-b border-gray-300' : '',
+                index !== data.length - 1 || $slots.footer
+                  ? 'border-b border-gray-300'
+                  : '',
               ]"
             >
               <component
@@ -107,6 +109,9 @@ function onClickRow(e, row) {
           </tr>
         </template>
       </tbody>
+      <tfoot v-if="$slots.footer">
+        <slot name="footer" :class-list="{ td: 'px-4 py-3 font-normal' }" />
+      </tfoot>
     </table>
   </div>
 </template>

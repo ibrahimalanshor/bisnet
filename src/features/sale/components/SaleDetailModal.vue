@@ -4,9 +4,8 @@ import BaseSkeleton from '../../../components/base/BaseSkeleton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseDescriptionList from '../../../components/base/BaseDescriptionList.vue';
 import SaleItemsTable from './SaleItemsTable.vue';
-import { sleep, formatDate, formatCurrency } from '../../../utils/common.js';
+import { formatDate, formatCurrency } from '../../../utils/common.js';
 import { ref, h } from 'vue';
-import mocks from '../data/sale.json';
 import { useRequest } from '../../../cores/http.js';
 
 const props = defineProps({
@@ -36,15 +35,10 @@ const columns = [
     value: (data) => formatCurrency(data.data.attributes.items_count),
   },
   {
-    id: 'totalPrice',
-    name: 'Total Harga',
-    value: (data) => formatCurrency(data.data.attributes.final_price),
-  },
-  {
     id: 'items',
     name: 'Barang',
     classList: 'col-span-full',
-    render: () => h(SaleItemsTable),
+    render: ({ data: item }) => h(SaleItemsTable, { sale: item }),
   },
 ];
 
@@ -55,7 +49,8 @@ async function onOpened() {
   const [res, err] = await request(`/api/v1/sales/${props.id}`, {
     query: {
       fields: {
-        sales: 'code,date,items_count,final_price',
+        sales:
+          'code,date,items_count,discount_type,discount_percent,discount_value,total_price,final_price',
       },
     },
   });
