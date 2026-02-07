@@ -70,7 +70,6 @@ const tax = computed(() => extractPriceTax(grandTotal.value, 11 / 100));
 const valid = computed(
   () =>
     form.supplier &&
-    form.date &&
     items.value.length > 0 &&
     items.value.every((item) => currencyToNum(item.qty) > 0),
 );
@@ -103,7 +102,6 @@ async function onConfirm() {
     method: 'post',
     body: {
       supplier_id: form.supplier.id,
-      date: form.date,
       items: items.value.map((item) => ({
         product_id: item.id,
         qty: currencyToNum(item.qty),
@@ -174,7 +172,7 @@ function onChangeQty(index) {
         />
       </BaseFormItem>
       <BaseFormItem id="restock_form.date" label="Tanggal" v-slot="{ id }">
-        <BaseInput :id="id" type="date" v-model="form.date" />
+        <BaseInput :id="id" type="date" disabled v-model="form.date" />
       </BaseFormItem>
     </div>
   </BaseCard>

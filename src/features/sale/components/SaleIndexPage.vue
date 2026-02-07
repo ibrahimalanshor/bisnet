@@ -25,7 +25,7 @@ const columns = computed(() => [
   {
     id: 'createdAt',
     name: 'Tanggal',
-    value: (item) => formatDate(item.attributes.date),
+    value: (item) => formatDate(item.attributes.createdAt),
   },
   ...(authStore.role === 'cashier'
     ? []
@@ -90,7 +90,8 @@ async function loadSales({ refresh, reload } = {}) {
         number: query.page,
       },
       fields: {
-        sales: 'code,date,payment_method,items_count,final_price,user_name',
+        sales:
+          'code,createdAt,payment_method,items_count,final_price,user_name',
       },
       filter: {
         search: filter.search,

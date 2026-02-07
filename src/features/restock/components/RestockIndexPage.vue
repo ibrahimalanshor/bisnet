@@ -19,7 +19,7 @@ const columns = [
   {
     id: 'createdAt',
     name: 'Tanggal',
-    value: (item) => formatDate(item.attributes.date),
+    value: (item) => formatDate(item.attributes.createdAt),
   },
   {
     id: 'supplier_name',
@@ -73,7 +73,7 @@ async function loadRestocks({ refresh, reload } = {}) {
         number: query.page,
       },
       fields: {
-        restocks: 'code,date,supplier_name,items_count,total_price',
+        restocks: 'code,createdAt,supplier_name,items_count,total_price',
       },
       filter: {
         search: filter.search,

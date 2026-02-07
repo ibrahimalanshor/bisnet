@@ -109,7 +109,6 @@ const paymentChange = computed(
 const tax = computed(() => extractPriceTax(grandTotal.value, 11 / 100));
 const valid = computed(
   () =>
-    form.value.date &&
     form.value.paymentMethod &&
     items.value.length > 0 &&
     items.value.every((item) => currencyToNum(item.qty) > 0) &&
@@ -142,7 +141,6 @@ async function onConfirm() {
   const [res, err] = await request(`/api/v1/sales/-actions/create`, {
     method: 'post',
     body: {
-      date: form.value.date,
       payment_method: form.value.paymentMethod,
       payment_amount: currencyToNum(form.value.paymentAmount),
       discount_type: form.value.discountType,
@@ -247,7 +245,7 @@ function onAddDiscount() {
 
     <BaseCard title="Informasi Penjualan">
       <BaseFormItem id="sale_form.date" label="Tanggal" v-slot="{ id }">
-        <BaseInput :id="id" type="date" v-model="form.date" />
+        <BaseInput :id="id" type="date" disabled v-model="form.date" />
       </BaseFormItem>
     </BaseCard>
 

@@ -77,7 +77,7 @@ const query = reactive({
   page: 1,
 });
 const filter = reactive({
-  date: formatDate(new Date(), 'YYYY-MM-DD'),
+  date: null,
 });
 
 async function loadData({ reload } = {}) {

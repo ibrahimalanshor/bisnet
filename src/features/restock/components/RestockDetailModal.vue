@@ -27,7 +27,7 @@ const columns = [
   {
     id: 'createdAt',
     name: 'Tanggal',
-    value: (item) => formatDate(item.data.attributes.date),
+    value: (item) => formatDate(item.data.attributes.createdAt),
   },
   {
     id: 'supplier_name',
@@ -54,7 +54,7 @@ async function onOpened() {
   const [res, err] = await request(`/api/v1/restocks/${props.id}`, {
     query: {
       fields: {
-        restocks: 'code,date,supplier_name,items_count,total_price',
+        restocks: 'code,createdAt,supplier_name,items_count,total_price',
       },
     },
   });

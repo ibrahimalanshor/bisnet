@@ -38,7 +38,7 @@ const columns = computed(() => [
   {
     id: 'createdAt',
     name: 'Tanggal',
-    value: (data) => formatDate(data.data.attributes.date),
+    value: (data) => formatDate(data.data.attributes.createdAt),
   },
   {
     id: 'itemsCount',
@@ -61,7 +61,7 @@ async function onOpened() {
     query: {
       fields: {
         sales:
-          'code,date,items_count,discount_type,discount_percent,discount_value,total_price,final_price,user_name',
+          'code,createdAt,items_count,discount_type,discount_percent,discount_value,total_price,final_price,user_name',
       },
     },
   });
