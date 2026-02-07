@@ -39,17 +39,14 @@ function onChangeAmount() {
 async function onSubmit() {
   loading.value = true;
 
-  const [, err] = await request(
-    `/api/v1/shifts/-actions/add-cash-transaction`,
-    {
-      method: 'post',
-      body: {
-        type: form.type === 'in' ? 'income' : 'outcome',
-        description: form.description,
-        amount: currencyToNum(form.amount),
-      },
+  const [, err] = await request(`/api/v1/current-shift/add-transaction`, {
+    method: 'post',
+    body: {
+      type: form.type === 'in' ? 'income' : 'outcome',
+      description: form.description,
+      amount: currencyToNum(form.amount),
     },
-  );
+  });
 
   if (!err) {
     shiftStore.loadShift();

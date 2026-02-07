@@ -22,7 +22,7 @@ const valid = computed(
 async function onConfirm() {
   loading.value = true;
 
-  const [res, err] = await request(`/api/v1/me/shift`, {
+  const [res, err] = await request(`/api/v1/current-shift/open`, {
     method: 'post',
     body: {
       init_balance: currencyToNum(initCash.value),

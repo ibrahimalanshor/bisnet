@@ -37,7 +37,7 @@ export const useShiftStore = defineStore('shift', () => {
   }
 
   async function loadShift() {
-    const [res, err] = await request(`/api/v1/me/shift`);
+    const [res, err] = await request(`/api/v1/current-shift`);
 
     if (err || !res) {
       active.value = false;

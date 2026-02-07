@@ -3,12 +3,14 @@ import BaseConfirm from '../../../components/base/BaseConfirm.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import { ref, computed } from 'vue';
-import { currencyToNum, sleep, formatCurrency } from '../../../utils/common';
+import { currencyToNum, formatCurrency } from '../../../utils/common';
 import { useShiftStore } from '../shift.store';
+import { useRequest } from '../../../cores/http';
 
 const visible = defineModel('visible');
 
 const shiftStore = useShiftStore();
+const { request } = useRequest();
 
 const balance = ref(1250000);
 const actualBalance = ref(null);
@@ -25,11 +27,18 @@ const remainder = computed(
 async function onConfirm() {
   loading.value = true;
 
-  await sleep();
+  const [, err] = await request(`/api/v1/current-shift/close`, {
+    method: 'post',
+    body: {
+      actual_balance: currencyToNum(actualBalance.value),
+    },
+  });
 
-  shiftStore.close();
+  if (!err) {
+    shiftStore.close();
 
-  visible.value = false;
+    visible.value = false;
+  }
 
   loading.value = false;
 }
