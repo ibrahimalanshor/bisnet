@@ -2,17 +2,22 @@
 import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseBadge from '../../../components/base/BaseBadge.vue';
-import data from '../data/transaction-histories.json';
-import { h } from 'vue';
-import { formatCurrency } from '../../../utils/common.js';
+import { h, ref, reactive } from 'vue';
+import { formatCurrency, formatDate } from '../../../utils/common.js';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
+import BasePagination from '../../../components/base/BasePagination.vue';
+import { useRequest } from '../../../cores/http.js';
+import { useShiftStore } from '../shift.store.js';
+
+const { request } = useRequest();
+const shiftStore = useShiftStore();
 
 const columns = [
   {
     id: 'date',
     name: 'Jam',
-    value: (item) => item.time,
+    value: (item) => formatDate(item.attributes.createdAt, 'HH:mm'),
     classList: 'text-gray-600',
   },
   {
@@ -20,8 +25,8 @@ const columns = [
     name: 'Keterangan',
     render: ({ item }) =>
       h('div', [
-        h('p', { class: 'font-medium' }, item.title),
-        h('p', { class: 'text-sm text-gray-500' }, item.reference),
+        h('p', { class: 'text-gray-900' }, item.attributes.description),
+        h('p', { class: 'text-sm text-gray-500' }, item.attributes.trx_code),
       ]),
   },
   {
@@ -33,13 +38,13 @@ const columns = [
         {
           colorVariant: 'thin',
           color:
-            item.type === 'Masuk'
+            item.attributes.type === 'income'
               ? 'success'
-              : item.type === 'Modal'
+              : item.attributes.type === 'init'
                 ? 'primary'
                 : 'error',
         },
-        () => item.type,
+        () => item.attributes.type,
       ),
   },
   {
@@ -51,9 +56,9 @@ const columns = [
       h(
         'p',
         {
-          class: `${item.type === 'Modal' ? 'text-blue-700' : item.type === 'Masuk' ? 'text-green-700' : 'text-red-700'} font-medium`,
+          class: `${item.attributes.type === 'init' ? 'text-blue-700' : item.attributes.type === 'income' ? 'text-green-700' : 'text-red-700'} font-medium`,
         },
-        formatCurrency(item.amount),
+        formatCurrency(item.attributes.amount),
       ),
   },
   {
@@ -62,20 +67,81 @@ const columns = [
     theadClassList: 'text-right',
     classList: 'text-right',
     render: ({ item }) =>
-      h('p', { class: 'font-medium' }, formatCurrency(item.balance)),
+      h('p', { class: 'font-medium' }, formatCurrency(item.attributes.balance)),
   },
 ];
+
+const transactions = ref({ data: [], meta: { page: {} } });
+const loading = ref(true);
+const query = reactive({
+  page: 1,
+});
+const filter = reactive({
+  date: formatDate(new Date(), 'YYYY-MM-DD'),
+});
+
+async function loadData({ reload } = {}) {
+  if (reload) {
+    query.page = 1;
+  }
+
+  loading.value = true;
+
+  const [res, err] = await request(
+    `/api/v1/shifts/${shiftStore.activeId}/cash-transactions`,
+    {
+      query: {
+        page: {
+          size: 10,
+          number: query.page,
+        },
+        sort: '-id',
+        fields: {
+          'shift-cash-transactions':
+            'createdAt,description,trx_code,type,amount,balance',
+        },
+        filter: {
+          date: filter.date,
+        },
+      },
+    },
+  );
+
+  if (!err) {
+    transactions.value = res;
+  }
+
+  loading.value = false;
+}
+
+loadData();
 </script>
 
 <template>
   <BaseCard title="Transaksi Kas" responsive>
     <template #action>
       <div class="grid grid-cols-2 sm:flex gap-2">
-        <BaseInput type="date" />
+        <BaseInput
+          type="date"
+          v-model="filter.date"
+          @change="loadData({ reload: true })"
+        />
         <BaseButton icon="ri:add-fill">Transaksi</BaseButton>
       </div>
     </template>
 
-    <BaseTable :columns="columns" :data="data.slice(0, 5)"></BaseTable>
+    <div class="space-y-4">
+      <BaseTable
+        :columns="columns"
+        :data="transactions.data"
+        :loading="loading"
+      ></BaseTable>
+      <BasePagination
+        v-if="transactions.meta.page.lastPage > 1"
+        :total-pages="transactions.meta.page.lastPage"
+        v-model="query.page"
+        @change="loadData"
+      />
+    </div>
   </BaseCard>
 </template>

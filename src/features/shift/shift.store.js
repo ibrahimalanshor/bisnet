@@ -6,6 +6,7 @@ export const useShiftStore = defineStore('shift', () => {
   const { request } = useRequest();
 
   const active = ref(false);
+  const activeId = ref(null);
   const balance = ref(0);
   const initBalance = ref(0);
   const income = ref(0);
@@ -19,6 +20,7 @@ export const useShiftStore = defineStore('shift', () => {
   function open(res) {
     active.value = true;
 
+    activeId.value = res.id;
     balance.value = res.balance;
     initBalance.value = res.init_balance;
     income.value = res.income;
@@ -46,6 +48,7 @@ export const useShiftStore = defineStore('shift', () => {
 
   return {
     active,
+    activeId,
     balance,
     initBalance,
     income,
