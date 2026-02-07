@@ -9,6 +9,7 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import { useRequest } from '../../../cores/http.js';
 import { useShiftStore } from '../shift.store.js';
+import ShiftTransactionModal from './ShiftTransactionModal.vue';
 
 const { request } = useRequest();
 const shiftStore = useShiftStore();
@@ -79,6 +80,7 @@ const query = reactive({
 const filter = reactive({
   date: null,
 });
+const visibleAddTrx = ref(false);
 
 async function loadData({ reload } = {}) {
   if (reload) {
@@ -126,7 +128,9 @@ loadData();
           v-model="filter.date"
           @change="loadData({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill">Transaksi</BaseButton>
+        <BaseButton icon="ri:add-fill" @click="visibleAddTrx = true"
+          >Transaksi</BaseButton
+        >
       </div>
     </template>
 
@@ -143,5 +147,10 @@ loadData();
         @change="loadData"
       />
     </div>
+
+    <ShiftTransactionModal
+      v-model:visible="visibleAddTrx"
+      @saved="loadData({ reload: true })"
+    />
   </BaseCard>
 </template>

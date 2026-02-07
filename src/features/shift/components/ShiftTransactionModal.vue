@@ -6,16 +6,21 @@ import BaseSelect from '../../../components/base/BaseSelect.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseCheckbox from '../../../components/base/BaseCheckbox.vue';
 import { reactive, ref } from 'vue';
-import { currencyToNum, sleep } from '../../../utils/common.js';
+import { currencyToNum } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
+import { useRequest } from '../../../cores/http.js';
+import { useShiftStore } from '../shift.store.js';
 
+const { request } = useRequest();
 const toastStore = useToastStore();
+const shiftStore = useShiftStore();
 
 const visible = defineModel('visible');
+const emit = defineEmits(['saved']);
 
 const form = reactive({
-  type: null,
-  name: null,
+  type: 'in',
+  description: null,
   amount: null,
   originalAmount: null,
   expense: false,
@@ -34,19 +39,33 @@ function onChangeAmount() {
 async function onSubmit() {
   loading.value = true;
 
-  await sleep();
+  const [, err] = await request(
+    `/api/v1/shifts/-actions/add-cash-transaction`,
+    {
+      method: 'post',
+      body: {
+        type: form.type === 'in' ? 'income' : 'outcome',
+        description: form.description,
+        amount: currencyToNum(form.amount),
+      },
+    },
+  );
 
-  toastStore.create({
-    message: 'Berhasil menambahkan transaksi',
-    type: 'success',
-  });
-  visible.value = false;
+  if (!err) {
+    shiftStore.loadShift();
+    toastStore.create({
+      message: 'Berhasil menambahkan transaksi',
+      type: 'success',
+    });
+    visible.value = false;
+    emit('saved');
+  }
 
   loading.value = false;
 }
 function onOpened() {
-  form.type = null;
-  form.name = null;
+  form.type = 'in';
+  form.description = null;
   form.amount = null;
   form.originalAmount = null;
   form.expense = false;
@@ -67,20 +86,12 @@ function onOpened() {
           v-model="form.type"
           required
           :options="[
-            { id: null, name: 'Jenis Transaksi' },
             { id: 'in', name: 'Uang Masuk' },
             { id: 'out', name: 'Uang Keluar' },
           ]"
         />
       </BaseFormItem>
-      <BaseFormItem id="shift_trx.name" label="Nama Transaksi" v-slot="{ id }">
-        <BaseInput
-          :id="id"
-          placeholder="Tambah uang kembalian"
-          v-model="form.name"
-          required
-        />
-      </BaseFormItem>
+
       <BaseFormItem id="shift_trx.amount" label="Nominal" v-slot="{ id }">
         <BaseInput
           :id="id"
@@ -89,6 +100,19 @@ function onOpened() {
           v-model="form.amount"
           required
           @change="onChangeAmount"
+        />
+      </BaseFormItem>
+
+      <BaseFormItem
+        id="shift_trx.description"
+        label="Keterangan"
+        v-slot="{ id }"
+      >
+        <BaseInput
+          :id="id"
+          placeholder="Tambah uang kembalian"
+          v-model="form.description"
+          required
         />
       </BaseFormItem>
 
