@@ -18,7 +18,10 @@ const shiftStore = useShiftStore();
       </div>
 
       <div class="col-span-1 min-w-0 xl:col-span-3 2xl:col-span-2">
-        <ShiftTransactionTable />
+        <ShiftTransactionTable
+          :shift-id="shiftStore.activeId"
+          :active="shiftStore.active"
+        />
       </div>
     </div>
   </div>

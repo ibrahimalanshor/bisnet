@@ -8,11 +8,14 @@ import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import { useRequest } from '../../../cores/http.js';
-import { useShiftStore } from '../shift.store.js';
 import ShiftTransactionModal from './ShiftTransactionModal.vue';
 
+const props = defineProps({
+  shiftId: null,
+  active: Boolean,
+});
+
 const { request } = useRequest();
-const shiftStore = useShiftStore();
 
 const columns = [
   {
@@ -90,7 +93,7 @@ async function loadData({ reload } = {}) {
   loading.value = true;
 
   const [res, err] = await request(
-    `/api/v1/shifts/${shiftStore.activeId}/cash-transactions`,
+    `/api/v1/shifts/${props.shiftId}/cash-transactions`,
     {
       query: {
         page: {
@@ -128,7 +131,10 @@ loadData();
           v-model="filter.date"
           @change="loadData({ reload: true })"
         />
-        <BaseButton icon="ri:add-fill" @click="visibleAddTrx = true"
+        <BaseButton
+          v-if="active"
+          icon="ri:add-fill"
+          @click="visibleAddTrx = true"
           >Transaksi</BaseButton
         >
       </div>
@@ -149,6 +155,7 @@ loadData();
     </div>
 
     <ShiftTransactionModal
+      v-if="active"
       v-model:visible="visibleAddTrx"
       @saved="loadData({ reload: true })"
     />

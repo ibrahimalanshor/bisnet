@@ -22,6 +22,7 @@ const colorClass = computed(() => {
       success: 'bg-green-600 text-white',
       primary: 'bg-blue-600 text-white',
       error: 'bg-red-600 text-white',
+      warning: 'bg-yellow-600 text-white',
     }[props.color];
   }
 
