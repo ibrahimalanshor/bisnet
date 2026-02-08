@@ -13,17 +13,22 @@ import { useRequest } from '../../../cores/http';
 const { request } = useRequest();
 
 const columns = [
-  { id: 'date', name: 'Tanggal', value: (item) => formatDate(item.createdAt) },
-  { id: 'name', name: 'Nama', value: (item) => item.name },
+  {
+    id: 'date',
+    name: 'Tanggal',
+    value: (item) => formatDate(item.attributes.createdAt),
+  },
+  { id: 'name', name: 'Nama', value: (item) => item.attributes.name },
   {
     id: 'amount',
     name: 'Jumlah',
-    value: (item) => formatCurrency(item.amount),
+    value: (item) => formatCurrency(item.attributes.amount),
   },
   {
     id: 'source',
     name: 'Sumber',
-    value: (item) => (item.source === 'kas' ? 'Kas Kasir' : 'Manual'),
+    value: (item) =>
+      item.attributes.source === 'shift' ? 'Kas Kasir' : 'Manual',
   },
 ];
 const loading = ref(true);
@@ -64,7 +69,7 @@ async function loadExpenses({ refresh, reload } = {}) {
       },
       sort: '-id',
       fields: {
-        expenses: 'createdAt,name,description,source,amount',
+        expenses: 'createdAt,name,source,amount',
       },
       filter: {
         search: filter.search,
