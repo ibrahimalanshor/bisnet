@@ -1,5 +1,4 @@
 <script setup>
-import data from '../data/expense.json';
 import { reactive, ref } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
@@ -8,7 +7,10 @@ import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import ExpenseFormModal from './ExpenseFormModal.vue';
-import { sleep, formatDate, formatCurrency } from '../../../utils/common';
+import { formatDate, formatCurrency } from '../../../utils/common';
+import { useRequest } from '../../../cores/http';
+
+const { request } = useRequest();
 
 const columns = [
   { id: 'date', name: 'Tanggal', value: (item) => formatDate(item.createdAt) },
@@ -26,7 +28,7 @@ const columns = [
 ];
 const loading = ref(true);
 const error = ref(false);
-const expenses = ref({ data: [] });
+const expenses = ref({ data: [], meta: { page: {} } });
 const query = reactive({
   page: 1,
 });
@@ -40,9 +42,12 @@ const formModal = reactive({
 });
 
 async function loadExpenses({ refresh, reload } = {}) {
+  error.value = false;
+
   if (refresh) {
     query.page = 1;
     filter.search = null;
+    filter.date = null;
   }
 
   if (reload) {
@@ -51,9 +56,28 @@ async function loadExpenses({ refresh, reload } = {}) {
 
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/expenses`, {
+    query: {
+      page: {
+        size: 10,
+        number: query.page,
+      },
+      sort: '-id',
+      fields: {
+        expenses: 'createdAt,name,description,source,amount',
+      },
+      filter: {
+        search: filter.search,
+        date: filter.date,
+      },
+    },
+  });
 
-  expenses.value = { data: data.slice(0, 10) };
+  if (err) {
+    error.value = true;
+  } else {
+    expenses.value = res;
+  }
 
   loading.value = false;
 }
@@ -72,7 +96,11 @@ loadExpenses();
 
     <template #action>
       <div class="flex flex-col gap-2 sm:flex-row">
-        <BaseInput type="date" v-model="filter.date" />
+        <BaseInput
+          type="date"
+          v-model="filter.date"
+          @change="loadExpenses({ reload: true })"
+        />
         <BaseInput
           type="search"
           placeholder="Cari pengeluaran"
@@ -88,7 +116,8 @@ loadExpenses();
   <BaseAlert v-if="error">Gagal memuat data pengeluaran.</BaseAlert>
   <BaseTable :columns="columns" :data="expenses.data" :loading="loading" />
   <BasePagination
-    :total-pages="10"
+    v-if="expenses.meta.page.lastPage > 1"
+    :total-pages="expenses.meta.page.lastPage"
     v-model="query.page"
     @change="loadExpenses"
   />
