@@ -89,6 +89,7 @@ async function loadSales({ refresh, reload } = {}) {
         size: 10,
         number: query.page,
       },
+      sort: '-id',
       fields: {
         sales:
           'code,createdAt,payment_method,items_count,final_price,user_name',

@@ -72,6 +72,7 @@ async function loadRestocks({ refresh, reload } = {}) {
         size: 10,
         number: query.page,
       },
+      sort: '-id',
       fields: {
         restocks: 'code,createdAt,supplier_name,items_count,total_price',
       },
