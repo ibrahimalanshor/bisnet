@@ -165,7 +165,7 @@ export const routes = [
       layout: 'LayoutAdmin',
       roles: ['admin', 'manager'],
       auth: true,
-      title: 'Pengeluaraj',
+      title: 'Pengeluaran',
     },
     component: () =>
       import('./features/expense/components/ExpenseIndexPage.vue'),

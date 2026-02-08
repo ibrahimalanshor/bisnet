@@ -2,6 +2,8 @@
 defineProps({
   label: String,
 });
+
+const checked = defineModel();
 </script>
 
 <template>
@@ -9,6 +11,7 @@ defineProps({
     <input
       type="checkbox"
       class="mt-1 rounded border-gray-300 text-blue-600 checked:border-blue-600 focus:ring-blue-600"
+      v-model="checked"
     />
     {{ label }}
   </label>

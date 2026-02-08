@@ -45,6 +45,7 @@ async function onSubmit() {
       type: form.type === 'in' ? 'income' : 'outcome',
       description: form.description,
       amount: currencyToNum(form.amount),
+      operational_cost: form.expense,
     },
   });
 
@@ -113,7 +114,11 @@ function onOpened() {
         />
       </BaseFormItem>
 
-      <BaseCheckbox label="Biaya Operasional" v-model="form.expense" />
+      <BaseCheckbox
+        v-if="form.type === 'out'"
+        label="Catat Pengeluaran Biaya Operasional"
+        v-model="form.expense"
+      />
 
       <div class="flex gap-2 justify-end">
         <BaseButton
