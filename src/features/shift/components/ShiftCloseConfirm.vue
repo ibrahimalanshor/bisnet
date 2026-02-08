@@ -12,7 +12,6 @@ const visible = defineModel('visible');
 const shiftStore = useShiftStore();
 const { request } = useRequest();
 
-const balance = ref(1250000);
 const actualBalance = ref(null);
 const loading = ref(false);
 
@@ -21,7 +20,8 @@ const valid = computed(
 );
 const remainder = computed(
   () =>
-    balance.value - currencyToNum(actualBalance.value, { failToZero: true }),
+    currencyToNum(actualBalance.value, { failToZero: true }) -
+    shiftStore.balance,
 );
 
 async function onConfirm() {
@@ -68,7 +68,7 @@ async function onConfirm() {
             :id="id"
             placeholder="100,000"
             readonly
-            :native-value="formatCurrency(balance)"
+            :native-value="formatCurrency(shiftStore.balance)"
           />
         </BaseFormItem>
         <BaseFormItem
@@ -78,7 +78,7 @@ async function onConfirm() {
         >
           <BaseInput
             :id="id"
-            :placeholder="balance"
+            :placeholder="formatCurrency(shiftStore.balance)"
             currency
             v-model="actualBalance"
           />

@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref, reactive } from 'vue';
 import { useRequest } from '../../cores/http';
+import { useRouter } from 'vue-router';
 
 export const useShiftStore = defineStore('shift', () => {
   const { request } = useRequest();
+  const router = useRouter();
 
   const active = ref(false);
   const activeId = ref(null);
@@ -34,6 +36,11 @@ export const useShiftStore = defineStore('shift', () => {
 
   function close() {
     active.value = false;
+
+    router.push({
+      name: 'shift-history.detail',
+      params: { id: activeId.value },
+    });
   }
 
   async function loadShift() {
