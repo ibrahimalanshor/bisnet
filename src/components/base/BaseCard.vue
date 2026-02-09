@@ -30,7 +30,7 @@ const responsiveClass = computed(() => {
 <template>
   <div
     :class="[
-      'bg-white rounded-lg',
+      'bg-white rounded-lg flex flex-col',
       !!title || $slots.header ? '' : paddless ? '' : 'p-4',
       bordered ? 'border border-gray-300' : '',
     ]"
@@ -50,7 +50,7 @@ const responsiveClass = computed(() => {
         <slot name="action" />
       </div>
     </slot>
-    <div :class="title && !paddless ? 'p-4' : ''">
+    <div :class="title && !paddless ? 'p-4 flex-grow' : ''">
       <slot />
     </div>
   </div>
