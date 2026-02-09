@@ -134,7 +134,7 @@ loadSales();
         <BaseInput
           v-if="authStore.role !== 'cashier'"
           type="search"
-          placeholder="Pilih kasir"
+          placeholder="Cari kasir"
           v-model="filter.userSearch"
           @input-debounce="loadSales({ reload: true })"
         />
