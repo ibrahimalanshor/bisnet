@@ -57,8 +57,8 @@ async function loadStats() {
 
       return {
         ...stat,
-        value,
-        trend,
+        value: value ?? 0,
+        trend: trend ?? 0,
       };
     });
   }
