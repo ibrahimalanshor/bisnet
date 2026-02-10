@@ -86,7 +86,7 @@ function onChangeProduct() {
       id: form.product.id,
       product_name: form.product.originalName,
       product_barcode: form.product.barcode,
-      qty: null,
+      qty: 1,
       originalQty: null,
       price: null,
     });

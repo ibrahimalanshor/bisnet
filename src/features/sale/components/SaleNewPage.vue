@@ -188,7 +188,7 @@ function onChangeProduct() {
       product_barcode: form.value.product.barcode,
       product_price: form.value.product.price,
       stock: form.value.product.stock,
-      qty: null,
+      qty: 1,
       originalQty: null,
       withDiscount: null,
       discount: null,
