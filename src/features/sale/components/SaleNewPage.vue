@@ -172,7 +172,13 @@ function onReset() {
 
   form.value.date = formatDate(new Date(), 'YYYY-MM-DD');
   form.value.product = null;
+  form.value.productSearch = null;
+  form.value.paymentMethod = 'cash';
   form.value.paymentAmount = null;
+  form.value.withDiscount = false;
+  form.value.discountType = 'percent';
+  form.value.discount = null;
+  form.value.originalDiscount = null;
 }
 
 function onChangeProduct() {
