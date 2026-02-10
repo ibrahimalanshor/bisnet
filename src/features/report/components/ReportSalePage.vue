@@ -18,7 +18,6 @@ import {
   getPaymentMethodName,
   getMonthNames,
 } from '../../../utils/common.js';
-import data from '../../sale/data/sale.json';
 import { useRequest } from '../../../cores/http.js';
 
 const { request } = useRequest();
@@ -37,18 +36,22 @@ const summaryColumns = [
   },
 ];
 const tableColumns = [
-  { id: 'code', name: 'No. Penjualan' },
-  { id: 'date', name: 'Tanggal', value: (item) => formatDate(item.createdAt) },
-  { id: 'cashier', name: 'Kasir', value: (item) => item.cashierName },
+  { id: 'code', name: 'No. Penjualan', value: (item) => item.attributes.code },
+  {
+    id: 'date',
+    name: 'Tanggal',
+    value: (item) => formatDate(item.attributes.createdAt),
+  },
+  { id: 'cashier', name: 'Kasir', value: (item) => item.attributes.user_name },
   {
     id: 'payment',
     name: 'Pembayaran',
-    value: (item) => getPaymentMethodName(item.paymentMethod),
+    value: (item) => getPaymentMethodName(item.attributes.payment_method),
   },
   {
     id: 'total',
     name: 'Total',
-    value: (item) => formatCurrency(item.totalPrice),
+    value: (item) => formatCurrency(item.attributes.final_price),
   },
 ];
 
@@ -56,11 +59,15 @@ const summary = ref({
   total_transactions: 29,
   total_sales: 2582900,
 });
-const reports = ref(data.slice(0, 10));
+const data = ref(null);
+const dataLoading = ref(false);
+
+const reports = computed(() => data.value.data);
 
 const resultVisible = ref(false);
-const error = ref(false);
-const loadingResult = ref(false);
+const resultError = ref(false);
+const resultLoading = ref(false);
+
 const filter = reactive({
   period: 'daily',
   date: null,
@@ -99,20 +106,48 @@ const title = computed(() => {
 });
 
 async function loadResult() {
-  error.value = false;
-  loadingResult.value = true;
+  resultError.value = false;
+  resultLoading.value = true;
 
-  const [res, err] = await request(`/api/v1/reports/sales`);
+  query.page = 1;
+
+  const [, err] = await loadDailyResult();
 
   if (err) {
-    error.value = true;
+    resultError.value = true;
   } else {
-    console.log(err);
     resultVisible.value = true;
   }
 
-  loadingResult.value = false;
+  resultLoading.value = false;
 }
+async function loadDailyResult() {
+  dataLoading.value = true;
+
+  const [res, err] = await request(`/api/v1/sales`, {
+    query: {
+      page: {
+        size: 10,
+        number: query.page,
+      },
+      fields: {
+        sales: 'createdAt,code,user_name,payment_method,final_price',
+      },
+      filter: {
+        date: filter.date,
+      },
+    },
+  });
+
+  if (!err) {
+    data.value = res;
+  }
+
+  dataLoading.value = false;
+
+  return [res, err];
+}
+
 function onChangePeriod() {
   filter.date = null;
   filter.month = 1;
@@ -125,7 +160,7 @@ function onChangePeriod() {
 
   <BaseCard title="Form Laporan Penjualan">
     <form class="space-y-4" @submit.prevent="loadResult">
-      <BaseAlert v-if="error"
+      <BaseAlert v-if="resultError"
         >Gagal menampilkan laporan, silakan coba lagi.</BaseAlert
       >
       <BaseFormItem
@@ -177,7 +212,7 @@ function onChangePeriod() {
       <BaseButton
         icon="ri:file-list-2-fill"
         :disabled="!formValid"
-        :loading="loadingResult"
+        :loading="resultLoading"
         >Tampilkan</BaseButton
       >
     </form>
@@ -208,8 +243,17 @@ function onChangePeriod() {
         class="sm:grid-cols-2"
       ></BaseDescriptionList>
 
-      <BaseTable :columns="tableColumns" :data="reports"></BaseTable>
-      <BasePagination :total-pages="10" v-model="query.page" />
+      <BaseTable
+        :loading="dataLoading"
+        :columns="tableColumns"
+        :data="reports"
+      ></BaseTable>
+      <BasePagination
+        v-if="filter.period === 'daily' && data.meta.page.lastPage > 1"
+        :total-pages="data.meta.page.lastPage"
+        v-model="query.page"
+        @change="loadDailyResult"
+      />
     </div>
   </BaseCard>
 </template>
