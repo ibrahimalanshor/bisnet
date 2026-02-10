@@ -10,16 +10,18 @@ import BasePagination from '../../../components/base/BasePagination.vue';
 import BaseSelect from '../../../components/base/BaseSelect.vue';
 import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
 import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
+import BaseAlert from '../../../components/base/BaseAlert.vue';
 import { reactive, ref, computed } from 'vue';
 import {
   formatCurrency,
   formatDate,
   getPaymentMethodName,
-  sleep,
   getMonthNames,
 } from '../../../utils/common.js';
 import data from '../../sale/data/sale.json';
+import { useRequest } from '../../../cores/http.js';
 
+const { request } = useRequest();
 const months = getMonthNames();
 
 const summaryColumns = [
@@ -57,6 +59,7 @@ const summary = ref({
 const reports = ref(data.slice(0, 10));
 
 const resultVisible = ref(false);
+const error = ref(false);
 const loadingResult = ref(false);
 const filter = reactive({
   period: 'daily',
@@ -96,10 +99,17 @@ const title = computed(() => {
 });
 
 async function loadResult() {
+  error.value = false;
   loadingResult.value = true;
 
-  await sleep();
-  resultVisible.value = true;
+  const [res, err] = await request(`/api/v1/reports/sales`);
+
+  if (err) {
+    error.value = true;
+  } else {
+    console.log(err);
+    resultVisible.value = true;
+  }
 
   loadingResult.value = false;
 }
@@ -115,6 +125,9 @@ function onChangePeriod() {
 
   <BaseCard title="Form Laporan Penjualan">
     <form class="space-y-4" @submit.prevent="loadResult">
+      <BaseAlert v-if="error"
+        >Gagal menampilkan laporan, silakan coba lagi.</BaseAlert
+      >
       <BaseFormItem
         id="report_sale_form.period"
         label="Periode"
@@ -161,13 +174,6 @@ function onChangePeriod() {
           <BaseYearSelect :id="id" required v-model="filter.year" />
         </BaseFormItem>
       </div>
-      <BaseFormItem
-        id="report_sale_form.cashier_id"
-        label="Kasir (Opsional)"
-        v-slot="{ id }"
-      >
-        <BaseInput :id="id" placeholder="Pilih Kasir" />
-      </BaseFormItem>
       <BaseButton
         icon="ri:file-list-2-fill"
         :disabled="!formValid"

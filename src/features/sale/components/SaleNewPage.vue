@@ -187,7 +187,9 @@ function onChangeProduct() {
   );
 
   if (existingIndex !== -1) {
-    items.value[existingIndex].qty++;
+    if (items.value[existingIndex].qty < items.value[existingIndex].stock) {
+      items.value[existingIndex].qty++;
+    }
   } else {
     items.value.push({
       id: form.value.product.id,
