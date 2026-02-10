@@ -56,8 +56,8 @@ const tableColumns = [
 ];
 
 const summary = ref({
-  total_transactions: 29,
-  total_sales: 2582900,
+  total_transactions: null,
+  total_sales: null,
 });
 const data = ref(null);
 const dataLoading = ref(false);
@@ -126,6 +126,8 @@ async function loadDailyResult() {
 
   const [res, err] = await request(`/api/v1/sales`, {
     query: {
+      with_summary: true,
+      summary_date: filter.date,
       page: {
         size: 10,
         number: query.page,
@@ -141,6 +143,9 @@ async function loadDailyResult() {
 
   if (!err) {
     data.value = res;
+
+    summary.value.total_sales = res.meta.summary.total_sales;
+    summary.value.total_transactions = res.meta.summary.total_transactions;
   }
 
   dataLoading.value = false;
