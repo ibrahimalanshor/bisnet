@@ -73,6 +73,7 @@ const itemsColumn = computed(() => {
 const form = ref({
   date: formatDate(new Date(), 'YYYY-MM-DD'),
   product: null,
+  productSearch: null,
   paymentMethod: 'cash',
   paymentAmount: null,
   withDiscount: false,
@@ -198,6 +199,7 @@ function onChangeProduct() {
   }
 
   form.value.product = null;
+  form.value.productSearch = null;
 }
 function onChangeQty(index) {
   const product = items.value[index];
@@ -259,6 +261,7 @@ function onAddDiscount() {
           icon-start="ri:qr-scan-2-line"
           :filter="{ stock_status: 'has_stock' }"
           v-model="form.product"
+          v-model:search="form.productSearch"
           @change="onChangeProduct"
         />
       </BaseFormItem>
