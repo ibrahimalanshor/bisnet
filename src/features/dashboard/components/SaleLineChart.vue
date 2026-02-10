@@ -27,7 +27,11 @@ const options = {};
 async function loadData() {
   loading.value = true;
 
-  const [res, err] = await request(`/api/v1/stats/sales`);
+  const [res, err] = await request(`/api/v1/stats/sales`, {
+    query: {
+      date: new Date(),
+    },
+  });
 
   if (!err) {
     data.value.datasets[0].data = Array.from({ length: 7 }, (_, i) =>

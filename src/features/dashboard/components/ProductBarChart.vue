@@ -34,7 +34,11 @@ const options = {
 async function loadData() {
   loading.value = true;
 
-  const [res, err] = await request(`/api/v1/stats/products`);
+  const [res, err] = await request(`/api/v1/stats/products`, {
+    query: {
+      date: new Date(),
+    },
+  });
 
   if (!err) {
     data.value.labels = res.map((item) => item.product_name);

@@ -46,7 +46,11 @@ const stats = ref([
 async function loadStats() {
   loading.value = true;
 
-  const [res, err] = await request(`/api/v1/stats`);
+  const [res, err] = await request(`/api/v1/stats`, {
+    query: {
+      date: new Date(),
+    },
+  });
 
   if (!err) {
     stats.value = stats.value.map((stat) => {
