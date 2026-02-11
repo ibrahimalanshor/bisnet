@@ -35,25 +35,51 @@ const summaryColumns = [
     value: (item) => formatCurrency(item.total_sales),
   },
 ];
-const tableColumns = [
-  { id: 'code', name: 'No. Penjualan', value: (item) => item.attributes.code },
-  {
-    id: 'date',
-    name: 'Tanggal',
-    value: (item) => formatDate(item.attributes.createdAt),
-  },
-  { id: 'cashier', name: 'Kasir', value: (item) => item.attributes.user_name },
-  {
-    id: 'payment',
-    name: 'Pembayaran',
-    value: (item) => getPaymentMethodName(item.attributes.payment_method),
-  },
-  {
-    id: 'total',
-    name: 'Total',
-    value: (item) => formatCurrency(item.attributes.final_price),
-  },
-];
+const tableColumns = computed(() => {
+  if (filter.period === 'daily') {
+    return [
+      {
+        id: 'code',
+        name: 'No. Penjualan',
+        value: (item) => item.attributes.code,
+      },
+      {
+        id: 'date',
+        name: 'Tanggal',
+        value: (item) => formatDate(item.attributes.createdAt),
+      },
+      {
+        id: 'cashier',
+        name: 'Kasir',
+        value: (item) => item.attributes.user_name,
+      },
+      {
+        id: 'payment',
+        name: 'Pembayaran',
+        value: (item) => getPaymentMethodName(item.attributes.payment_method),
+      },
+      {
+        id: 'total',
+        name: 'Total',
+        value: (item) => formatCurrency(item.attributes.final_price),
+      },
+    ];
+  }
+
+  return [
+    { id: 'date', name: 'Tanggal' },
+    {
+      id: 'total_transactions',
+      name: 'Total Transaksi',
+      value: (item) => formatCurrency(item.total_transactions),
+    },
+    {
+      id: 'total_sales',
+      name: 'Total Penjualan',
+      value: (item) => formatCurrency(item.total_sales),
+    },
+  ];
+});
 
 const summary = ref({
   total_transactions: null,
@@ -67,6 +93,7 @@ const reports = computed(() => data.value.data);
 const resultVisible = ref(false);
 const resultError = ref(false);
 const resultLoading = ref(false);
+const resultTitle = ref(null);
 
 const filter = reactive({
   period: 'daily',
@@ -89,21 +116,6 @@ const formValid = computed(() => {
 
   return !!filter.year;
 });
-const title = computed(() => {
-  if (!formValid.value) {
-    return null;
-  }
-
-  if (filter.period === 'daily') {
-    return `Laporan Penjualan ${formatDate(filter.date, 'DD MMMM YYYY')}`;
-  }
-
-  if (filter.period === 'monthly') {
-    return `Laporan Penjualan Bulan ${months[filter.month]} ${filter.year}`;
-  }
-
-  return `Laporan Penjualan Tahun ${filter.year}`;
-});
 
 async function loadResult() {
   resultError.value = false;
@@ -111,11 +123,22 @@ async function loadResult() {
 
   query.page = 1;
 
-  const [, err] = await loadDailyResult();
+  const [, err] =
+    filter.period === 'daily'
+      ? await loadDailyResult()
+      : await loadPeriodlyResult();
 
   if (err) {
     resultError.value = true;
   } else {
+    if (filter.period === 'daily') {
+      resultTitle.value = `Laporan Penjualan ${formatDate(filter.date, 'DD MMMM YYYY')}`;
+    } else if (filter.period === 'monthly') {
+      resultTitle.value = `Laporan Penjualan Bulan ${months[filter.month]} ${filter.year}`;
+    } else {
+      resultTitle.value = `Laporan Penjualan Tahun ${filter.year}`;
+    }
+
     resultVisible.value = true;
   }
 
@@ -153,7 +176,32 @@ async function loadDailyResult() {
   return [res, err];
 }
 
+async function loadPeriodlyResult() {
+  dataLoading.value = true;
+
+  const [res, err] = await request(`/api/v1/reports/sales`, {
+    query: {
+      period: filter.period,
+      month: filter.month,
+      year: filter.year,
+    },
+  });
+
+  if (!err) {
+    data.value = res;
+
+    summary.value.total_sales = res.meta.summary.total_sales;
+    summary.value.total_transactions = res.meta.summary.total_transactions;
+  }
+
+  dataLoading.value = false;
+
+  return [res, err];
+}
+
 function onChangePeriod() {
+  resultVisible.value = false;
+
   filter.date = null;
   filter.month = 1;
   filter.year = new Date().getFullYear();
@@ -225,7 +273,7 @@ function onChangePeriod() {
 
   <BaseCard
     v-if="resultVisible"
-    :title="title"
+    :title="resultTitle"
     :custom-class="{
       header:
         'flex-col items-start gap-2 md:flex-row md:items-center lg:flex-col lg:items-start xl:flex-row xl:items-center',
@@ -254,7 +302,7 @@ function onChangePeriod() {
         :data="reports"
       ></BaseTable>
       <BasePagination
-        v-if="filter.period === 'daily' && data.meta.page.lastPage > 1"
+        v-if="filter.period === 'daily' && data.meta.page?.lastPage > 1"
         :total-pages="data.meta.page.lastPage"
         v-model="query.page"
         @change="loadDailyResult"
