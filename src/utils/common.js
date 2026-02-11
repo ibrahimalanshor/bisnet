@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import localeData from 'dayjs/plugin/localeData';
+import objectSupport from 'dayjs/plugin/objectSupport';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(localeData);
+dayjs.extend(objectSupport);
 
 export function getChartColor(color, transparent = 1) {
   return {
@@ -83,4 +85,8 @@ export function getPaymentMethodName(name) {
 
 export function getMonthNames() {
   return dayjs().localeData().months();
+}
+
+export function getMonthName(i) {
+  return dayjs({ month: i }).format('MMMM');
 }

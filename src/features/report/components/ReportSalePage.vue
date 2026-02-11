@@ -17,6 +17,7 @@ import {
   formatDate,
   getPaymentMethodName,
   getMonthNames,
+  getMonthName,
 } from '../../../utils/common.js';
 import { useRequest } from '../../../cores/http.js';
 
@@ -67,7 +68,17 @@ const tableColumns = computed(() => {
   }
 
   return [
-    { id: 'date', name: 'Tanggal' },
+    filter.period === 'monthly'
+      ? {
+          id: 'date',
+          name: 'Tanggal',
+          value: (item) => formatDate(item.date, 'DD/MM/YYYY'),
+        }
+      : {
+          id: 'month',
+          name: 'Bulan',
+          value: (item) => getMonthName(item.month - 1),
+        },
     {
       id: 'total_transactions',
       name: 'Total Transaksi',
