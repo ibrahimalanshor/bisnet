@@ -90,3 +90,19 @@ export function getMonthNames() {
 export function getMonthName(i) {
   return dayjs({ month: i }).format('MMMM');
 }
+
+export function getPeriodFromToDate(period, data) {
+  if (period === 'daily') {
+    return {
+      fromDate: dayjs(data.date).startOf('day'),
+      toDate: dayjs(data.date).endOf('day'),
+    };
+  }
+
+  const monthDate = dayjs({ month: data.month - 1, year: data.year, day: 1 });
+
+  return {
+    fromDate: monthDate.startOf('month'),
+    toDate: monthDate.endOf('month'),
+  };
+}
