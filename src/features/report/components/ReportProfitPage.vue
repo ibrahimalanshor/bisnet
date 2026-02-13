@@ -18,10 +18,10 @@ const months = getMonthNames();
 
 const summary = ref({
   sales: 0,
-  hpp: 90_000_000,
-  income: 60_000_000,
-  expense: 15_000_000,
-  profit: 45_000_000,
+  hpp: 0,
+  income: 0,
+  expense: 0,
+  profit: 0,
 });
 
 const resultVisible = ref(false);
@@ -48,6 +48,10 @@ async function loadResult() {
 
   if (!err) {
     summary.value.sales = res.sales;
+    summary.value.hpp = res.hpp;
+    summary.value.income = res.gross_profit;
+    summary.value.expense = res.expense;
+    summary.value.profit = res.profit;
 
     resultVisible.value = true;
   }
@@ -134,7 +138,7 @@ function resetResult() {
         <div class="flex items-center justify-between pb-4">
           <p>Biaya Operasional</p>
           <p class="font-bold text-2xl text-red-700">
-            -{{ formatCurrency(summary.income) }}
+            -{{ formatCurrency(summary.expense) }}
           </p>
         </div>
         <div class="flex items-center justify-between">
