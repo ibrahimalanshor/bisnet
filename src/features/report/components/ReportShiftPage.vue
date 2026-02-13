@@ -25,14 +25,29 @@ const months = getMonthNames();
 
 const summaryColumns = [
   {
-    id: 'total_transactions',
-    name: 'Total Transaksi',
-    value: (item) => formatCurrency(item.total_transactions),
+    id: 'total_shifts',
+    name: 'Total Shifts',
+    value: (item) => formatCurrency(item.total_shifts),
   },
   {
-    id: 'total_sales',
-    name: 'Total Penjualan',
-    value: (item) => formatCurrency(item.total_sales),
+    id: 'total_income',
+    name: 'Total Pemasukkan',
+    value: (item) => formatCurrency(item.total_income),
+  },
+  {
+    id: 'total_outcome',
+    name: 'Total Pengeluaran',
+    value: (item) => formatCurrency(item.total_outcome),
+  },
+  {
+    id: 'total_balance',
+    name: 'Total Saldo Akhir',
+    value: (item) => formatCurrency(item.total_balance),
+  },
+  {
+    id: 'total_actual_balance',
+    name: 'Total Saldo Aktual',
+    value: (item) => formatCurrency(item.total_actual_balance),
   },
 ];
 const tableColumns = computed(() => {
@@ -176,8 +191,11 @@ async function loadData() {
   if (!err) {
     data.value = res;
 
-    summary.value.total_sales = res.meta.summary.total_sales;
-    summary.value.total_transactions = res.meta.summary.total_transactions;
+    summary.value.total_shifts = res.meta.summary.total_shifts;
+    summary.value.total_income = res.meta.summary.total_income;
+    summary.value.total_outcome = res.meta.summary.total_outcome;
+    summary.value.total_balance = res.meta.summary.total_balance;
+    summary.value.total_actual_balance = res.meta.summary.total_actual_balance;
   }
 
   dataLoading.value = false;
@@ -265,7 +283,7 @@ function onChangePeriod() {
       <BaseDescriptionList
         :columns="summaryColumns"
         :data="summary"
-        class="sm:grid-cols-2"
+        class="sm:grid-cols-2 xl:grid-cols-3"
       ></BaseDescriptionList>
 
       <BaseTable
