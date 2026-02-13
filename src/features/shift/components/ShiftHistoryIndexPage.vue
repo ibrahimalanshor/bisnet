@@ -18,7 +18,7 @@ const columns = [
   },
   {
     id: 'duration',
-    name: 'Durasi',
+    name: 'Jam',
     render: ({ item }) =>
       item.attributes.finishedAt
         ? h(

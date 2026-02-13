@@ -44,7 +44,7 @@ const tableColumns = computed(() => {
     },
     {
       id: 'duration',
-      name: 'Durasi',
+      name: 'Jam',
       render: ({ item }) =>
         h(
           'p',
@@ -162,11 +162,13 @@ async function loadData() {
         number: query.page,
       },
       fields: {
-        sales: 'createdAt,code,user_name,payment_method,final_price',
+        shifts:
+          'createdAt,finishedAt,init_balance,income,outcome,balance,actual_balance',
       },
       filter: {
         from_date: queryDate.fromDate.toISOString(),
         to_date: queryDate.toDate.toISOString(),
+        finished: true,
       },
     },
   });
