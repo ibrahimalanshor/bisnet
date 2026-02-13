@@ -10,50 +10,65 @@ import BasePagination from '../../../components/base/BasePagination.vue';
 import BaseSelect from '../../../components/base/BaseSelect.vue';
 import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
 import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
-import { reactive, ref, computed } from 'vue';
+import BaseAlert from '../../../components/base/BaseAlert.vue';
+import { reactive, ref, computed, h } from 'vue';
 import {
   formatCurrency,
   formatDate,
-  sleep,
   getMonthNames,
+  getPeriodFromToDate,
 } from '../../../utils/common.js';
-import data from '../../expense/data/expense.json';
+import { useRequest } from '../../../cores/http.js';
 
+const { request } = useRequest();
 const months = getMonthNames();
 
 const summaryColumns = [
   {
-    id: 'total',
+    id: 'total_expenses',
+    name: 'Jumlah Pengeluaran',
+    value: (item) => formatCurrency(item.total_expenses),
+  },
+  {
+    id: 'total_amount',
     name: 'Total Pengeluaran',
-    value: (item) => formatCurrency(item.total),
+    value: (item) => formatCurrency(item.total_amount),
   },
 ];
-const tableColumns = [
+const tableColumns = computed(() => [
   {
     id: 'date',
     name: 'Tanggal',
-    value: (item) => formatDate(item.date, 'DD MMMM YYYY'),
+    value: (item) => formatDate(item.attributes.createdAt),
   },
-  { id: 'name', name: 'Keterangan' },
+  { id: 'name', name: 'Nama', value: (item) => item.attributes.name },
   {
     id: 'amount',
-    name: 'Nominal',
-    value: (item) => formatCurrency(item.amount),
+    name: 'Jumlah',
+    value: (item) => formatCurrency(item.attributes.amount),
   },
   {
     id: 'source',
     name: 'Sumber',
-    value: (item) => (item.source === 'kas' ? 'Kas Kasir' : 'Manual'),
+    value: (item) =>
+      item.attributes.source === 'shift' ? 'Kas Kasir' : 'Manual',
   },
-];
+]);
 
 const summary = ref({
-  total: 2582900,
+  total_transactions: null,
+  total_sales: null,
 });
-const reports = ref(data.slice(0, 10));
+const data = ref(null);
+const dataLoading = ref(false);
+
+const reports = computed(() => data.value.data);
 
 const resultVisible = ref(false);
-const loadingResult = ref(false);
+const resultError = ref(false);
+const resultLoading = ref(false);
+const resultTitle = ref(null);
+
 const filter = reactive({
   period: 'daily',
   date: null,
@@ -69,37 +84,72 @@ const formValid = computed(() => {
     return !!filter.date;
   }
 
-  if (filter.period === 'monthly') {
-    return filter.month && filter.year;
-  }
-
-  return !!filter.year;
-});
-const title = computed(() => {
-  if (!formValid.value) {
-    return null;
-  }
-
-  if (filter.period === 'daily') {
-    return `Laporan Pengeluaran ${formatDate(filter.date, 'DD MMMM YYYY')}`;
-  }
-
-  if (filter.period === 'monthly') {
-    return `Laporan Pengeluaran Bulan ${months[filter.month]} ${filter.year}`;
-  }
-
-  return `Laporan Pengeluaran Tahun ${filter.year}`;
+  return filter.month && filter.year;
 });
 
 async function loadResult() {
-  loadingResult.value = true;
+  resultError.value = false;
+  resultLoading.value = true;
 
-  await sleep();
-  resultVisible.value = true;
+  query.page = 1;
 
-  loadingResult.value = false;
+  const [, err] = await loadData();
+
+  if (err) {
+    resultError.value = true;
+  } else {
+    if (filter.period === 'daily') {
+      resultTitle.value = `Laporan Pengeluaran ${formatDate(filter.date, 'DD MMMM YYYY')}`;
+    } else {
+      resultTitle.value = `Laporan Pengeluaran Bulan ${months[filter.month]} ${filter.year}`;
+    }
+
+    resultVisible.value = true;
+  }
+
+  resultLoading.value = false;
 }
+async function loadData() {
+  dataLoading.value = true;
+
+  const queryDate = getPeriodFromToDate(filter.period, {
+    date: filter.date,
+    month: filter.month,
+    year: filter.year,
+  });
+
+  const [res, err] = await request(`/api/v1/expenses`, {
+    query: {
+      with_summary: true,
+      page: {
+        size: 10,
+        number: query.page,
+      },
+      fields: {
+        expenses: 'createdAt,name,source,amount',
+      },
+      filter: {
+        from_date: queryDate.fromDate.toISOString(),
+        to_date: queryDate.toDate.toISOString(),
+      },
+    },
+  });
+
+  if (!err) {
+    data.value = res;
+
+    summary.value.total_expenses = res.meta.summary.total_expenses;
+    summary.value.total_amount = res.meta.summary.total_amount;
+  }
+
+  dataLoading.value = false;
+
+  return [res, err];
+}
+
 function onChangePeriod() {
+  resultVisible.value = false;
+
   filter.date = null;
   filter.month = 1;
   filter.year = new Date().getFullYear();
@@ -111,8 +161,11 @@ function onChangePeriod() {
 
   <BaseCard title="Form Laporan Pengeluaran">
     <form class="space-y-4" @submit.prevent="loadResult">
+      <BaseAlert v-if="resultError"
+        >Gagal menampilkan laporan, silakan coba lagi.</BaseAlert
+      >
       <BaseFormItem
-        id="report_expense_form.period"
+        id="report_sale_form.period"
         label="Periode"
         v-slot="{ id }"
       >
@@ -121,7 +174,6 @@ function onChangePeriod() {
           :options="[
             { id: 'daily', name: 'Per Hari' },
             { id: 'monthly', name: 'Per Bulan' },
-            { id: 'yearly', name: 'Per Tahun' },
           ]"
           required
           v-model="filter.period"
@@ -130,37 +182,24 @@ function onChangePeriod() {
       </BaseFormItem>
       <BaseFormItem
         v-if="filter.period === 'daily'"
-        id="report_expense_form.date"
+        id="report_sale_form.date"
         label="Tanggal"
         v-slot="{ id }"
       >
         <BaseInput type="date" :id="id" required v-model="filter.date" />
       </BaseFormItem>
-      <div
-        v-if="filter.period === 'monthly' || filter.period === 'yearly'"
-        class="grid grid-cols-2 gap-4"
-      >
-        <BaseFormItem
-          v-if="filter.period === 'monthly'"
-          id="report_expense_form.month"
-          label="Bulan"
-          v-slot="{ id }"
-        >
+      <div v-else class="grid grid-cols-2 gap-4">
+        <BaseFormItem id="report_sale_form.month" label="Bulan" v-slot="{ id }">
           <BaseMonthSelect :id="id" required v-model="filter.month" />
         </BaseFormItem>
-        <BaseFormItem
-          id="report_expense_form.year"
-          label="Tahun"
-          :class="filter.period === 'yearly' ? 'col-span-2' : ''"
-          v-slot="{ id }"
-        >
+        <BaseFormItem id="report_sale_form.year" label="Tahun" v-slot="{ id }">
           <BaseYearSelect :id="id" required v-model="filter.year" />
         </BaseFormItem>
       </div>
       <BaseButton
         icon="ri:file-list-2-fill"
         :disabled="!formValid"
-        :loading="loadingResult"
+        :loading="resultLoading"
         >Tampilkan</BaseButton
       >
     </form>
@@ -168,7 +207,7 @@ function onChangePeriod() {
 
   <BaseCard
     v-if="resultVisible"
-    :title="title"
+    :title="resultTitle"
     :custom-class="{
       header:
         'flex-col items-start gap-2 md:flex-row md:items-center lg:flex-col lg:items-start xl:flex-row xl:items-center',
@@ -191,8 +230,17 @@ function onChangePeriod() {
         class="sm:grid-cols-2"
       ></BaseDescriptionList>
 
-      <BaseTable :columns="tableColumns" :data="reports"></BaseTable>
-      <BasePagination :total-pages="10" v-model="query.page" />
+      <BaseTable
+        :loading="dataLoading"
+        :columns="tableColumns"
+        :data="reports"
+      ></BaseTable>
+      <BasePagination
+        v-if="data.meta.page.lastPage > 1"
+        :total-pages="data.meta.page.lastPage"
+        v-model="query.page"
+        @change="loadData"
+      />
     </div>
   </BaseCard>
 </template>
