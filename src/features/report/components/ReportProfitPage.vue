@@ -6,12 +6,18 @@ import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
 import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
 import { reactive, ref } from 'vue';
-import { formatCurrency, getMonthNames, sleep } from '../../../utils/common.js';
+import {
+  formatCurrency,
+  getMonthNames,
+  getPeriodFromToDate,
+} from '../../../utils/common.js';
+import { useRequest } from '../../../cores/http.js';
 
+const { request } = useRequest();
 const months = getMonthNames();
 
 const summary = ref({
-  sales: 150_000_000,
+  sales: 0,
   hpp: 90_000_000,
   income: 60_000_000,
   expense: 15_000_000,
@@ -28,10 +34,28 @@ const filter = reactive({
 async function loadResult() {
   loadingResult.value = true;
 
-  await sleep();
-  resultVisible.value = true;
+  const queryDate = getPeriodFromToDate('monthly', {
+    month: filter.month,
+    year: filter.year,
+  });
+
+  const [res, err] = await request(`/api/v1/reports/profit`, {
+    query: {
+      from_date: queryDate.fromDate.toISOString(),
+      to_date: queryDate.toDate.toISOString(),
+    },
+  });
+
+  if (!err) {
+    summary.value.sales = res.sales;
+
+    resultVisible.value = true;
+  }
 
   loadingResult.value = false;
+}
+function resetResult() {
+  resultVisible.value = false;
 }
 </script>
 
@@ -47,14 +71,24 @@ async function loadResult() {
             label="Bulan"
             v-slot="{ id }"
           >
-            <BaseMonthSelect :id="id" required v-model="filter.month" />
+            <BaseMonthSelect
+              :id="id"
+              required
+              v-model="filter.month"
+              @change="resetResult"
+            />
           </BaseFormItem>
           <BaseFormItem
             id="report_profit_form.year"
             label="Tahun"
             v-slot="{ id }"
           >
-            <BaseYearSelect :id="id" required v-model="filter.year" />
+            <BaseYearSelect
+              :id="id"
+              required
+              v-model="filter.year"
+              @change="resetResult"
+            />
           </BaseFormItem>
         </div>
         <BaseButton
