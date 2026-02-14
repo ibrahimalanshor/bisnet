@@ -150,6 +150,7 @@ loadUsers();
           @click="onEdit(item.id)"
         />
         <BaseButton
+          v-if="item.id != authStore.user.id"
           icon="ri:delete-bin-fill"
           color="error"
           size="sm"
