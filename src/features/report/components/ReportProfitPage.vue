@@ -5,6 +5,7 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
 import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
+import BaseAlert from '../../../components/base/BaseAlert.vue';
 import { reactive, ref } from 'vue';
 import {
   formatCurrency,
@@ -22,6 +23,8 @@ const summary = ref({
   income: 0,
   expense: 0,
   profit: 0,
+  grossMargin: 0,
+  profitMargin: 0,
 });
 
 const resultVisible = ref(false);
@@ -52,6 +55,8 @@ async function loadResult() {
     summary.value.income = res.gross_profit;
     summary.value.expense = res.expense;
     summary.value.profit = res.profit;
+    summary.value.grossMargin = res.gross_margin;
+    summary.value.profitMargin = res.profit_margin;
 
     resultVisible.value = true;
   }
@@ -125,7 +130,7 @@ function resetResult() {
           <p>Pendapatan</p>
           <p class="font-bold text-2xl">{{ formatCurrency(summary.sales) }}</p>
         </div>
-        <div class="flex items-center justify-between pb-4">
+        <div class="flex items-center justify-between pb-4 border-gray-900">
           <p>HPP</p>
           <p class="font-bold text-2xl text-red-700">
             -{{ formatCurrency(summary.hpp) }}
@@ -135,17 +140,42 @@ function resetResult() {
           <p>Laba Kotor</p>
           <p class="font-bold text-2xl">{{ formatCurrency(summary.income) }}</p>
         </div>
-        <div class="flex items-center justify-between pb-4">
+        <div class="flex items-center justify-between pb-4 border-gray-900">
           <p>Biaya Operasional</p>
           <p class="font-bold text-2xl text-red-700">
             -{{ formatCurrency(summary.expense) }}
           </p>
         </div>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between pb-4">
           <p class="font-bold text-xl">Laba</p>
-          <p class="font-bold text-3xl text-green-700">
+          <p
+            :class="[
+              'font-bold text-3xl',
+              summary.profit > 0 ? 'text-green-700' : 'text-red-700',
+            ]"
+          >
             {{ formatCurrency(summary.profit) }}
           </p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-2">
+          <BaseAlert
+            :with-icon="false"
+            :color="summary.grossMargin > 0 ? 'primary' : 'warning'"
+          >
+            <div class="flex gap-2 items-center justify-center w-full text-lg">
+              <span>Margin Kotor:</span>
+              <strong class="text-2xl">{{ summary.grossMargin }}%</strong>
+            </div>
+          </BaseAlert>
+          <BaseAlert
+            :with-icon="false"
+            :color="summary.profitMargin > 0 ? 'green' : 'error'"
+          >
+            <div class="flex gap-2 items-center justify-center w-full text-lg">
+              <span>Margin Bersih:</span>
+              <strong class="text-2xl">{{ summary.profitMargin }}%</strong>
+            </div>
+          </BaseAlert>
         </div>
       </div>
     </BaseCard>
