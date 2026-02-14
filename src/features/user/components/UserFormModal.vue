@@ -35,7 +35,22 @@ const form = reactive({
 async function loadForm() {
   loadingForm.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/users/${props.id}`, {
+    query: {
+      fields: {
+        users: 'name,username,email,phone,role',
+      },
+    },
+  });
+
+  if (!err) {
+    form.name = res.data.attributes.name;
+    form.username = res.data.attributes.username;
+    form.email = res.data.attributes.email;
+    form.phone = res.data.attributes.phone;
+    form.password = res.data.attributes.password;
+    form.role = res.data.attributes.role;
+  }
 
   loadingForm.value = false;
 }
@@ -59,22 +74,26 @@ async function onSubmit() {
   error.value = null;
   loadingSave.value = true;
 
-  const [, err] = await request(`/api/v1/users`, {
-    method: 'post',
-    body: {
-      data: {
-        type: 'users',
-        attributes: {
-          name: form.name,
-          username: form.username,
-          phone: form.phone,
-          email: form.email,
-          role: form.role,
-          password: form.password,
+  const [, err] = await request(
+    props.id ? `/api/v1/users/${props.id}` : `/api/v1/users`,
+    {
+      method: props.id ? 'patch' : 'post',
+      body: {
+        data: {
+          type: 'users',
+          ...(props.id ? { id: props.id } : {}),
+          attributes: {
+            name: form.name,
+            username: form.username,
+            phone: form.phone,
+            email: form.email,
+            role: form.role,
+            password: form.password,
+          },
         },
       },
     },
-  });
+  );
 
   if (err) {
     if (!err.jsonapi) {
@@ -142,12 +161,17 @@ async function onSubmit() {
           v-model="form.role"
         />
       </BaseFormItem>
-      <BaseFormItem id="user_form.password" label="Password" v-slot="{ id }">
+      <BaseFormItem
+        id="user_form.password"
+        label="Password"
+        :message="props.id ? 'Kosongkan jika tidak diganti' : ''"
+        v-slot="{ id }"
+      >
         <BaseInput
           :id="id"
           placeholder="Password"
           type="password"
-          required
+          :required="!props.id"
           v-model="form.password"
         />
       </BaseFormItem>
