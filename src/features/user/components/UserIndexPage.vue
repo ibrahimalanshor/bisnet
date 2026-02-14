@@ -1,5 +1,4 @@
 <script setup>
-import data from '../data/user.json';
 import { reactive, ref, h } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
@@ -11,27 +10,38 @@ import BaseBadge from '../../../components/base/BaseBadge.vue';
 import UserFormModal from './UserFormModal.vue';
 import UserDeleteConfirm from './UserDeleteConfirm.vue';
 import UserRoleSelect from './UserRoleSelect.vue';
-import { sleep } from '../../../utils/common';
+import { useRequest } from '../../../cores/http';
+
+const { request } = useRequest();
 
 const columns = [
   {
     id: 'name',
     name: 'Nama',
-    render: ({ item }) => h('p', { class: 'font-semibold' }, item.name),
+    render: ({ item }) =>
+      h('p', { class: 'font-semibold' }, item.attributes.name),
   },
-  { id: 'email', name: 'Email' },
-  { id: 'phone', name: 'No. Telp' },
+  {
+    id: 'username',
+    name: 'Nama Pengguna',
+    value: (item) => item.attributes.username,
+  },
+  {
+    id: 'phone',
+    name: 'No. Telp',
+    value: (item) => item.attributes.phone ?? '-',
+  },
   {
     id: 'role',
     name: 'Role',
     render: ({ item }) =>
-      h(BaseBadge, { colorVariant: 'thin' }, () => item.role),
+      h(BaseBadge, { colorVariant: 'thin' }, () => item.attributes.role),
   },
   { id: 'action', name: 'Aksi' },
 ];
 const loading = ref(true);
 const error = ref(false);
-const users = ref({ data: [] });
+const users = ref({ data: [], meta: { page: {} } });
 const query = reactive({
   page: 1,
 });
@@ -49,6 +59,8 @@ const deleteConfirm = reactive({
 });
 
 async function loadUsers({ refresh, reload } = {}) {
+  error.value = false;
+
   if (refresh) {
     query.page = 1;
     filter.search = null;
@@ -60,9 +72,27 @@ async function loadUsers({ refresh, reload } = {}) {
 
   loading.value = true;
 
-  await sleep();
+  const [res, err] = await request(`/api/v1/users`, {
+    query: {
+      page: {
+        size: 10,
+        number: query.page,
+      },
+      fields: {
+        users: 'name,username,phone,role',
+      },
+      filter: {
+        search: filter.search,
+        role: filter.role,
+      },
+    },
+  });
 
-  users.value = { data: data.slice(0, 10) };
+  if (err) {
+    error.value = true;
+  } else {
+    users.value = res;
+  }
 
   loading.value = false;
 }
@@ -95,7 +125,11 @@ loadUsers();
           v-model="filter.search"
           @input-debounce="loadUsers({ reload: true })"
         />
-        <UserRoleSelect placeholder="Semua Role" v-model="filter.role" />
+        <UserRoleSelect
+          placeholder="Semua Role"
+          v-model="filter.role"
+          @change="loadUsers({ reload: true })"
+        />
         <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
           >Tambah Pengguna</BaseButton
         >
@@ -121,7 +155,12 @@ loadUsers();
       </div>
     </template>
   </BaseTable>
-  <BasePagination :total-pages="10" v-model="query.page" @change="loadUsers" />
+  <BasePagination
+    v-if="users.meta.page.lastPage > 1"
+    :total-pages="users.meta.page.lastPage"
+    v-model="query.page"
+    @change="loadUsers"
+  />
   <UserFormModal
     :id="formModal.id"
     v-model:visible="formModal.visible"
