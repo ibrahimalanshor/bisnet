@@ -9,6 +9,7 @@ import UserRoleSelect from './UserRoleSelect.vue';
 import { ref, reactive } from 'vue';
 import { sleep } from '../../../utils/common.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
+import { useRequest } from '../../../cores/http.js';
 
 const props = defineProps({
   id: null,
@@ -17,11 +18,14 @@ const visible = defineModel('visible');
 const emit = defineEmits(['saved']);
 
 const toastStore = useToastStore();
+const { request } = useRequest();
+
 const loadingForm = ref(false);
 const loadingSave = ref(false);
-const error = ref(false);
+const error = ref(null);
 const form = reactive({
   name: null,
+  username: null,
   email: null,
   phone: null,
   password: null,
@@ -38,30 +42,58 @@ async function loadForm() {
 
 function onOpen() {
   loadingSave.value = false;
-  error.value = false;
+  error.value = null;
 
   form.name = null;
+  form.username = null;
+  form.email = null;
+  form.phone = null;
+  form.password = null;
+  form.role = null;
 
   if (props.id) {
     loadForm();
   }
 }
 async function onSubmit() {
+  error.value = null;
   loadingSave.value = true;
 
-  await sleep();
-
-  toastStore.create({
-    message: props.id
-      ? 'Berhasil memperbarui pengguna'
-      : 'Berhasil menambahkan pengguna baru',
-    type: 'success',
+  const [, err] = await request(`/api/v1/users`, {
+    method: 'post',
+    body: {
+      data: {
+        type: 'users',
+        attributes: {
+          name: form.name,
+          username: form.username,
+          phone: form.phone,
+          email: form.email,
+          role: form.role,
+          password: form.password,
+        },
+      },
+    },
   });
-  visible.value = false;
+
+  if (err) {
+    if (!err.jsonapi) {
+      error.value = 'Gagal menyimpan supplier';
+    } else if (err.status === 422) {
+      error.value = err.response.data.errors[0].detail;
+    }
+  } else {
+    toastStore.create({
+      message: props.id
+        ? 'Berhasil memperbarui pengguna'
+        : 'Berhasil menambahkan pengguna baru',
+      type: 'success',
+    });
+    visible.value = false;
+    emit('saved');
+  }
 
   loadingSave.value = false;
-
-  emit('saved');
 }
 </script>
 
@@ -74,9 +106,21 @@ async function onSubmit() {
   >
     <BaseSkeleton v-if="loadingForm" class="h-40" />
     <form v-else class="space-y-4" @submit.prevent="onSubmit">
-      <BaseAlert v-if="error"> Gagal menyimpan pengguna baru. </BaseAlert>
+      <BaseAlert v-if="error"> {{ error }} </BaseAlert>
       <BaseFormItem id="user_form.name" label="Nama" v-slot="{ id }">
         <BaseInput :id="id" placeholder="Ahmad" required v-model="form.name" />
+      </BaseFormItem>
+      <BaseFormItem
+        id="user_form.username"
+        label="Nama Pengguna"
+        v-slot="{ id }"
+      >
+        <BaseInput
+          :id="id"
+          placeholder="ahmad"
+          required
+          v-model="form.username"
+        />
       </BaseFormItem>
       <BaseFormItem id="user_form.email" label="Email" v-slot="{ id }">
         <BaseInput
@@ -91,7 +135,12 @@ async function onSubmit() {
         <BaseInput :id="id" placeholder="08xxx" required v-model="form.phone" />
       </BaseFormItem>
       <BaseFormItem id="user_form.role" label="Role" v-slot="{ id }">
-        <UserRoleSelect :id="id" placeholder="Pilih Role" v-model="form.rome" />
+        <UserRoleSelect
+          :id="id"
+          placeholder="Pilih Role"
+          required
+          v-model="form.role"
+        />
       </BaseFormItem>
       <BaseFormItem id="user_form.password" label="Password" v-slot="{ id }">
         <BaseInput
