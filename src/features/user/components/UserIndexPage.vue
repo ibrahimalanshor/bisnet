@@ -11,7 +11,9 @@ import UserFormModal from './UserFormModal.vue';
 import UserDeleteConfirm from './UserDeleteConfirm.vue';
 import UserRoleSelect from './UserRoleSelect.vue';
 import { useRequest } from '../../../cores/http';
+import { useAuthStore } from '../../auth/auth.store';
 
+const authStore = useAuthStore();
 const { request } = useRequest();
 
 const columns = [
@@ -141,6 +143,7 @@ loadUsers();
     <template #column-action="{ item }">
       <div class="flex gap-2">
         <BaseButton
+          v-if="item.id != authStore.user.id"
           icon="ri:edit-fill"
           color="success"
           size="sm"
