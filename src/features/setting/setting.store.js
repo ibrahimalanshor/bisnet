@@ -43,5 +43,9 @@ export const useSettingStore = defineStore('setting', () => {
     }
   }
 
-  return { name, logo, form, loadSetting, updateSetting };
+  function resetForm() {
+    form.name = name.value;
+  }
+
+  return { name, logo, form, loadSetting, updateSetting, resetForm };
 });

@@ -60,7 +60,13 @@ async function onSubmit() {
             :disabled="settingStore.form.name === settingStore.name"
             >Simpan</BaseButton
           >
-          <BaseButton color="light">Batal</BaseButton>
+          <BaseButton
+            v-if="settingStore.form.name !== settingStore.name"
+            color="light"
+            type="button"
+            @click="settingStore.resetForm"
+            >Batal</BaseButton
+          >
         </div>
       </form>
     </BaseCard>
