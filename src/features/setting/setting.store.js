@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRequest } from '../../cores/http';
 import { useRoute } from 'vue-router';
 
@@ -9,6 +9,9 @@ export const useSettingStore = defineStore('setting', () => {
 
   const name = ref('Open POS');
   const logo = ref('/logo.png');
+  const form = reactive({
+    name: null,
+  });
 
   async function loadSetting() {
     const [res, err] = await request(`/api/v1/setting`);
@@ -16,6 +19,8 @@ export const useSettingStore = defineStore('setting', () => {
     if (!err) {
       name.value = res.name;
       logo.value = res.logo;
+
+      form.name = name.value;
     }
 
     document.title = `${route.meta.title} - ${name.value}`;
@@ -25,5 +30,18 @@ export const useSettingStore = defineStore('setting', () => {
     icon.href = logo.value;
   }
 
-  return { name, logo, loadSetting };
+  async function updateSetting() {
+    const [, err] = await request(`/api/v1/setting`, {
+      method: 'post',
+      body: {
+        name: form.name,
+      },
+    });
+
+    if (!err) {
+      name.value = form.name;
+    }
+  }
+
+  return { name, logo, form, loadSetting, updateSetting };
 });

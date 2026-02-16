@@ -4,16 +4,27 @@ import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
-import { reactive } from 'vue';
+import { ref } from 'vue';
 import { useSettingStore } from '../setting.store.js';
+import { useToastStore } from '../../../cores/toast/toast.store.js';
 
 const settingStore = useSettingStore();
+const toastStore = useToastStore();
 
-const form = reactive({
-  name: null,
-});
+const loadingSubmit = ref(false);
 
-form.name = settingStore.name;
+async function onSubmit() {
+  loadingSubmit.value = true;
+
+  await settingStore.updateSetting();
+
+  toastStore.create({
+    message: 'Nama toko berhasil diperbarui',
+    type: 'success',
+  });
+
+  loadingSubmit.value = false;
+}
 </script>
 
 <template>
@@ -21,7 +32,7 @@ form.name = settingStore.name;
 
   <div class="max-w-screen-md mx-auto space-y-4">
     <BaseCard>
-      <form class="space-y-4">
+      <form class="space-y-4" @submit.prevent="onSubmit">
         <div class="flex items-center gap-4 md:gap-6">
           <img :src="settingStore.logo" class="w-28 rounded-md shrink-0" />
           <div class="space-y-2">
@@ -39,11 +50,16 @@ form.name = settingStore.name;
             :id="id"
             placeholder="PT Open Pos Indonesia"
             required
-            v-model="form.name"
+            v-model="settingStore.form.name"
           />
         </BaseFormItem>
         <div class="flex gap-2">
-          <BaseButton color="primary">Simpan</BaseButton>
+          <BaseButton
+            color="primary"
+            :loading="loadingSubmit"
+            :disabled="settingStore.form.name === settingStore.name"
+            >Simpan</BaseButton
+          >
           <BaseButton color="light">Batal</BaseButton>
         </div>
       </form>
