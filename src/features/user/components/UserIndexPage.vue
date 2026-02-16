@@ -12,6 +12,7 @@ import UserDeleteConfirm from './UserDeleteConfirm.vue';
 import UserRoleSelect from './UserRoleSelect.vue';
 import { useRequest } from '../../../cores/http';
 import { useAuthStore } from '../../auth/auth.store';
+import roles from '../data/role.json';
 
 const authStore = useAuthStore();
 const { request } = useRequest();
@@ -37,7 +38,11 @@ const columns = [
     id: 'role',
     name: 'Role',
     render: ({ item }) =>
-      h(BaseBadge, { colorVariant: 'thin' }, () => item.attributes.role),
+      h(
+        BaseBadge,
+        { colorVariant: 'thin' },
+        () => roles.find((role) => role.id === item.attributes.role).name,
+      ),
   },
   { id: 'action', name: 'Aksi' },
 ];

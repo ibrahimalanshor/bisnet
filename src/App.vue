@@ -7,15 +7,11 @@ const router = useRouter();
 const settingStore = useSettingStore();
 const authStore = useAuthStore();
 
-document.title = settingStore.name;
-
-const icon = document.querySelector('link[rel=icon]');
-
-icon.href = settingStore.logo;
-
 router.afterEach((to) => {
   document.title = `${to.meta.title} - ${settingStore.name}`;
 });
+
+settingStore.loadSetting();
 
 if (authStore.loggedIn) {
   authStore.loadMe();

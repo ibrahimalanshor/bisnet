@@ -1,7 +1,7 @@
 [
   { "id": "admin", "name": "Admin" },
   { "id": "manager", "name": "Manager" },
-  { "id": "cashier", "name": "Cashier" },
+  { "id": "cashier", "name": "Kasir" },
   { "id": "warehouse", "name": "Gudang" }
 ]
 
