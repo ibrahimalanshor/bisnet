@@ -30,16 +30,23 @@ export const useSettingStore = defineStore('setting', () => {
     icon.href = logo.value;
   }
 
-  async function updateSetting() {
-    const [, err] = await request(`/api/v1/setting`, {
+  async function updateSetting(uploadLogo) {
+    const payload = new FormData();
+
+    payload.append('name', form.name);
+
+    if (uploadLogo) {
+      payload.append('logo', uploadLogo);
+    }
+
+    const [res, err] = await request(`/api/v1/setting`, {
       method: 'post',
-      body: {
-        name: form.name,
-      },
+      body: payload,
     });
 
     if (!err) {
-      name.value = form.name;
+      name.value = res.name;
+      logo.value = res.logo_url;
     }
   }
 
