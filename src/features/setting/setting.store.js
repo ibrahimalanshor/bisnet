@@ -18,7 +18,10 @@ export const useSettingStore = defineStore('setting', () => {
 
     if (!err) {
       name.value = res.name;
-      logo.value = res.logo;
+
+      if (res.logo) {
+        logo.value = res.logo;
+      }
 
       form.name = name.value;
     }
