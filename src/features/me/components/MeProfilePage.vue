@@ -4,12 +4,15 @@ import BaseCard from '../../../components/base/BaseCard.vue';
 import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
+import BaseAlert from '../../../components/base/BaseAlert.vue';
 import UserPicture from '../../../assets/user.png';
 import { reactive, computed, ref } from 'vue';
 import { useAuthStore } from '../../auth/auth.store';
 import { getRoleName } from '../../../utils/common';
+import { useToastStore } from '../../../cores/toast/toast.store';
 
 const authStore = useAuthStore();
+const toastStore = useToastStore();
 
 const form = reactive({
   name: null,
@@ -20,6 +23,7 @@ const form = reactive({
   password: null,
   password_confirmation: null,
 });
+const errorSubmitForm = ref(null);
 const loadingSubmitForm = ref(false);
 
 const formChanged = computed(() => {
@@ -39,9 +43,23 @@ function resetForm() {
 }
 
 async function onSubmit() {
+  errorSubmitForm.value = null;
   loadingSubmitForm.value = true;
 
-  await authStore.updateUser(form);
+  const [, err] = await authStore.updateUser(form);
+
+  if (err) {
+    if (!err.jsonapi) {
+      errorSubmitForm.value = 'Gagal menyimpan barang';
+    } else if (err.status === 422) {
+      errorSubmitForm.value = err.response.data.errors[0].detail;
+    }
+  } else {
+    toastStore.create({
+      message: 'Profile berhasil diperbarui',
+      type: 'success',
+    });
+  }
 
   loadingSubmitForm.value = false;
 }
@@ -71,6 +89,7 @@ form.role = getRoleName(authStore.user.role);
           </div>
         </div>
         <hr class="border-gray-200" />
+        <BaseAlert v-if="errorSubmitForm">{{ errorSubmitForm }}</BaseAlert>
         <BaseFormItem id="user_form.name" label="Nama" v-slot="{ id }">
           <BaseInput
             :id="id"

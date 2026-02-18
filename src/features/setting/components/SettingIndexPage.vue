@@ -30,7 +30,7 @@ async function onSubmit() {
   resetUploadFile();
 
   toastStore.create({
-    message: 'Nama toko berhasil diperbarui',
+    message: 'Pengaturan berhasil diperbarui',
     type: 'success',
   });
 

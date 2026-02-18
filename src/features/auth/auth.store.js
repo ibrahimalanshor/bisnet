@@ -61,6 +61,8 @@ export const useAuthStore = defineStore(
       if (!err) {
         user.value = res;
       }
+
+      return [res, err];
     }
 
     return {
