@@ -1,6 +1,5 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-import UserPicture from '../../assets/user.png';
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../features/auth/auth.store';
@@ -49,7 +48,7 @@ router.afterEach(() => (opened.value = false));
     placement="bottom-end"
   >
     <button class="cursor-pointer" @click="opened = true">
-      <img :src="UserPicture" class="w-8 h-8 object-cover rounded" />
+      <img :src="authStore.photo" class="w-8 h-8 object-cover rounded" />
     </button>
     <template #popper>
       <div class="min-w-48">

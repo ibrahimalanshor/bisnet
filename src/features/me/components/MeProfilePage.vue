@@ -5,9 +5,8 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
-import UserPicture from '../../../assets/user.png';
 import ChangePasswordCard from './ChangePasswordCard.vue';
-import { reactive, computed, ref } from 'vue';
+import { reactive, computed, ref, onUnmounted } from 'vue';
 import { useAuthStore } from '../../auth/auth.store';
 import { getRoleName } from '../../../utils/common';
 import { useToastStore } from '../../../cores/toast/toast.store';
@@ -21,6 +20,8 @@ const form = reactive({
   email: null,
   phone: null,
   role: null,
+  photo: null,
+  photoPreview: null,
 });
 const errorSubmitForm = ref(null);
 const loadingSubmitForm = ref(false);
@@ -30,17 +31,39 @@ const formChanged = computed(() => {
     form.name !== authStore.user.name ||
     form.username !== authStore.user.username ||
     form.email !== authStore.user.email ||
-    form.phone !== authStore.user.phone
+    form.phone !== authStore.user.phone ||
+    form.photo
   );
 });
 
+function removePhoto() {
+  form.photo = null;
+
+  URL.revokeObjectURL(form.photoPreview);
+
+  form.photoPreview = null;
+}
 function resetForm() {
   form.name = authStore.user.name;
   form.username = authStore.user.username;
   form.email = authStore.user.email;
   form.phone = authStore.user.phone;
+
+  if (form.photo) {
+    removePhoto();
+  }
 }
 
+function onChangeUploadPhoto(e) {
+  const [file] = e.target.files;
+
+  if (!file) {
+    removePhoto();
+  } else {
+    form.photo = file;
+    form.photoPreview = URL.createObjectURL(form.photo);
+  }
+}
 async function onSubmit() {
   errorSubmitForm.value = null;
   loadingSubmitForm.value = true;
@@ -63,6 +86,12 @@ async function onSubmit() {
   loadingSubmitForm.value = false;
 }
 
+onUnmounted(() => {
+  if (form.photo) {
+    removePhoto();
+  }
+});
+
 form.name = authStore.user.name;
 form.username = authStore.user.username;
 form.email = authStore.user.email;
@@ -77,11 +106,18 @@ form.role = getRoleName(authStore.user.role);
     <BaseCard>
       <form class="space-y-4" @submit.prevent="onSubmit">
         <div class="flex items-center gap-4 md:gap-6">
-          <img :src="UserPicture" class="w-28 rounded-md shrink-0" />
+          <img
+            :src="form.photoPreview || authStore.photo"
+            accept="image/*"
+            class="w-28 rounded-md shrink-0"
+          />
           <div class="space-y-2">
-            <BaseButton color="light" icon="ri:upload-2-line"
-              >Ganti Foto</BaseButton
-            >
+            <label class="block">
+              <input type="file" class="hidden" @change="onChangeUploadPhoto" />
+              <BaseButton tag="div" color="light" icon="ri:upload-2-line"
+                >Ganti Foto</BaseButton
+              >
+            </label>
             <p class="text-sm text-gray-500">
               Format: JPG, GIF or PNG. Ukuran Maksimal: 800K
             </p>

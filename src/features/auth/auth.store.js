@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useRequest } from '../../cores/http';
 import { useRouter } from 'vue-router';
 import { useShiftStore } from '../shift/shift.store';
+import DefaultPhoto from '../../assets/user.png';
 
 export const useAuthStore = defineStore(
   'auth',
@@ -16,6 +17,17 @@ export const useAuthStore = defineStore(
     const shiftStore = useShiftStore();
 
     const role = computed(() => (!loggedIn.value ? null : user.value.role));
+    const photo = computed(() => {
+      if (!loggedIn.value) {
+        return null;
+      }
+
+      if (!user.value.photo_url) {
+        return DefaultPhoto;
+      }
+
+      return user.value.photo_url;
+    });
 
     function login(data) {
       user.value = data.me;
@@ -53,9 +65,20 @@ export const useAuthStore = defineStore(
     }
 
     async function updateUser(form) {
+      const payload = new FormData();
+
+      payload.append('name', form.name);
+      payload.append('username', form.username);
+      payload.append('email', form.email);
+      payload.append('phone', form.phone);
+
+      if (form.photo) {
+        payload.append('photo', form.photo);
+      }
+
       const [res, err] = await request(`/api/v1/me`, {
         method: 'post',
-        body: form,
+        body: payload,
       });
 
       if (!err) {
@@ -69,6 +92,7 @@ export const useAuthStore = defineStore(
       loggedIn,
       user,
       role,
+      photo,
       accessToken,
       login,
       loadMe,
