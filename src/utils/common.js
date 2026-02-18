@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import localeData from 'dayjs/plugin/localeData';
 import objectSupport from 'dayjs/plugin/objectSupport';
+import roles from '../features/user/data/role.json';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(localeData);
@@ -105,4 +106,8 @@ export function getPeriodFromToDate(period, data) {
     fromDate: monthDate.startOf('month'),
     toDate: monthDate.endOf('month'),
   };
+}
+
+export function getRoleName(roleName) {
+  return roles.find((role) => role.id === roleName).name;
 }

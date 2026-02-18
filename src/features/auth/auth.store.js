@@ -52,7 +52,27 @@ export const useAuthStore = defineStore(
       router.push({ name: 'login' });
     }
 
-    return { loggedIn, user, role, accessToken, login, loadMe, logout };
+    async function updateUser(form) {
+      const [res, err] = await request(`/api/v1/me`, {
+        method: 'post',
+        body: form,
+      });
+
+      if (!err) {
+        user.value = res;
+      }
+    }
+
+    return {
+      loggedIn,
+      user,
+      role,
+      accessToken,
+      login,
+      loadMe,
+      logout,
+      updateUser,
+    };
   },
   { persist: true },
 );
