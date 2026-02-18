@@ -6,6 +6,7 @@ import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import UserPicture from '../../../assets/user.png';
+import ChangePasswordCard from './ChangePasswordCard.vue';
 import { reactive, computed, ref } from 'vue';
 import { useAuthStore } from '../../auth/auth.store';
 import { getRoleName } from '../../../utils/common';
@@ -20,8 +21,6 @@ const form = reactive({
   email: null,
   phone: null,
   role: null,
-  password: null,
-  password_confirmation: null,
 });
 const errorSubmitForm = ref(null);
 const loadingSubmitForm = ref(false);
@@ -50,7 +49,7 @@ async function onSubmit() {
 
   if (err) {
     if (!err.jsonapi) {
-      errorSubmitForm.value = 'Gagal menyimpan barang';
+      errorSubmitForm.value = 'Gagal menyimpan profil';
     } else if (err.status === 422) {
       errorSubmitForm.value = err.response.data.errors[0].detail;
     }
@@ -145,43 +144,6 @@ form.role = getRoleName(authStore.user.role);
       </form>
     </BaseCard>
 
-    <BaseCard title="Ganti Kata Sandi">
-      <form class="space-y-4">
-        <input
-          type="text"
-          name="username"
-          autocomplete="username"
-          :value="form.username"
-          hidden
-        />
-        <BaseFormItem
-          id="user_form.password"
-          label="Kata Sandi Baru"
-          v-slot="{ id }"
-        >
-          <BaseInput
-            :id="id"
-            placeholder="12345678"
-            type="password"
-            autocomplete="new-password"
-            v-model="form.password"
-          />
-        </BaseFormItem>
-        <BaseFormItem
-          id="user_form.password_confirmation"
-          label="Konfirmasi Kata Sandi"
-          v-slot="{ id }"
-        >
-          <BaseInput
-            :id="id"
-            placeholder="12345678"
-            autocomplete="new-password"
-            type="password"
-            v-model="form.password_confirmation"
-          />
-        </BaseFormItem>
-        <BaseButton>Simpan</BaseButton>
-      </form>
-    </BaseCard>
+    <ChangePasswordCard />
   </div>
 </template>
