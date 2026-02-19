@@ -11,7 +11,7 @@ const visible = defineModel('visible');
     type="success"
     confirm-color="primary"
     title="Shift Berhasil Ditutup"
-    message="Shift berhasi ditutup, lihat detail shift atau buka shift baru"
+    message="Shift berhasil ditutup, lihat detail shift atau buka shift baru"
     v-model:visible="visible"
   >
     <template #action>

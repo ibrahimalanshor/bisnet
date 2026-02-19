@@ -123,20 +123,26 @@ loadData();
 </script>
 
 <template>
-  <BaseCard title="Transaksi Kas" responsive>
+  <BaseCard title="Transaksi Kas" responsive responsive-screen="md">
     <template #action>
-      <div class="grid grid-cols-2 sm:flex gap-2">
+      <div class="grid grid-cols-1 sm:grid-cols-3 md:flex gap-2">
         <BaseInput
           type="date"
           v-model="filter.date"
+          width="fit"
           @change="loadData({ reload: true })"
         />
-        <BaseButton
-          v-if="active"
-          icon="ri:add-fill"
-          @click="visibleAddTrx = true"
-          >Transaksi</BaseButton
-        >
+        <div v-if="active" class="grid grid-cols-2 gap-2 sm:col-span-2 md:flex">
+          <BaseButton icon="ri:add-fill" @click="visibleAddTrx = true"
+            >Transaksi Manual</BaseButton
+          >
+          <BaseButton
+            icon="ri:calculator-fill"
+            tag="router-link"
+            :to="{ name: 'sale.new' }"
+            >Penjualan</BaseButton
+          >
+        </div>
       </div>
     </template>
 

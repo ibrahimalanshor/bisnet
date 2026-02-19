@@ -10,7 +10,7 @@ const visible = defineModel('visible');
     type="success"
     confirm-color="primary"
     title="Shift Berhasil Dibuka"
-    message="Shift berhasi dibuka, lanjutkan buat penjualan atau tambah transaksi kas."
+    message="Shift berhasil dibuka, lanjutkan buat penjualan atau tambah transaksi kas."
     v-model:visible="visible"
   >
     <template #action>

@@ -23,6 +23,7 @@ const responsiveClass = computed(() => {
   return {
     sm: 'sm:flex-row sm:items-center sm:justify-between sm:gap-0',
     md: 'md:flex-row md:items-center md:justify-between md:gap-0',
+    lg: 'lg:flex-row lg:items-center lg:justify-between lg:gap-0',
   }[props.responsiveScreen];
 });
 </script>
