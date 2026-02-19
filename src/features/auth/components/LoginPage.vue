@@ -4,13 +4,14 @@ import BaseFormItem from '../../../components/base/BaseFormItem.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
-import { Icon } from '@iconify/vue';
 import { ref, reactive } from 'vue';
 import { useAuthStore } from '../auth.store';
 import { useRouter } from 'vue-router';
 import { request } from '../../../cores/http.js';
+import { useSettingStore } from '../../setting/setting.store.js';
 
 const authStore = useAuthStore();
+const settingStore = useSettingStore();
 const router = useRouter();
 
 const form = reactive({
@@ -52,7 +53,7 @@ async function onSubmit() {
   <div
     class="bg-gray-100 h-screen flex flex-col items-center justify-center gap-4 px-4"
   >
-    <Icon icon="flat-color-icons:shop" class="size-16" />
+    <img :src="settingStore.logo" class="w-16" />
     <BaseCard class="max-w-md w-full p-6" paddless>
       <form class="space-y-4" @submit.prevent="onSubmit">
         <div class="space-y-1">
@@ -87,6 +88,6 @@ async function onSubmit() {
         <BaseButton class="w-full" :loading="loading">Login</BaseButton>
       </form>
     </BaseCard>
-    <p class="text-gray-500">PT OpenPos Indonesia</p>
+    <p class="text-gray-500">{{ settingStore.name }}</p>
   </div>
 </template>
