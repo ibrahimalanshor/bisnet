@@ -15,7 +15,6 @@ import {
   formatCurrency,
   currencyToNum,
   formatDate,
-  sleep,
   extractPriceTax,
   calculateDiscount,
 } from '../../../utils/common';

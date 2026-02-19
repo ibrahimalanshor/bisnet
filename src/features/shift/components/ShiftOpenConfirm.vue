@@ -30,7 +30,7 @@ async function onConfirm() {
   });
 
   if (!err) {
-    shiftStore.open(res);
+    shiftStore.open(res, { waitSuccess: true });
 
     visible.value = false;
   }

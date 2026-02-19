@@ -38,7 +38,7 @@ async function onSubmit() {
   });
 
   if (!err) {
-    shiftStore.open(res);
+    shiftStore.open(res, { waitSuccess: true });
   }
 
   loading.value = false;

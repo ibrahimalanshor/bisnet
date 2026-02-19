@@ -18,10 +18,10 @@ export const useShiftStore = defineStore('shift', () => {
     date: null,
   });
   const lastTransactions = ref([]);
+  const successOpen = ref(false);
+  const successClose = ref(false);
 
-  function open(res) {
-    active.value = true;
-
+  function open(res, options = {}) {
     activeId.value = res.id;
     balance.value = res.balance;
     initBalance.value = res.init_balance;
@@ -32,15 +32,24 @@ export const useShiftStore = defineStore('shift', () => {
     detail.date = res.created_at;
 
     lastTransactions.value = res.cash_transactions;
+
+    if (options.waitSuccess) {
+      successOpen.value = true;
+    } else {
+      active.value = true;
+    }
   }
 
   function close() {
-    active.value = false;
+    successClose.value = true;
+  }
 
-    router.push({
-      name: 'shift-history.detail',
-      params: { id: activeId.value },
-    });
+  function closeSuccessClose() {
+    active.value = false;
+  }
+
+  function closeSuccessOpen() {
+    active.value = true;
   }
 
   async function loadShift() {
@@ -49,7 +58,7 @@ export const useShiftStore = defineStore('shift', () => {
     if (err || !res) {
       active.value = false;
     } else {
-      open(res);
+      open(res, { success: false });
     }
   }
 
@@ -61,9 +70,13 @@ export const useShiftStore = defineStore('shift', () => {
     income,
     outcome,
     detail,
+    successOpen,
+    successClose,
     lastTransactions,
     open,
     close,
+    closeSuccessOpen,
+    closeSuccessClose,
     loadShift,
   };
 });

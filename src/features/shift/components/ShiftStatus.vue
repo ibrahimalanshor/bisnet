@@ -3,6 +3,8 @@ import BaseButton from '../../../components/base/BaseButton.vue';
 import ShiftOpenConfirm from './ShiftOpenConfirm.vue';
 import ShiftCloseConfirm from './ShiftCloseConfirm.vue';
 import ShiftTransactionModal from './ShiftTransactionModal.vue';
+import ShiftOpenSuccessConfirm from './ShiftOpenSuccessConfirm.vue';
+import ShiftCloseSuccessConfirm from './ShiftCloseSuccessConfirm.vue';
 import { ref } from 'vue';
 import { formatCurrency, formatDate } from '../../../utils/common.js';
 import { Icon } from '@iconify/vue';
@@ -17,7 +19,11 @@ const visibleAddTrx = ref(false);
 const visibleClose = ref(false);
 const opened = ref(false);
 
-router.afterEach(() => (opened.value = false));
+router.afterEach(() => {
+  opened.value = false;
+  shiftStore.successOpen = false;
+  shiftStore.successClose = false;
+});
 </script>
 
 <template>
@@ -101,5 +107,19 @@ router.afterEach(() => (opened.value = false));
     <ShiftOpenConfirm v-model:visible="visibleOpen" />
     <ShiftCloseConfirm v-model:visible="visibleClose" />
     <ShiftTransactionModal v-model:visible="visibleAddTrx" />
+    <ShiftOpenSuccessConfirm
+      v-model:visible="shiftStore.successOpen"
+      @close="shiftStore.closeSuccessOpen"
+    />
+    <ShiftCloseSuccessConfirm
+      v-model:visible="shiftStore.successClose"
+      @close="shiftStore.closeSuccessClose"
+      @open-detail="
+        $router.push({
+          name: 'shift-history.detail',
+          params: { id: shiftStore.activeId },
+        })
+      "
+    />
   </div>
 </template>
