@@ -3,10 +3,12 @@ import { Icon } from '@iconify/vue';
 import { useRoute, useRouter } from 'vue-router';
 import { h, ref, computed } from 'vue';
 import { useAuthStore } from '../../features/auth/auth.store';
+import { useSettingStore } from '../../features/setting/setting.store';
 
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
+const settingStore = useSettingStore();
 
 const allMenus = [
   {
@@ -203,66 +205,74 @@ router.beforeEach(() => {
 <template>
   <aside
     :class="[
-      'z-10 bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 px-4 py-6 flex flex-col gap-1 transition lg:translate-x-0',
+      'z-10 bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 transition lg:translate-x-0',
       sidebarVisible ? 'translate-x-0' : '-translate-x-full',
     ]"
     v-click-outside="onClickOutsideSidebar"
   >
-    <template v-for="menu in menus" :key="menu.id">
-      <router-link
-        v-if="!menu.children || !menu.children.length"
-        :to="menu.to"
-        :class="[
-          classList.base,
-          checkMenuIsActive(menu) ? classList.active : classList.inactive,
-        ]"
-      >
-        <MenuIcon :icon="menu.icon" />
-        {{ menu.name }}
-      </router-link>
-
-      <template v-else>
-        <div
+    <div
+      class="flex items-center gap-3 h-14 lg:h-16 px-4 bg-gray-800 border-b border-gray-900"
+    >
+      <img :src="settingStore.logo" class="shrink-0 h-8" />
+      <h1 class="font-bold text-gray-100 text-lg">{{ settingStore.name }}</h1>
+    </div>
+    <div class="px-4 py-6 flex flex-col gap-1">
+      <template v-for="menu in menus" :key="menu.id">
+        <router-link
+          v-if="!menu.children || !menu.children.length"
+          :to="menu.to"
           :class="[
             classList.base,
             checkMenuIsActive(menu) ? classList.active : classList.inactive,
-            'justify-between cursor-pointer',
           ]"
-          @click="onToggleMenu(menu)"
         >
-          <div class="flex items-center">
-            <MenuIcon :icon="menu.icon" />
-            {{ menu.name }}
-          </div>
-          <Icon
-            :icon="
-              menusOpened.includes(menu.id)
-                ? 'ri:arrow-down-s-line'
-                : 'ri:arrow-right-s-line'
-            "
-          />
-        </div>
+          <MenuIcon :icon="menu.icon" />
+          {{ menu.name }}
+        </router-link>
 
-        <div
-          v-if="menusOpened.includes(menu.id)"
-          class="space-y-1"
-          v-motion-fade
-        >
-          <router-link
-            v-for="child in menu.children"
-            :key="child.id"
-            :to="child.to"
+        <template v-else>
+          <div
             :class="[
               classList.base,
-              checkMenuIsActive(child)
-                ? classList.activeChild
-                : classList.inactive,
+              checkMenuIsActive(menu) ? classList.active : classList.inactive,
+              'justify-between cursor-pointer',
             ]"
+            @click="onToggleMenu(menu)"
           >
-            <span class="ml-7">{{ child.name }}</span>
-          </router-link>
-        </div>
+            <div class="flex items-center">
+              <MenuIcon :icon="menu.icon" />
+              {{ menu.name }}
+            </div>
+            <Icon
+              :icon="
+                menusOpened.includes(menu.id)
+                  ? 'ri:arrow-down-s-line'
+                  : 'ri:arrow-right-s-line'
+              "
+            />
+          </div>
+
+          <div
+            v-if="menusOpened.includes(menu.id)"
+            class="space-y-1"
+            v-motion-fade
+          >
+            <router-link
+              v-for="child in menu.children"
+              :key="child.id"
+              :to="child.to"
+              :class="[
+                classList.base,
+                checkMenuIsActive(child)
+                  ? classList.activeChild
+                  : classList.inactive,
+              ]"
+            >
+              <span class="ml-7">{{ child.name }}</span>
+            </router-link>
+          </div>
+        </template>
       </template>
-    </template>
+    </div>
   </aside>
 </template>
