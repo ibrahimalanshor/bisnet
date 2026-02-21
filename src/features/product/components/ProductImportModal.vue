@@ -7,9 +7,12 @@ import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import { ref } from 'vue';
 import { useRequest } from '../../../cores/http';
+import { useToastStore } from '../../../cores/toast/toast.store';
 
+const emit = defineEmits(['submit']);
 const visible = defineModel('visible');
 
+const toast = useToastStore();
 const { request } = useRequest();
 
 const file = ref(null);
@@ -39,7 +42,14 @@ async function onSubmit() {
   if (err) {
     error.value = true;
   } else {
-    console.log('jawad');
+    visible.value = false;
+
+    toast.createConfirm({
+      title: 'Import Barang Sedang Diproses',
+      message: 'Silakan tunggu hingga proses import selesai.',
+    });
+
+    emit('submit');
   }
 
   loading.value = false;

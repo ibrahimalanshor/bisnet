@@ -2,6 +2,7 @@
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import BaseAlert from '../base/BaseAlert.vue';
+import BaseConfirm from '../base/BaseConfirm.vue';
 import AppSidebar from '../app/AppSidebar.vue';
 import AppUserDropdown from '../app/AppUserDropdown.vue';
 import AppLogoutConfirm from '../app/AppLogoutConfirm.vue';
@@ -35,6 +36,17 @@ const logoutVisible = ref(false);
         >{{ toast.message }}</BaseAlert
       >
     </div>
+
+    <BaseConfirm
+      type="success"
+      :title="toastStore.confirm.title"
+      :message="toastStore.confirm.message"
+      confirm-color="success"
+      confirm-text="Tutup"
+      :with-cancel="false"
+      v-model:visible="toastStore.confirm.visible"
+      @confirm="toastStore.confirm.visible = false"
+    />
 
     <AppSidebar v-model="sidebarVisible" />
 

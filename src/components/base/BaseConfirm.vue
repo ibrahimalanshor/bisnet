@@ -19,6 +19,10 @@ const props = defineProps({
     default: 'error',
   },
   disabled: Boolean,
+  withCancel: {
+    type: Boolean,
+    default: true,
+  },
 });
 defineEmits(['confirm']);
 
@@ -52,7 +56,7 @@ const iconColorClass = computed(() => {
       </slot>
     </div>
     <slot name="action">
-      <div class="grid grid-cols-2 gap-2">
+      <div :class="['grid', withCancel ? 'grid-cols-2 gap-2' : '']">
         <BaseButton
           :color="confirmColor"
           :loading="loading"
@@ -60,7 +64,7 @@ const iconColorClass = computed(() => {
           @click="$emit('confirm')"
           >{{ confirmText }}</BaseButton
         >
-        <BaseButton color="light" @click="visible = false">{{
+        <BaseButton v-if="withCancel" color="light" @click="visible = false">{{
           cancelText
         }}</BaseButton>
       </div>

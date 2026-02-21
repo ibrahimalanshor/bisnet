@@ -57,7 +57,10 @@ const filterStockStatusOptions = [
 
 const loading = ref(true);
 const error = ref(false);
-const products = ref({ data: [], meta: { page: { lastPage: 1 } } });
+const products = ref({
+  data: [],
+  meta: { import_status: false, page: { lastPage: 1 } },
+});
 const query = reactive({
   page: 1,
 });
@@ -97,6 +100,7 @@ async function loadProducts({ refresh, reload } = {}) {
 
   const [res, err] = await request(`/api/v1/products`, {
     query: {
+      with_import_status: true,
       page: {
         size: 10,
         number: query.page,
@@ -179,11 +183,15 @@ loadProducts();
       class="flex flex-col gap-2 sm:grid sm:grid-cols-3 2xl:flex 2xl:flex-row order-first 2xl:order-last"
     >
       <BaseButton
+        v-if="!products.meta.import_status"
         icon="ri:import-fill"
         class="w-full sm:w-auto"
         color="light"
         @click="importModalVisible = true"
         >Import Barang</BaseButton
+      >
+      <BaseButton v-else loading color="light"
+        >Import Sedang Diproses</BaseButton
       >
       <BaseButton icon="ri:export-fill" class="w-full sm:w-auto" color="light"
         >Export Barang</BaseButton
@@ -240,5 +248,8 @@ loadProducts();
     :id="detailModal.id"
     v-model:visible="detailModal.visible"
   />
-  <ProductImportModal v-model:visible="importModalVisible" />
+  <ProductImportModal
+    v-model:visible="importModalVisible"
+    @submit="products.meta.import_status = true"
+  />
 </template>
