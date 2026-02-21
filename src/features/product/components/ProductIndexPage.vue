@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, h, computed } from 'vue';
+import { reactive, ref, h, computed, onMounted, onUnmounted } from 'vue';
 import BaseHeading from '../../../components/base/BaseHeading.vue';
 import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseTable from '../../../components/base/BaseTable.vue';
@@ -16,8 +16,10 @@ import ProductImportModal from './ProductImportModal.vue';
 import { formatCurrency } from '../../../utils/common';
 import { useAuthStore } from '../../auth/auth.store.js';
 import { useRequest } from '../../../cores/http.js';
+import { useToastStore } from '../../../cores/toast/toast.store.js';
 
 const authStore = useAuthStore();
+const toast = useToastStore();
 const { request } = useRequest();
 
 const canManage = computed(() => authStore.role !== 'cashier');
@@ -144,6 +146,31 @@ function onOpenDetail(item, e) {
     detailModal.visible = true;
   }
 }
+function onSuccesProductImport(e) {
+  if (e.type === 'App\\Notifications\\ProductImported') {
+    toast.create({ message: 'Barang berhasil diimport', type: 'success' });
+
+    products.value.meta.import_status = false;
+  }
+}
+
+onMounted(() => {
+  if (canManage.value) {
+    authStore.channel.bind(
+      'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+      onSuccesProductImport,
+    );
+  }
+});
+
+onUnmounted(() => {
+  if (canManage.value) {
+    authStore.channel.unbind(
+      'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+      onSuccesProductImport,
+    );
+  }
+});
 
 loadProducts();
 </script>
