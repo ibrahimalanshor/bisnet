@@ -111,3 +111,12 @@ export function getPeriodFromToDate(period, data) {
 export function getRoleName(roleName) {
   return roles.find((role) => role.id === roleName).name;
 }
+
+export function downloadLink(url) {
+  const a = document.createElement('a');
+
+  a.href = url;
+  a.target = '_blank';
+
+  a.click();
+}

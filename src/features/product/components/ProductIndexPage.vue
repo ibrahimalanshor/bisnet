@@ -13,7 +13,7 @@ import ProductDetailModal from './ProductDetailModal.vue';
 import ProductStock from './ProductStock.vue';
 import ProductCategorySelectSearch from '../../product-category/components/ProductCategorySelectSearch.vue';
 import ProductImportModal from './ProductImportModal.vue';
-import { formatCurrency } from '../../../utils/common';
+import { formatCurrency, downloadLink } from '../../../utils/common';
 import { useAuthStore } from '../../auth/auth.store.js';
 import { useRequest } from '../../../cores/http.js';
 import { useToastStore } from '../../../cores/toast/toast.store.js';
@@ -61,7 +61,7 @@ const loading = ref(true);
 const error = ref(false);
 const products = ref({
   data: [],
-  meta: { import_status: false, page: { lastPage: 1 } },
+  meta: { import_status: false, export_status: false, page: { lastPage: 1 } },
 });
 const query = reactive({
   page: 1,
@@ -102,7 +102,7 @@ async function loadProducts({ refresh, reload } = {}) {
 
   const [res, err] = await request(`/api/v1/products`, {
     query: {
-      with_import_status: true,
+      with_import_export_status: true,
       page: {
         size: 10,
         number: query.page,
@@ -146,11 +146,28 @@ function onOpenDetail(item, e) {
     detailModal.visible = true;
   }
 }
-function onSuccesProductImport(e) {
+async function onExport() {
+  products.value.meta.export_status = true;
+
+  const [, err] = await request(`/api/v1/products/-actions/export`, {
+    method: 'post',
+  });
+
+  if (err) {
+    products.value.meta.export_status = false;
+  }
+}
+function onSuccesProductImportExport(e) {
   if (e.type === 'App\\Notifications\\ProductImported') {
     toast.create({ message: 'Barang berhasil diimport', type: 'success' });
 
     products.value.meta.import_status = false;
+
+    loadProducts();
+  } else if (e.type === 'App\\Notifications\\ProductExported') {
+    products.value.meta.export_status = false;
+
+    downloadLink(e.file_url);
   }
 }
 
@@ -158,7 +175,7 @@ onMounted(() => {
   if (canManage.value) {
     authStore.channel.bind(
       'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
-      onSuccesProductImport,
+      onSuccesProductImportExport,
     );
   }
 });
@@ -167,7 +184,7 @@ onUnmounted(() => {
   if (canManage.value) {
     authStore.channel.unbind(
       'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
-      onSuccesProductImport,
+      onSuccesProductImportExport,
     );
   }
 });
@@ -220,8 +237,16 @@ loadProducts();
       <BaseButton v-else loading color="light"
         >Import Sedang Diproses</BaseButton
       >
-      <BaseButton icon="ri:export-fill" class="w-full sm:w-auto" color="light"
+      <BaseButton
+        v-if="!products.meta.export_status"
+        icon="ri:export-fill"
+        class="w-full sm:w-auto"
+        color="light"
+        @click="onExport"
         >Export Barang</BaseButton
+      >
+      <BaseButton v-else loading color="light"
+        >Export Sedang Diproses</BaseButton
       >
       <BaseButton icon="ri:add-fill" class="w-full sm:w-auto" @click="onAdd"
         >Tambah Barang</BaseButton
