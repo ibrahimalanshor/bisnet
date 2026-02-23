@@ -11,16 +11,19 @@ import BaseSelect from '../../../components/base/BaseSelect.vue';
 import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
 import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
-import { reactive, ref, computed } from 'vue';
+import { reactive, ref, computed, onMounted, onUnmounted } from 'vue';
 import {
   formatCurrency,
   formatDate,
   getPaymentMethodName,
   getMonthNames,
   getMonthName,
+  downloadLink,
 } from '../../../utils/common.js';
 import { useRequest } from '../../../cores/http.js';
+import { useAuthStore } from '../../auth/auth.store.js';
 
+const auth = useAuthStore();
 const { request } = useRequest();
 const months = getMonthNames();
 
@@ -98,6 +101,7 @@ const summary = ref({
 });
 const data = ref(null);
 const dataLoading = ref(false);
+const exportLoading = ref(false);
 
 const reports = computed(() => data.value.data);
 
@@ -217,6 +221,38 @@ function onChangePeriod() {
   filter.month = 1;
   filter.year = new Date().getFullYear();
 }
+async function onExport() {
+  exportLoading.value = true;
+
+  const [, err] = await request(`/api/v1/reports/export/sales`, {
+    method: 'post',
+  });
+
+  if (err) {
+    exportLoading.value = false;
+  }
+}
+function onSuccesExport(e) {
+  if (e.type === 'App\\Notifications\\ReportSaleExported') {
+    exportLoading.value = false;
+
+    downloadLink(e.file_url);
+  }
+}
+
+onMounted(() => {
+  auth.channel.bind(
+    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    onSuccesExport,
+  );
+});
+
+onUnmounted(() => {
+  auth.channel.unbind(
+    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    onSuccesExport,
+  );
+});
 </script>
 
 <template>
@@ -292,12 +328,20 @@ function onChangePeriod() {
   >
     <template #action>
       <div class="flex gap-2">
-        <BaseButton icon="ri:file-excel-fill" color="success"
-          >Download Excel</BaseButton
+        <BaseButton v-if="!exportLoading" loading
+          >Export sedang diproses</BaseButton
         >
-        <BaseButton icon="ri:file-pdf-2-fill" color="error"
-          >Download PDF</BaseButton
-        >
+        <template v-else>
+          <BaseButton
+            icon="ri:file-excel-fill"
+            color="success"
+            @click="onExport"
+            >Download Excel</BaseButton
+          >
+          <BaseButton icon="ri:file-pdf-2-fill" color="error"
+            >Download PDF</BaseButton
+          >
+        </template>
       </div>
     </template>
     <div class="space-y-4">
