@@ -226,6 +226,12 @@ async function onExport() {
 
   const [, err] = await request(`/api/v1/reports/export/sales`, {
     method: 'post',
+    body: {
+      period: filter.period,
+      ...(filter.period === 'date' ? { date: filter.date } : {}),
+      month: filter.month,
+      year: filter.year,
+    },
   });
 
   if (err) {
@@ -328,7 +334,7 @@ onUnmounted(() => {
   >
     <template #action>
       <div class="flex gap-2">
-        <BaseButton v-if="!exportLoading" loading
+        <BaseButton v-if="exportLoading" loading
           >Export sedang diproses</BaseButton
         >
         <template v-else>
