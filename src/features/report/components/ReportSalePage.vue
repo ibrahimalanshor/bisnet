@@ -11,7 +11,7 @@ import BaseSelect from '../../../components/base/BaseSelect.vue';
 import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
 import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
-import { reactive, ref, computed, onMounted, onUnmounted } from 'vue';
+import { reactive, ref, computed, onUnmounted } from 'vue';
 import {
   formatCurrency,
   formatDate,
@@ -155,6 +155,9 @@ async function loadResult() {
     }
 
     resultVisible.value = true;
+    exportLoading.value = false;
+
+    stopListenExportStatus();
   }
 
   resultLoading.value = false;
@@ -213,13 +216,30 @@ async function loadPeriodlyResult() {
 
   return [res, err];
 }
+function listenExportStatus() {
+  auth.channel.bind(
+    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    onSuccesExport,
+  );
+}
+function stopListenExportStatus() {
+  auth.channel.unbind(
+    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    onSuccesExport,
+  );
+}
 
 function onChangePeriod() {
   resultVisible.value = false;
+  exportLoading.value = false;
+
+  data.value = null;
 
   filter.date = null;
   filter.month = 1;
   filter.year = new Date().getFullYear();
+
+  stopListenExportStatus();
 }
 async function onExport() {
   exportLoading.value = true;
@@ -228,7 +248,7 @@ async function onExport() {
     method: 'post',
     body: {
       period: filter.period,
-      ...(filter.period === 'date' ? { date: filter.date } : {}),
+      ...(filter.period === 'daily' ? { date: filter.date } : {}),
       month: filter.month,
       year: filter.year,
     },
@@ -236,6 +256,8 @@ async function onExport() {
 
   if (err) {
     exportLoading.value = false;
+  } else {
+    listenExportStatus();
   }
 }
 function onSuccesExport(e) {
@@ -246,18 +268,8 @@ function onSuccesExport(e) {
   }
 }
 
-onMounted(() => {
-  auth.channel.bind(
-    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
-    onSuccesExport,
-  );
-});
-
 onUnmounted(() => {
-  auth.channel.unbind(
-    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
-    onSuccesExport,
-  );
+  stopListenExportStatus();
 });
 </script>
 
