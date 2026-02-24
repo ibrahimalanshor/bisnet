@@ -241,7 +241,7 @@ function onChangePeriod() {
 
   stopListenExportStatus();
 }
-async function onExport() {
+async function onExport(type = 'csv') {
   exportLoading.value = true;
 
   const [, err] = await request(`/api/v1/reports/export/sales`, {
@@ -251,6 +251,7 @@ async function onExport() {
       ...(filter.period === 'daily' ? { date: filter.date } : {}),
       month: filter.month,
       year: filter.year,
+      type,
     },
   });
 
@@ -353,10 +354,13 @@ onUnmounted(() => {
           <BaseButton
             icon="ri:file-excel-fill"
             color="success"
-            @click="onExport"
+            @click="onExport('csv')"
             >Download Excel</BaseButton
           >
-          <BaseButton icon="ri:file-pdf-2-fill" color="error"
+          <BaseButton
+            icon="ri:file-pdf-2-fill"
+            color="error"
+            @click="onExport('pdf')"
             >Download PDF</BaseButton
           >
         </template>
