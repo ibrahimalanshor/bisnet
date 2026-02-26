@@ -6,14 +6,17 @@ import BaseButton from '../../../components/base/BaseButton.vue';
 import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
 import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, onUnmounted } from 'vue';
 import {
   formatCurrency,
   getMonthNames,
   getPeriodFromToDate,
+  downloadLink,
 } from '../../../utils/common.js';
 import { useRequest } from '../../../cores/http.js';
+import { useAuthStore } from '../../auth/auth.store.js';
 
+const auth = useAuthStore();
 const { request } = useRequest();
 const months = getMonthNames();
 
@@ -29,6 +32,7 @@ const summary = ref({
 
 const resultVisible = ref(false);
 const loadingResult = ref(false);
+const loadingExport = ref(false);
 const filter = reactive({
   month: 1,
   year: new Date().getFullYear(),
@@ -62,10 +66,62 @@ async function loadResult() {
   }
 
   loadingResult.value = false;
+  loadingExport.value = false;
+
+  stopListenExportStatus();
 }
 function resetResult() {
   resultVisible.value = false;
 }
+function listenExportStatus() {
+  auth.channel.bind(
+    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    onSuccesExport,
+  );
+}
+function stopListenExportStatus() {
+  auth.channel.unbind(
+    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    onSuccesExport,
+  );
+}
+
+async function onExport() {
+  loadingExport.value = true;
+
+  const queryDate = getPeriodFromToDate('monthly', {
+    month: filter.month,
+    year: filter.year,
+  });
+
+  const [, err] = await request(`/api/v1/reports/export/profit`, {
+    method: 'post',
+    body: {
+      from_date: queryDate.fromDate.toISOString(),
+      to_date: queryDate.toDate.toISOString(),
+    },
+  });
+
+  if (err) {
+    loadingExport.value = false;
+  } else {
+    listenExportStatus();
+  }
+}
+
+function onSuccesExport(e) {
+  if (e.type === 'App\\Notifications\\ReportProfitExported') {
+    loadingExport.value = false;
+
+    downloadLink(e.file_url);
+
+    stopListenExportStatus();
+  }
+}
+
+onUnmounted(() => {
+  stopListenExportStatus();
+});
 </script>
 
 <template>
@@ -117,10 +173,14 @@ function resetResult() {
     >
       <template #action>
         <div class="flex gap-2">
-          <BaseButton icon="ri:file-excel-fill" color="success"
-            >Download Excel</BaseButton
+          <BaseButton v-if="loadingExport" loading
+            >Export sedang diproses</BaseButton
           >
-          <BaseButton icon="ri:file-pdf-2-fill" color="error"
+          <BaseButton
+            v-else
+            icon="ri:file-pdf-2-fill"
+            color="error"
+            @click="onExport"
             >Download PDF</BaseButton
           >
         </div>
