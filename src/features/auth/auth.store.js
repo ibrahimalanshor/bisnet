@@ -4,7 +4,7 @@ import { useRequest } from '../../cores/http';
 import { useRouter } from 'vue-router';
 import { useShiftStore } from '../shift/shift.store';
 import DefaultPhoto from '../../assets/user.png';
-import { pusher } from '../../cores/pusher';
+import Pusher from '../../cores/pusher';
 
 export const useAuthStore = defineStore(
   'auth',
@@ -67,7 +67,7 @@ export const useAuthStore = defineStore(
       await request(`/api/v1/me/logout`, { method: 'post' });
 
       channel.value = null;
-      pusher.unsubscribe(`private-App.Models.User.${user.value.id}`);
+      Pusher.server.unsubscribe(`private-App.Models.User.${user.value.id}`);
 
       loggedIn.value = false;
       router.push({ name: 'login' });
@@ -98,7 +98,8 @@ export const useAuthStore = defineStore(
     }
 
     function subscribeChannel() {
-      channel.value = pusher.subscribe(
+      Pusher.setup(accessToken.value);
+      channel.value = Pusher.server.subscribe(
         `private-App.Models.User.${user.value.id}`,
       );
     }
@@ -116,5 +117,5 @@ export const useAuthStore = defineStore(
       channel,
     };
   },
-  { persist: true },
+  { persist: { omit: ['channel'] } },
 );

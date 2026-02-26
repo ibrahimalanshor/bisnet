@@ -1,26 +1,25 @@
-import Pusher from 'pusher-js';
-import { useAuthStore } from '../features/auth/auth.store';
+import PusherJs from 'pusher-js';
 
-const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
-  cluster: '',
-  forceTLS: false,
-  wsHost: import.meta.env.VITE_PUSHER_HOST,
-  wsPort: import.meta.env.VITE_PUSHER_PORT,
-  channelAuthorization: {
-    endpoint: '/broadcasting/auth',
-    headersProvider: () => {
-      const auth = useAuthStore();
+class Pusher {
+  server;
 
-      return {
-        Accept: 'application/json',
-        Authorization: `Bearer ${auth.accessToken}`,
-      };
-    },
-  },
-});
+  setup(key) {
+    this.server = new PusherJs(import.meta.env.VITE_PUSHER_KEY, {
+      cluster: '',
+      forceTLS: false,
+      wsHost: import.meta.env.VITE_PUSHER_HOST,
+      wsPort: import.meta.env.VITE_PUSHER_PORT,
+      channelAuthorization: {
+        endpoint: '/broadcasting/auth',
+        headersProvider: () => {
+          return {
+            Accept: 'application/json',
+            Authorization: `Bearer ${key}`,
+          };
+        },
+      },
+    });
+  }
+}
 
-pusher.connection.bind('error', (e) =>
-  console.error('cannot connect to pusher : ', e),
-);
-
-export { pusher };
+export default new Pusher();
