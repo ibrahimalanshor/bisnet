@@ -11,15 +11,18 @@ import BaseSelect from '../../../components/base/BaseSelect.vue';
 import BaseMonthSelect from '../../../components/base/BaseMonthSelect.vue';
 import BaseYearSelect from '../../../components/base/BaseYearSelect.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
-import { reactive, ref, computed, h } from 'vue';
+import { reactive, ref, computed, h, onUnmounted } from 'vue';
 import {
   formatCurrency,
   formatDate,
   getMonthNames,
   getPeriodFromToDate,
+  downloadLink,
 } from '../../../utils/common.js';
 import { useRequest } from '../../../cores/http.js';
+import { useAuthStore } from '../../auth/auth.store.js';
 
+const auth = useAuthStore();
 const { request } = useRequest();
 const months = getMonthNames();
 
@@ -112,6 +115,7 @@ const summary = ref({
 });
 const data = ref(null);
 const dataLoading = ref(false);
+const exportLoading = ref(false);
 
 const reports = computed(() => data.value.data);
 
@@ -159,6 +163,9 @@ async function loadResult() {
   }
 
   resultLoading.value = false;
+  exportLoading.value = false;
+
+  stopListenExportStatus();
 }
 async function loadData() {
   dataLoading.value = true;
@@ -202,14 +209,67 @@ async function loadData() {
 
   return [res, err];
 }
+function listenExportStatus() {
+  auth.channel.bind(
+    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    onSuccesExport,
+  );
+}
+function stopListenExportStatus() {
+  auth.channel.unbind(
+    'Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    onSuccesExport,
+  );
+}
 
 function onChangePeriod() {
   resultVisible.value = false;
+  exportLoading.value = false;
 
   filter.date = null;
   filter.month = 1;
   filter.year = new Date().getFullYear();
+
+  stopListenExportStatus();
 }
+async function onExport(type = 'csv') {
+  exportLoading.value = true;
+
+  const queryDate = getPeriodFromToDate(filter.period, {
+    date: filter.date,
+    month: filter.month,
+    year: filter.year,
+  });
+
+  const [, err] = await request(`/api/v1/shifts/-actions/export`, {
+    method: 'post',
+    body: {
+      period: filter.period,
+      from_date: queryDate.fromDate.toISOString(),
+      to_date: queryDate.toDate.toISOString(),
+      format: type,
+    },
+  });
+
+  if (err) {
+    exportLoading.value = false;
+  } else {
+    listenExportStatus();
+  }
+}
+function onSuccesExport(e) {
+  if (e.type === 'App\\Notifications\\ReportShiftExported') {
+    exportLoading.value = false;
+
+    downloadLink(e.file_url);
+
+    stopListenExportStatus();
+  }
+}
+
+onUnmounted(() => {
+  stopListenExportStatus();
+});
 </script>
 
 <template>
@@ -271,12 +331,23 @@ function onChangePeriod() {
   >
     <template #action>
       <div class="flex gap-2">
-        <BaseButton icon="ri:file-excel-fill" color="success"
-          >Download Excel</BaseButton
+        <BaseButton v-if="exportLoading" loading
+          >Export sedang diproses</BaseButton
         >
-        <BaseButton icon="ri:file-pdf-2-fill" color="error"
-          >Download PDF</BaseButton
-        >
+        <template v-else>
+          <BaseButton
+            icon="ri:file-excel-fill"
+            color="success"
+            @click="onExport('csv')"
+            >Download Excel</BaseButton
+          >
+          <BaseButton
+            icon="ri:file-pdf-2-fill"
+            color="error"
+            @click="onExport('pdf')"
+            >Download PDF</BaseButton
+          >
+        </template>
       </div>
     </template>
     <div class="space-y-4">
