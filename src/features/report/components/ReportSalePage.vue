@@ -251,7 +251,7 @@ async function onExport(type = 'csv') {
       ...(filter.period === 'daily' ? { date: filter.date } : {}),
       month: filter.month,
       year: filter.year,
-      type,
+      format: type,
     },
   });
 
@@ -266,6 +266,8 @@ function onSuccesExport(e) {
     exportLoading.value = false;
 
     downloadLink(e.file_url);
+
+    stopListenExportStatus();
   }
 }
 
