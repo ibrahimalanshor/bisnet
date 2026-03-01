@@ -121,7 +121,7 @@ export const routes = [
         name: 'restock.new',
         meta: {
           layout: 'LayoutAdmin',
-          roles: ['manager', 'warehouse'],
+          roles: ['warehouse'],
           title: 'Tambah Restock',
         },
         component: () =>

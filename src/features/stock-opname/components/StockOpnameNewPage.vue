@@ -85,6 +85,7 @@ async function onConfirm() {
       items: items.value.map((item) => ({
         product_id: item.id,
         qty: currencyToNum(item.qty),
+        description: item.description,
       })),
     },
   });
@@ -219,7 +220,7 @@ function onChangeQty(index) {
 
     <template #action>
       <div class="grid sm:grid-cols-2 gap-2">
-        <BaseButton color="light" icon="ri:add-fill" @click="onReset"
+        <BaseButton color="primary" icon="ri:add-fill" @click="onReset"
           >Buat Stok Opname Baru</BaseButton
         >
         <BaseButton

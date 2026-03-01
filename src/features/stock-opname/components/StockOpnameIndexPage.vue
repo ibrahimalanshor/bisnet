@@ -7,7 +7,11 @@ import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
 import RestockDetailModal from './RestockDetailModal.vue';
-import { formatDate, formatCurrency } from '../../../utils/common';
+import {
+  formatDate,
+  formatCurrency,
+  getPeriodFromToDate,
+} from '../../../utils/common';
 import { useAuthStore } from '../../auth/auth.store';
 import { useRequest } from '../../../cores/http';
 
@@ -66,7 +70,12 @@ async function loadStockOpnames({ refresh, reload } = {}) {
 
   loading.value = true;
 
-  const [res, err] = await request(`/api/v1/restocks`, {
+  const periodQuery = getPeriodFromToDate('daily', {
+    fromDate: filter.date,
+    toDate: filter.date,
+  });
+
+  const [res, err] = await request(`/api/v1/stock-opnames`, {
     query: {
       page: {
         size: 10,
@@ -74,11 +83,12 @@ async function loadStockOpnames({ refresh, reload } = {}) {
       },
       sort: '-id',
       fields: {
-        restocks: 'code,createdAt,supplier_name,items_count,total_price',
+        'stock-opnames': 'code,createdAt,items_count',
       },
       filter: {
         search: filter.search,
-        date: filter.date,
+        from_date: periodQuery.fromDate.toISOString(),
+        to_date: periodQuery.toDate.toISOString(),
       },
     },
   });

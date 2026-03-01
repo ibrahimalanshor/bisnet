@@ -22,7 +22,9 @@ const authStore = useAuthStore();
 const toast = useToastStore();
 const { request } = useRequest();
 
-const canManage = computed(() => authStore.role !== 'cashier');
+const canManage = computed(
+  () => authStore.role === 'admin' || authStore.role === 'manager',
+);
 
 const columns = computed(() => [
   {
