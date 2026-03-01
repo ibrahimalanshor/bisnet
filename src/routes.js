@@ -130,6 +130,36 @@ export const routes = [
     ],
   },
   {
+    path: '/stock-opname',
+    meta: {
+      roles: ['admin', 'manager', 'warehouse'],
+      auth: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'stock-opname.index',
+        meta: {
+          layout: 'LayoutAdmin',
+          title: 'Stock Opname',
+        },
+        component: () =>
+          import('./features/stock-opname/components/StockOpnameIndexPage.vue'),
+      },
+      {
+        path: 'new',
+        name: 'stock-opname.new',
+        meta: {
+          layout: 'LayoutAdmin',
+          roles: ['manager', 'warehouse'],
+          title: 'Tambah Stok Opname',
+        },
+        component: () =>
+          import('./features/stock-opname/components/StockOpnameNewPage.vue'),
+      },
+    ],
+  },
+  {
     path: '/sale',
     meta: {
       roles: ['admin', 'manager', 'cashier'],

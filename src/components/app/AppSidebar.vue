@@ -51,6 +51,14 @@ const allMenus = [
     roles: ['admin', 'manager', 'warehouse'],
   },
   {
+    id: 'stock-opname',
+    to: { name: 'stock-opname.index' },
+    activeKey: ['stock-opname.index', 'stock-opname.new'],
+    name: 'Stok Opname',
+    icon: 'ri:file-check-line',
+    roles: ['admin', 'manager', 'warehouse'],
+  },
+  {
     id: 'sale',
     to: { name: 'sale.index' },
     activeKey: ['sale.index', 'sale.new'],
