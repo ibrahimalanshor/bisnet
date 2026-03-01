@@ -38,7 +38,7 @@ const columns = [
   },
   {
     id: 'stock',
-    name: 'Saldo',
+    name: 'Stok',
     value: (data) => formatCurrency(data.attributes.stock),
   },
 ];

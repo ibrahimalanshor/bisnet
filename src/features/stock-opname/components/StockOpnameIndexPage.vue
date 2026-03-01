@@ -26,19 +26,9 @@ const columns = [
     value: (item) => formatDate(item.attributes.createdAt),
   },
   {
-    id: 'supplier_name',
-    name: 'Supplier',
-    value: (item) => item.attributes.supplier_name,
-  },
-  {
     id: 'itemsCount',
-    name: 'Jumlah',
+    name: 'Jumlah Barang',
     value: (item) => formatCurrency(item.attributes.items_count),
-  },
-  {
-    id: 'totalPrice',
-    name: 'Harga',
-    value: (item) => formatCurrency(item.attributes.total_price),
   },
 ];
 const loading = ref(true);
@@ -71,8 +61,7 @@ async function loadStockOpnames({ refresh, reload } = {}) {
   loading.value = true;
 
   const periodQuery = getPeriodFromToDate('daily', {
-    fromDate: filter.date,
-    toDate: filter.date,
+    date: filter.date,
   });
 
   const [res, err] = await request(`/api/v1/stock-opnames`, {
