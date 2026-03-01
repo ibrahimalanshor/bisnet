@@ -6,7 +6,7 @@ import { ref, reactive } from 'vue';
 import { useRequest } from '../../../cores/http.js';
 
 const props = defineProps({
-  restock: Object,
+  stockOpname: Object,
 });
 
 const { request } = useRequest();
@@ -18,23 +18,19 @@ const columns = [
     value: (data) => data.attributes.product_name,
   },
   {
+    id: 'stock',
+    name: 'Stok Sistem',
+    value: (data) => formatCurrency(data.attributes.stock),
+  },
+  {
     id: 'qty',
-    name: 'Jumlah',
+    name: 'Stok Fisik',
     value: (data) => formatCurrency(data.attributes.qty),
   },
   {
-    id: 'price',
-    name: 'Harga',
-    value: (data) => formatCurrency(data.attributes.price),
-    theadClassList: 'text-right',
-    classList: 'text-right',
-  },
-  {
-    id: 'total_price',
-    name: 'Total Harga',
-    value: (data) => formatCurrency(data.attributes.total_price),
-    theadClassList: 'text-right',
-    classList: 'text-right',
+    id: 'description',
+    name: 'Keterangan',
+    value: (data) => data.attributes.description ?? '-',
   },
 ];
 
@@ -48,7 +44,7 @@ async function loadData() {
   loading.value = true;
 
   const [res, err] = await request(
-    `/api/v1/restocks/${props.restock.data.id}/items`,
+    `/api/v1/stock-opnames/${props.stockOpname.data.id}/items`,
     {
       query: {
         page: {
@@ -56,7 +52,7 @@ async function loadData() {
           number: query.page,
         },
         fields: {
-          'restock-items': 'product_name,qty,price,total_price',
+          'stock-opname-items': 'product_name,stock,qty,description',
         },
       },
     },
@@ -74,18 +70,7 @@ loadData();
 
 <template>
   <div class="space-y-4">
-    <BaseTable :columns="columns" :data="data.data" :loading="loading">
-      <template #footer="{ classList }">
-        <tr>
-          <td :class="[classList.td, 'text-right']" colspan="3">Total</td>
-          <td :class="[classList.td, 'text-right']">
-            <p class="font-medium">
-              {{ formatCurrency(restock.data.attributes.total_price) }}
-            </p>
-          </td>
-        </tr>
-      </template>
-    </BaseTable>
+    <BaseTable :columns="columns" :data="data.data" :loading="loading" />
     <BasePagination
       v-if="data.meta.page.lastPage > 1"
       :total-pages="data.meta.page.lastPage"

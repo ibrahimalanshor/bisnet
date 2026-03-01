@@ -6,7 +6,7 @@ import BaseTable from '../../../components/base/BaseTable.vue';
 import BaseAlert from '../../../components/base/BaseAlert.vue';
 import BaseInput from '../../../components/base/BaseInput.vue';
 import BasePagination from '../../../components/base/BasePagination.vue';
-import RestockDetailModal from './RestockDetailModal.vue';
+import StockOpnameDetailModal from './StockOpnameDetailModal.vue';
 import {
   formatDate,
   formatCurrency,
@@ -141,7 +141,7 @@ loadStockOpnames();
     v-model="query.page"
     @change="loadStockOpnames"
   />
-  <RestockDetailModal
+  <StockOpnameDetailModal
     :id="detailModal.id"
     v-model:visible="detailModal.visible"
   />
