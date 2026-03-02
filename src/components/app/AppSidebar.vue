@@ -81,6 +81,7 @@ const allMenus = [
     activeKey: [
       'report.sale',
       'report.stock',
+      'report.stock-opname',
       'report.shift',
       'report.expense',
       'report.profit',
@@ -96,6 +97,11 @@ const allMenus = [
         id: 'report.stock',
         to: { name: 'report.stock' },
         name: 'Laporan Stok',
+      },
+      {
+        id: 'report.stock-opname',
+        to: { name: 'report.stock-opname' },
+        name: 'Laporan Stok Opname',
       },
       {
         id: 'report.shift',

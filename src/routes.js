@@ -226,6 +226,16 @@ export const routes = [
           import('./features/report/components/ReportStockPage.vue'),
       },
       {
+        path: 'stock-opname',
+        name: 'report.stock-opname',
+        meta: {
+          layout: 'LayoutAdmin',
+          title: 'Laporan Stok Opname',
+        },
+        component: () =>
+          import('./features/report/components/ReportStockOpnamePage.vue'),
+      },
+      {
         path: 'shift',
         name: 'report.shift',
         meta: {
