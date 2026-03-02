@@ -53,7 +53,13 @@ const visibleConfirm = ref(false);
 const loadingConfirm = ref(false);
 const items = ref([]);
 
-const valid = computed(() => items.value.length > 0);
+const valid = computed(
+  () =>
+    items.value.length > 0 &&
+    items.value.some(
+      (item) => item.stock !== currencyToNum(item.qty, { failToZero: true }),
+    ),
+);
 
 function onChangeProduct() {
   const existingIndex = items.value.findIndex(
