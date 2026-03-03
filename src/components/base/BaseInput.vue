@@ -25,7 +25,7 @@ const props = defineProps({
   nativeValue: null,
   readonly: Boolean,
 });
-const emit = defineEmits(['input', 'input-debounce']);
+const emit = defineEmits(['input', 'input-debounce', 'keydown']);
 
 const value = defineModel();
 const input = useTemplateRef('input');
@@ -89,6 +89,7 @@ defineExpose({ input });
     :class="[classList]"
     v-model="value"
     @input="onInput"
+    @keydown="$emit('keydown', $event)"
   />
   <textarea v-else :id="id" :class="[classList]" v-model="value"></textarea>
 </template>

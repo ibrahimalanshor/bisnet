@@ -20,6 +20,7 @@ const emit = defineEmits([
   'close',
   'change',
   'scroll-bottom',
+  'keydown',
 ]);
 
 const visible = ref(false);
@@ -92,6 +93,7 @@ watch(selected, () => {
       v-model="search"
       @focus="onFocus"
       @input-debounce="$emit('search')"
+      @keydown="$emit('keydown', $event)"
     />
     <Icon
       v-if="loading"

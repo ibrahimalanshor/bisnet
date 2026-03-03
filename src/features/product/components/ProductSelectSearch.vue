@@ -6,9 +6,11 @@ import { useRequest } from '../../../cores/http';
 const props = defineProps({
   filter: Object,
 });
+const emit = defineEmits(['change']);
 
 const { request } = useRequest();
 
+const selected = defineModel();
 const search = defineModel('search');
 const options = ref([]);
 const loading = ref(false);
@@ -67,6 +69,17 @@ function onScrollBottom() {
     loadOptions({ append: true });
   }
 }
+function onKeydown(e) {
+  if (
+    e.key === 'Enter' &&
+    search.value.length >= 10 &&
+    options.value.length === 1
+  ) {
+    selected.value = options.value[0];
+
+    emit('change');
+  }
+}
 </script>
 
 <template>
@@ -74,8 +87,11 @@ function onScrollBottom() {
     :options="options"
     :loading="loading"
     v-model:search="search"
+    v-model="selected"
     @focus="loadOptions({ append: false })"
     @search="loadOptions({ append: false })"
     @scroll-bottom="onScrollBottom"
+    @keydown="onKeydown"
+    @change="$emit('change')"
   />
 </template>
