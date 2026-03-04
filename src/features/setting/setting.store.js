@@ -8,9 +8,13 @@ export const useSettingStore = defineStore('setting', () => {
   const route = useRoute();
 
   const name = ref('Open POS');
+  const address = ref('Jln. Kaliurang KM 13');
+  const phone = ref('082773712733');
   const logo = ref('/logo.png');
   const form = reactive({
     name: null,
+    address: null,
+    phone: null,
   });
 
   async function loadSetting() {
@@ -18,12 +22,16 @@ export const useSettingStore = defineStore('setting', () => {
 
     if (!err) {
       name.value = res.name;
+      address.value = res.address;
+      phone.value = res.phone;
 
       if (res.logo) {
         logo.value = res.logo;
       }
 
       form.name = name.value;
+      form.address = address.value;
+      form.phone = phone.value;
     }
 
     document.title = `${route.meta.title} - ${name.value}`;
@@ -37,6 +45,8 @@ export const useSettingStore = defineStore('setting', () => {
     const payload = new FormData();
 
     payload.append('name', form.name);
+    payload.append('phone', form.phone);
+    payload.append('address', form.address);
 
     if (uploadLogo) {
       payload.append('logo', uploadLogo);
@@ -49,13 +59,26 @@ export const useSettingStore = defineStore('setting', () => {
 
     if (!err) {
       name.value = res.name;
+      address.value = res.address;
+      phone.value = res.phone;
       logo.value = res.logo_url;
     }
   }
 
   function resetForm() {
     form.name = name.value;
+    form.address = address.value;
+    form.phone = phone.value;
   }
 
-  return { name, logo, form, loadSetting, updateSetting, resetForm };
+  return {
+    name,
+    address,
+    phone,
+    logo,
+    form,
+    loadSetting,
+    updateSetting,
+    resetForm,
+  };
 });

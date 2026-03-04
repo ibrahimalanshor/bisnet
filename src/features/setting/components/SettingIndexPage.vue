@@ -93,12 +93,31 @@ onUnmounted(() => {
             v-model="settingStore.form.name"
           />
         </BaseFormItem>
+        <BaseFormItem id="setting_form.phone" label="No. Telp" v-slot="{ id }">
+          <BaseInput
+            :id="id"
+            placeholder="082773712733"
+            required
+            v-model="settingStore.form.phone"
+          />
+        </BaseFormItem>
+        <BaseFormItem id="setting_form.address" label="Alamat" v-slot="{ id }">
+          <BaseInput
+            :id="id"
+            placeholder="Jln. Kaliurang KM 13"
+            required
+            tag="textarea"
+            v-model="settingStore.form.address"
+          />
+        </BaseFormItem>
         <div class="flex gap-2">
           <BaseButton
             color="primary"
             :loading="loadingSubmit"
             :disabled="
               settingStore.form.name === settingStore.name &&
+              settingStore.form.address === settingStore.address &&
+              settingStore.form.phone === settingStore.phone &&
               !changeLogoPreviewSrc
             "
             >Simpan</BaseButton
@@ -106,6 +125,8 @@ onUnmounted(() => {
           <BaseButton
             v-if="
               settingStore.form.name !== settingStore.name ||
+              settingStore.form.address !== settingStore.address ||
+              settingStore.form.phone !== settingStore.phone ||
               changeLogoPreviewSrc
             "
             color="light"
