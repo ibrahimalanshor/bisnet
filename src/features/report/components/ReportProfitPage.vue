@@ -229,7 +229,7 @@ onUnmounted(() => {
           </BaseAlert>
           <BaseAlert
             :with-icon="false"
-            :color="summary.profitMargin > 0 ? 'green' : 'error'"
+            :color="summary.profitMargin > 0 ? 'success' : 'error'"
           >
             <div class="flex gap-2 items-center justify-center w-full text-lg">
               <span>Margin Bersih:</span>
