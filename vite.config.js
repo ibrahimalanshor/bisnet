@@ -7,8 +7,8 @@ export default defineConfig({
   plugins: [vue(), tailwindcss()],
   server: {
     proxy: {
-      '/api/v1': 'http://localhost:8001',
-      '/broadcasting/auth': 'http://localhost:8001/api/v1',
+      '/api/v1': 'http://localhost:8000',
+      '/broadcasting/auth': 'http://localhost:8000/api/v1',
     },
   },
 });

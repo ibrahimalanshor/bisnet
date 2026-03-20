@@ -219,7 +219,7 @@ router.beforeEach(() => {
 <template>
   <aside
     :class="[
-      'z-10 bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 transition lg:translate-x-0',
+      'z-10 bg-gray-900 text-white h-screen w-72 fixed top-0 left-0 flex flex-col transition lg:translate-x-0',
       sidebarVisible ? 'translate-x-0' : '-translate-x-full',
     ]"
     v-click-outside="onClickOutsideSidebar"
@@ -230,7 +230,7 @@ router.beforeEach(() => {
       <img :src="settingStore.logo" class="shrink-0 h-8" />
       <h1 class="font-bold text-gray-100 text-lg">{{ settingStore.name }}</h1>
     </div>
-    <div class="px-4 py-6 flex flex-col gap-1">
+    <div class="px-4 py-6 flex flex-col gap-1 flex-1 overflow-y-auto">
       <template v-for="menu in menus" :key="menu.id">
         <router-link
           v-if="!menu.children || !menu.children.length"
